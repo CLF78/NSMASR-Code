@@ -153,7 +153,7 @@ void dWMPathManager_c::setup() {
 			waitAtStart = 1;
 
 		if (wm->isFirstPlay)
-			waitAtStart = 280;
+			waitAtStart = 50;
 
 		SpammyReport("saved path node: %d\n", save->current_path_node);
 		if (save->current_path_node >= pathLayer->nodeCount) {
@@ -226,7 +226,7 @@ void dWMPathManager_c::setup() {
 				exits++;
 		}
 
-		completionMessageWorldNum = whatEntry->displayWorld;
+		completionMessageWorldNum = whatEntry->displayWorld+1;
 
 		// now do all the message checks
 		int flag = 0, totalFlag = 0;
@@ -643,23 +643,21 @@ bool dWMPathManager_c::evaluateUnlockCondition(u8 *&in, SaveBlock *save, int sta
 		u8 subConditionType = controlByte & 0x3F;
 		switch (subConditionType) {
 			case 0: case 1: case 2: case 3:
-				{
-					u8 one = *(in++);
-					u8 two = *(in++);
+				u8 one = *(in++);
+				u8 two = *(in++);
 
-					int compareOne = (one & 0x80) ? cachedUnspentStarCoinCount : cachedTotalStarCoinCount;
-					int compareTwo = ((one & 0x7F) << 8) | two;
+				int compareOne = (one & 0x80) ? cachedUnspentStarCoinCount : cachedTotalStarCoinCount;
+				int compareTwo = ((one & 0x7F) << 8) | two;
 
-					switch (subConditionType) {
-						case 0:
-							return compareOne == compareTwo;
-						case 1:
-							return compareOne != compareTwo;
-						case 2:
-							return compareOne < compareTwo;
-						case 3:
-							return compareOne > compareTwo;
-					}
+				switch (subConditionType) {
+					case 0:
+						return compareOne == compareTwo;
+					case 1:
+						return compareOne != compareTwo;
+					case 2:
+						return compareOne < compareTwo;
+					case 3:
+						return compareOne > compareTwo;
 				}
 
 			case 15:
@@ -834,7 +832,7 @@ void dWMPathManager_c::execute() {
 				dKPNode_s *node = pathLayer->nodes[i];
 
 				if (node->isNew && node->type == dKPNode_s::LEVEL) {
-					Vec efPos = {float(node->x), float(-node->y), 3300.0f};
+					Vec efPos = {node->x, -node->y, 3300.0f};
 					S16Vec efRot = {0x2000,0,0};
 					Vec efScale = {0.8f,0.8f,0.8f};
 					SpawnEffect("Wm_cs_pointlight", 0, &efPos, &efRot, &efScale);
@@ -941,7 +939,7 @@ void dWMPathManager_c::execute() {
 		checkedForMoveAfterEndLevel = true;
 
 		static const int endLevels[11][3] = {
-			{1, 38, 1}, // W1 right
+			{1, 40, 1}, // W1 right
 			{2, 38, 2}, // W2 up
 			{3, 38, 0}, // W3 left
 			{4, 38, 1}, // W4 right
@@ -1001,7 +999,7 @@ void dWMPathManager_c::execute() {
 				startMovementTo(currentNode->exits[pressedDir]);
 			} else {
 				// TODO: maybe remove this? got to see how it looks
-				static s16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
+				static u16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
 				daWMPlayer_c::instance->setTargetRotY(directions[pressedDir]);
 			}
 		} else if (nowPressed & WPAD_TWO) {
@@ -1102,7 +1100,7 @@ void dWMPathManager_c::startMovementTo(dKPPath_s *path) {
 	if (path->animation == dKPPath_s::ENTER_CAVE_UP) {
 		scaleAnimProgress = 60;
 		// what direction does this path go in?
-		static s16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
+		static u16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
 		isScalingUp = (deltaY < 0) ^ reverseThroughPath;
 
 		if (!isScalingUp)
@@ -1266,7 +1264,7 @@ void dWMPathManager_c::moveThroughPath(int pressedDir) {
 	}
 
 
-	Vec move = (Vec){float(to->x - from->x), float(to->y - from->y), 0};
+	Vec move = (Vec){to->x - from->x, to->y - from->y, 0};
 	VECNormalize(&move, &move);
 	VECScale(&move, &move, moveSpeed);
 
@@ -1477,7 +1475,7 @@ void dWMPathManager_c::moveThroughPath(int pressedDir) {
 					movingAgain = true;
 				} else {
 					// TODO: maybe remove this? got to see how it looks
-					static s16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
+					static u16 directions[] = {-0x4000,0x4000,-0x7FFF,0};
 					daWMPlayer_c::instance->setTargetRotY(directions[pressedDir]);
 				}
 			}
@@ -1533,7 +1531,7 @@ void dWMPathManager_c::activatePoint() {
 			return;
 		}
 
-		if ((l >= 29) && (l <= 36)) {
+		if ((l >= 32) && (l <= 35) && (l == 41)) {
 			SaveBlock *save = GetSaveFile()->GetBlock(-1);
 			u32 conds = save->GetLevelCondition(w, l);
 

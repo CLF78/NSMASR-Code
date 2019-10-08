@@ -21,53 +21,15 @@ struct Hijacker {
 
 
 const char* SongNameList [] = {
-	"AIRSHIP",
-	"BOSS_TOWER",
-	"MENU",
-	"UNDERWATER",
-	"ATHLETIC",
-	"CASTLE",
-	"MAIN",
-	"MOUNTAIN",
-	"TOWER",
-	"UNDERGROUND",
-	"DESERT",
-	"FIRE",
-	"FOREST",
-	"FREEZEFLAME",
-	"JAPAN",
-	"PUMPKIN",
-	"SEWER",
-	"SPACE",
-	"BOWSER",
-	"BONUS",	
-	"AMBUSH",	
-	"BRIDGE_DRUMS",	
-	"SNOW2",	
-	"MINIMEGA",	
-	"CLIFFS",
-	"AUTUMN",
-	"CRYSTALCAVES",
-	"GHOST_HOUSE",
-	"GRAVEYARD",
-	"JUNGLE",
-	"TROPICAL",
-	"SKY_CITY",
-	"SNOW",
-	"STAR_HAVEN",
-	"SINGALONG",
-	"FACTORY",
-	"TANK",
-	"TRAIN",
-	"YOSHIHOUSE",
-	"FACTORYB",
-	"CAVERN",
-	"SAND",
-	"SHYGUY",
-	"MINIGAME",
-	"BONUS_AREA",
-	"CHALLENGE",
-	"BOWSER_CASTLE",
+	"SMBGRASS",
+	"SMBUNDERGROUND",
+	"SMBUNDERWATER",
+	"SMBBONUS",
+	"SMBCASTLE",
+	"INTRO",
+	"SMBSNOW",
+	"SMBSNOWNIGHT",
+	"SMBGRASSNIGHT",
 	"",
 	"",
 	"",
@@ -77,8 +39,46 @@ const char* SongNameList [] = {
 	"",
 	"",
 	"",
-	"BOSS_CASTLE",
-	"BOSS_AIRSHIP",
+	"",
+	"",	
+	"",	
+	"",	
+	"",	
+	"",	
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
 	NULL	
 };
 
@@ -144,8 +144,8 @@ u8 hijackMusicWithSongName(const char *songName, int themeID, bool hasFast, int 
 		OSReport("It has been set to: channel count %d, track bitfield 0x%x\n", thing[0], thing[1]);
 	}
 
-	sprintf(BrsarInfoOffset(stream->stringOffset), "new/%s.er", songName);
-	sprintf(BrsarInfoOffset(stream->stringOffsetFast), hasFast?"new/%s_F.er":"new/%s.er", songName);
+	sprintf(BrsarInfoOffset(stream->stringOffset), "stream/%s.brstm", songName);
+	sprintf(BrsarInfoOffset(stream->stringOffsetFast), hasFast?"stream/%s_F.brstm":"stream/%s.brstm", songName);
 
 	// update filesizes
 	FixFilesize(stream->stringOffset);
@@ -161,6 +161,7 @@ u8 hijackMusicWithSongName(const char *songName, int themeID, bool hasFast, int 
 
 //oh for fuck's sake
 #include "fileload.h"
+//#include <rvl/dvd.h>
 
 void FixFilesize(u32 streamNameOffset) {
 	char *streamName = BrsarInfoOffset(streamNameOffset);
@@ -187,7 +188,8 @@ extern "C" u8 after_course_getMusicForZone(u8 realThemeID) {
 		return realThemeID;
 
 	bool usesDrums = (realThemeID >= 200);
-	return hijackMusicWithSongName(SongNameList[realThemeID-100], realThemeID, true, usesDrums?4:2, usesDrums?2:1, 0);
+	const char *name = SongNameList[realThemeID - (usesDrums ? 200 : 100)];
+	return hijackMusicWithSongName(name, realThemeID, true, usesDrums?4:2, usesDrums?2:1, 0);
 }
 
 

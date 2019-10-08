@@ -49,7 +49,7 @@ hooks:
   - name: TitleReplayLevels
     type: patch
     addr_pal: 0x802F4CD0
-    data: '0402 0002 0101 0104 0202 0002 0301 0306 0400 0402 0501 0503 0104 0900 0900'
+    data: '0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002'
 
   - name: NoTitleScreenMovie
     type: nop_insn

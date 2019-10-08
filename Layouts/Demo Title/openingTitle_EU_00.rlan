@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nw4r_layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.2.0" xmlns="http://www.nintendo.co.jp/NW4R/LayoutEditor">
+  <head>
+    <create user="Paola" host="PAOLA-PC" date="2019-08-06T23:04:43.370461+02:00" source="" />
+    <title />
+    <comment />
+    <generator name="" version="1.0.0" />
+  </head>
+  <body>
+    <animTag name="inTitle" startFrame="0" endFrame="70" animLoop="OneTime" fileName="inTitle" descendingBind="false">
+      <comment />
+      <group name="A00_title" />
+    </animTag>
+    <animTag name="inPress" startFrame="100" endFrame="110" animLoop="OneTime" fileName="inPress" descendingBind="false">
+      <comment />
+      <group name="B00_press" />
+    </animTag>
+    <animTag name="loopPress" startFrame="120" endFrame="160" fileName="loopPress" descendingBind="false">
+      <comment />
+      <group name="B00_press" />
+    </animTag>
+    <animTag name="outPress" startFrame="200" endFrame="210" animLoop="OneTime" fileName="outPress" descendingBind="false">
+      <comment />
+      <group name="B00_press" />
+    </animTag>
+    <rlan animType="PainSRT" startFrame="0" endFrame="210" convertStartFrame="0" convertEndFrame="210">
+      <animContent name="P_logo_00">
+        <animPainSRTTarget target="TranslateY">
+          <key frame="0" value="366.002" />
+          <key frame="30" value="-37.5" slope="-25.6287" />
+          <key frame="30" value="-37.5" slope="6.02101" />
+          <key frame="55" value="-37.5" slope="-5.02642" />
+          <key frame="55" value="-37.5" slope="2.87678" />
+          <key frame="70" value="-37.5" slope="-1.83862" />
+          <key frame="70" value="-37.5" />
+        </animPainSRTTarget>
+        <animPainSRTTarget target="ScaleY">
+          <key frame="0" value="0.7" />
+          <key frame="29" value="0.7" />
+          <key frame="29" value="0.7" slope="-0.1" />
+          <key frame="30" value="0.6" slope="-0.103904" />
+          <key frame="30" value="0.6" slope="0.0482487" />
+          <key frame="38" value="0.7" />
+        </animPainSRTTarget>
+      </animContent>
+      <animContent name="T_Press_00">
+        <animPainSRTTarget target="ScaleX">
+          <key frame="100" value="0" />
+          <key frame="110" value="1" />
+          <key frame="120" value="1" />
+          <key frame="140" value="1.02" />
+          <key frame="160" value="1" />
+          <key frame="200" value="1" slope="-0.0280995" />
+          <key frame="210" value="2.2" slope="0.382546" />
+        </animPainSRTTarget>
+        <animPainSRTTarget target="ScaleY">
+          <key frame="100" value="0" />
+          <key frame="110" value="1" />
+          <key frame="120" value="1" />
+          <key frame="140" value="1.02" />
+          <key frame="160" value="1" />
+          <key frame="200" value="1" slope="-0.0280995" />
+          <key frame="210" value="2.2" slope="0.382546" />
+        </animPainSRTTarget>
+      </animContent>
+    </rlan>
+    <rlan animType="VertexColor" startFrame="0" endFrame="210" convertStartFrame="0" convertEndFrame="210">
+      <animContent name="T_Press_00">
+        <animVertexColorTarget target="PaneAlpha">
+          <key xsi:type="HermiteU8" frame="200" value="255" />
+          <key xsi:type="HermiteU8" frame="210" value="0" slope="-44.4259" />
+        </animVertexColorTarget>
+      </animContent>
+    </rlan>
+  </body>
+</nw4r_layout>

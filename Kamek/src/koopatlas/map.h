@@ -3,6 +3,23 @@
 
 #include "koopatlas/core.h"
 
+// Can't remember why I had this. Who cares
+#define GEKKO
+#include "rvl/mtx.h"
+#include "rvl/GXEnum.h"
+#include "rvl/GXStruct.h"
+#include "rvl/GXTransform.h"
+#include "rvl/GXGeometry.h"
+#include "rvl/GXDispList.h"
+#include "rvl/GXLighting.h"
+#include "rvl/GXTev.h"
+#include "rvl/GXTexture.h"
+#include "rvl/GXCull.h"
+#include "rvl/GXPixel.h"
+#include "rvl/GXBump.h"
+#include "rvl/GXVert.h"
+#include "rvl/vifuncs.h"
+
 class dWMMap_c : public dBase_c {
 	public:
 		dWMMap_c();

@@ -1,4 +1,5 @@
-#include <asm_setup.S>
+.set sp,1
+.set rtoc,2
 
 .text
 .extern OSReport
@@ -159,10 +160,10 @@ chosenWName:
 	li r5, 0
 	bl InsertIntIntoTextBox1
 
-.extern _Z28ResetAllCompletionCandidatesv
-.extern _Z28ClearOldPathAvailabilityDatav
-	bl _Z28ResetAllCompletionCandidatesv
-	bl _Z28ClearOldPathAvailabilityDatav
+.extern ResetAllCompletionCandidates__Fv
+.extern ClearOldPathAvailabilityData__Fv
+	bl ResetAllCompletionCandidates__Fv
+	bl ClearOldPathAvailabilityData__Fv
 
 	lwz r22, 0x24(r1)
 	lwz r21, 0x28(r1)
@@ -280,7 +281,7 @@ dontFixThisOne2:
 	blr
 
 
-.section .ctors
+.section .ctors,4
 .long FixUpExistingSavefile
 
 .data
@@ -327,16 +328,16 @@ WarpZoneName:
 
 .align 4
 DefaultSavefileInfoData:
-.string "Yoshi's Island" #15
+.string "Choose a Game" #14
 .byte 0,0,0,0,0,0,0,0,0,0,0 # 11
-.byte 0,0,0,0,0,0 # 6
-.long 0xFFFF99FF,0x1FB423FF
-.long 0x173714FF,0x3C9135FF
-.long 0xFFFF99FF,0x1FB423FF
-.short 0x75
-.byte 0x2E,0xB
+.byte 0,0,0,0,0,0,0 # 7
+.long 0xFFFFFFFF,0xFFFFFFFF
+.long 0xFF6A00FF,0xCC5100FF
+.long 0xFFFFFFFF,0xFFFFFFFF
+.short 0x18
+.byte 0x3C,0x1E
 .byte 1,1
-.byte 0,10
+.byte 0,46
 
 DefaultSavefileInfoDataEnd:
 .long 0

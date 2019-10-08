@@ -1,7 +1,7 @@
 #include <game.h>
 #include <stage.h>
 #include "msgbox.h"
-#include "boss.h" // for stopbgmmusic and crap
+#include "boss.h"
 
 const char *PalaceDudeFileList[] = {"OpeningScene", 0};
 

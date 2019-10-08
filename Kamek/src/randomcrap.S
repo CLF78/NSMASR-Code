@@ -1,5 +1,4 @@
 .text
-#include <asm_setup.S>
 .global _Z3absf
 _Z3absf:
 	fabs f1, f1
@@ -17,7 +16,6 @@ JrFloorFireHax:
 	lis r4, 0x100
 	stw r4, 0x774(r30)
 	stw r4, 0x77C(r30)
-	blr
 
 .global TryAndFixScoreGlitch
 TryAndFixScoreGlitch:
@@ -459,10 +457,10 @@ dontResetRREDelay:
 	b set__10dFlagMgr_cFUcibbbUi
 
 .global EFB_Crap
-.extern _Z9EFBMagic2v
+.extern EFBMagic2__Fv
 .extern ContinueFromEFBMagic2
 EFB_Crap:
-	bl _Z9EFBMagic2v
+	bl EFBMagic2__Fv
 	lwz r3, 4(r30)
 	b ContinueFromEFBMagic2
 
@@ -610,9 +608,11 @@ ReplaceExceptionOccurred:
 	ori r3, r3, NewExceptionOccurred@l
 	blr
 
+#.section .ctors,4
+#.long CRAPPYALLOC
 .data
 NewExceptionOccurred:
-.string "Whoops! Newer 1.0.2 has crashed.\nPlease take a screenshot of the info below\nand send it to newer@newerteam.com.\nYou can scroll through this report using the D-Pad.\n"
+.string "Mamma mia, the game has crashed!\nPlease take note of when the crash occurred\nand bug CLF78 so he fixes it.\n You can find him at https://discord.gg/A4WSCRZ.\n"
 UniLogStr: .string "[ULog] returning %8x to: %x > %x > %x > %x > %x > %x\n"
 #WillAlloc: .string "[AH] Will allocate %x bytes aligned by %x\n"
 #Alloced: .string "[AH] Allocated %p\n"
@@ -622,3 +622,7 @@ SCMs: .string "Setting music to %d\n"
 
 .global Rrun
 Rrun: .string "Rrun"
+
+.global enableHardMode
+enableHardMode:
+	.byte 0

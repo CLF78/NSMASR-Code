@@ -1,0 +1,13 @@
+texname = shroomblock1.bin
+framedelays = 50, 6, 6, 6
+tilenum = 512
+tileset = 2
+
+end tile
+
+texname = shroomblock2.bin
+framedelays = 50, 6, 6, 6
+tilenum = 513
+tileset = 2
+
+end tile

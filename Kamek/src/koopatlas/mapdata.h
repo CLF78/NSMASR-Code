@@ -252,9 +252,9 @@ class dKPMapData_c {
 			}
 
 		inline void fixTexObjSafe(GXTexObj *obj) {
-			if (obj->val[3] >= 0x10000000) {
-				obj->val[3] = (((u32)data) & 0x7FFFFFFF) + (obj->val[3] - 0x10000000);
-				obj->val[3] >>= 5;
+			if (obj->dummy[3] >= 0x10000000) {
+				obj->dummy[3] = (((u32)data) & 0x7FFFFFFF) + (obj->dummy[3] - 0x10000000);
+				obj->dummy[3] >>= 5;
 			}
 		}
 

@@ -26,15 +26,15 @@ void dTexMapColouriser_c::setTexMap(nw4r::lyt::TexMap *tm) {
 	if (texmap)
 		resetAndClear();
 
-	if (tm->getFormat() != GX_TF_IA8) {
-		OSReport("Warning: Trying to colourise image whose format is %d not GX_TF_IA8\n", tm->getFormat());
+	if (tm->mBits.textureFormat != GX_TF_IA8) {
+		OSReport("Warning: Trying to colourise image whose format is %d not GX_TF_IA8\n", tm->mBits.textureFormat);
 	}
 
 	texmap = tm;
 	original = (u16*)tm->image;
 	mine = (u16*)EGG__Heap__alloc(tm->width * tm->height * 4, 0x20, mHeap::gameHeaps[2]);
 	tm->image = mine;
-	tm->setFormat(GX_TF_RGBA8);
+	tm->mBits.textureFormat = GX_TF_RGBA8;
 }
 
 void dTexMapColouriser_c::applyAlso(nw4r::lyt::TexMap *tm) {
@@ -42,7 +42,7 @@ void dTexMapColouriser_c::applyAlso(nw4r::lyt::TexMap *tm) {
 		setTexMap(tm);
 	} else {
 		tm->image = mine;
-		tm->setFormat(GX_TF_RGBA8);
+		tm->mBits.textureFormat = GX_TF_RGBA8;
 	}
 }
 

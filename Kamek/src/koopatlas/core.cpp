@@ -177,7 +177,7 @@ bool WMInit_LoadResources2(void *ptr) {
 		wm->mapPath = wm->getMapNameForIndex(wm->currentMapID);
 		if (wm->mapPath == 0)
 			wm->mapPath = wm->getMapNameForIndex(0);
-		if (!strcmp(wm->mapPath, "/Maps/WSEL.kpbin"))
+		if (!strcmp(wm->mapPath, "/Maps/WarpZone.kpbin") || !strcmp(wm->mapPath, "/Maps/WarpZone2.kpbin"))
 			wm->warpZoneHacks = true;
 		else
 			wm->warpZoneHacks = false;
@@ -250,7 +250,7 @@ bool WMInit_SetupExtra(void *ptr) {
 
 	// and put the player into position
 	dKPNode_s *cNode = wm->pathManager.currentNode;
-	wm->player->pos = (Vec){float(cNode->x), float(-cNode->y), wm->player->pos.z};
+	wm->player->pos = (Vec){cNode->x, -cNode->y, wm->player->pos.z};
 
 	// is last param correct? must check :/
 	SpammyReport("creating MAP\n");
@@ -519,7 +519,6 @@ void dScKoopatlas_c::endState_ContinueWait() {
 
 
 void dScKoopatlas_c::executeState_Normal() {
-	// ghb
 	if (pathManager.completionMessagePending) {
 		OSReport("Going to set CompletionMsg\n");
 		state.setState(&StateID_CompletionMsg);
@@ -1083,21 +1082,37 @@ void dScKoopatlas_c::showSaveWindow() {
 	yesNoWindow->visible = true;
 }
 
+static const wchar_t *completionMsgs[] = {
+	L"The most erudite of Buttocks",
+	L"You've collected all of\nthe \x0B\x014F\xBEEF Star Coins in\n",
+	L"You have gotten every \x0B\x013B\xBEEF exit\nin",
+	L"You have gotten everything\nin",
+	L"You have collected all the\nnecessary \x0B\x014F\xBEEF coins to enter\nthe Special World!",
+	L"You have collected all the \x0B\x014F\xBEEF Star\nCoins in the game!",
+	L"You've found every \x0B\x013B\xBEEF exit in the\ngame!",
+	L"You've completed everything in\nNEWER SUPER MARIO BROS. Wii!\n\nWe present you a new quest.\nTry pressing \x0B\x0122\xBEEF, \x0B\x0123\xBEEF and \x0B\x0125\xBEEF\n on the Star Coin menu."
+};
+
 void dScKoopatlas_c::beginState_CompletionMsg() {
-	if (pathManager.completionMessageType == 0)
-		pathManager.completionMessageType = 1;
 	OSReport("CompletionMsg beginning with type %d\n", pathManager.completionMessageType);
-	yesNoWindow->type = 21;
+	static const int ynTypes[8] = {
+		/*NULL*/ -1,
+		/*COINS*/ 14,
+		/*EXITS*/ 7,
+		/*WORLD*/ 8,
+		/*COINS EXC W9*/ 9,
+		/*GLOBAL COINS*/ 11,
+		/*GLOBAL EXITS*/ 27,
+		/*EVERYTHING*/ 21
+	};
+	yesNoWindow->type = ynTypes[pathManager.completionMessageType];
 	yesNoWindow->visible = true;
 	mustFixYesNoText = 10; // hacky shit
 }
 
 void dScKoopatlas_c::endState_CompletionMsg() {
-	// ghb
 	pathManager.completionMessagePending = false;
 	pathManager.completionMessageType = 0;
-	//pathManager.completionMessagePending = true;
-	//pathManager.completionMessageType ++;
 }
 
 void dScKoopatlas_c::executeState_CompletionMsg() {
@@ -1107,20 +1122,16 @@ void dScKoopatlas_c::executeState_CompletionMsg() {
 
 		int type = pathManager.completionMessageType;
 
-		dScript::Res_c *bmg = GetBMG();
-
-		const wchar_t *baseText = bmg->findStringForMessageID(9000, type);
-
+		const wchar_t *baseText = completionMsgs[type];
 		// Used when we assemble a dynamic message
 		wchar_t text[512];
 
 		if (type >= CMP_MSG_COINS && type <= CMP_MSG_WORLD) {
 			// title
 			int w = pathManager.completionMessageWorldNum;
-			// ghb
-			//w = 1;
 			int l = ((w == 5) || (w == 7)) ? 101 : 100;
-			const wchar_t *title = bmg->findStringForMessageID(8000+w, l);
+			dLevelInfo_c::entry_s *titleEntry = dLevelInfo_c::s_info.searchByDisplayNum(w, l);
+			const char *title = dLevelInfo_c::s_info.getNameForLevel(titleEntry);
 
 			// assemble the string
 
@@ -1130,7 +1141,7 @@ void dScKoopatlas_c::executeState_CompletionMsg() {
 			text[pos++] = ' ';
 
 			while (*title) {
-				wchar_t chr = *(title++);
+				char chr = *(title++);
 				if (chr != '-')
 					text[pos++] = chr;
 			}

@@ -71,7 +71,7 @@ int dWorldCamera_c::onExecute() {
 	if (dScKoopatlas_c::instance->warpZoneHacks) {
 		currentX = 2040.0f;
 		currentY = -1460.0f;
-		zoomLevel = 3.4f;
+		zoomLevel = 2.8f;
 
 	} else if (panning) {
 		// Calculate where we are
@@ -197,7 +197,7 @@ void dWorldCamera_c::panToPosition(float x, float y, float zoom) {
 
 
 int dWorldCamera_c::onDraw() {
-	GXRModeObj *rmode = nw4r::g3d::G3DState::GetRenderModeObj();
+	GXRenderModeObj *rmode = nw4r::g3d::G3DState::GetRenderModeObj();
 
 	nw4r::g3d::Camera cam(GetCameraByID(0));
 	nw4r::g3d::Camera cam2d(GetCameraByID(1));
@@ -225,9 +225,9 @@ void dWorldCamera_c::calculateScreenGeometry() {
 
 void dWorldCamera_c::doStuff(float something) {
 	camTarget = (Vec){
-		screenLeft + (screenWidth * 0.5f),
-	   (screenTop - screenHeight) + (screenHeight * 0.5f),
-	   0.0f
+		screenLeft + (screenWidth * 0.5),
+	   (screenTop - screenHeight) + (screenHeight * 0.5),
+	   0.0
 	};
 
 	camPos = (Vec){camTarget.x, camTarget.y, something};
@@ -248,11 +248,7 @@ void dWorldCamera_c::generateCameraMatrices() {
 
 	screen.setOrtho(orthoTop, orthoBottom, orthoLeft, orthoRight, -100000.0f, 100000.0f);
 
-	//VEC2 crap = GetSomeSizeRelatedBULLSHIT();
-	// This is a horrible, horrible hack
-	VEC2 crap;
-	*((u64*)(&crap)) = GetSomeSizeRelatedBULLSHIT();
-
+	VEC2 crap = GetSomeSizeRelatedBULLSHIT();
 	Vec calcedAboutRatio = CalculateSomethingAboutRatio(orthoTop, orthoBottom, orthoLeft, orthoRight);
 	screen._44 = CalculateSomethingElseAboutRatio();
 
@@ -269,7 +265,7 @@ void dWorldCamera_c::generateCameraMatrices() {
 
 	camera2d.calculateMatrix();
 
-	GXRModeObj *rmode = nw4r::g3d::G3DState::GetRenderModeObj();
+	GXRenderModeObj *rmode = nw4r::g3d::G3DState::GetRenderModeObj();
 	projection2d.setVolume(rmode->efbHeight, 0.0, 0.0, rmode->fbWidth * (IsWideScreen() ? 1.3333334f : 1.0f));
 }
 
