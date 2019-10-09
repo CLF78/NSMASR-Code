@@ -41,7 +41,7 @@ int dPalaceDude_c::onExecute() {
 
 			dMsgBoxManager_c::instance->showMessage(
 				settings & 0xFFFFFF, // message ID
-				false, // cannot cancel
+				true, // can cancel
 				delay // delay
 				);
 		}
