@@ -18,8 +18,8 @@ Danster64
 ZementBlock
 TobiasAmaranth
 Gimzie
-MarioUniverse.com
 Randonly
+MarioUniverse.com
 
 TILESET ARTISTS
 Nintendo
@@ -81,7 +81,7 @@ Toadster
 Danster64
 
 PROMOTIONAL SUPPORT
-MayroSMM
+Mayro
 HorizonWii
 The Wii Hacking House
 
@@ -95,10 +95,8 @@ SPECIAL THANKS
 Treeki
 Grop
 AboodXD
-Huseyin the Mighty
-Danster64
-Mario_TV
-Jadid
+Toms
+Frenzies
 ZementBlock
 cad111
 HorizonWii Community
