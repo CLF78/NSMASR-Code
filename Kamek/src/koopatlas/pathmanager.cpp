@@ -226,7 +226,7 @@ void dWMPathManager_c::setup() {
 				exits++;
 		}
 
-		completionMessageWorldNum = whatEntry->displayWorld+1;
+		completionMessageWorldNum = whatEntry->displayWorld;
 
 		// now do all the message checks
 		int flag = 0, totalFlag = 0;
