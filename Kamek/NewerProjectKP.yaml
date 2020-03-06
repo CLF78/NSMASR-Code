@@ -68,5 +68,6 @@ modules:
   - processed/challengeStar.yaml
   - processed/singAlong.yaml
   - processed/pumpkinGoomba.yaml
+  - processed/trapblock.yaml
   # - processed/pengi.yaml
 #  - processed/actorlog.yaml
