@@ -643,6 +643,7 @@ bool dWMPathManager_c::evaluateUnlockCondition(u8 *&in, SaveBlock *save, int sta
 		u8 subConditionType = controlByte & 0x3F;
 		switch (subConditionType) {
 			case 0: case 1: case 2: case 3:
+			{
 				u8 one = *(in++);
 				u8 two = *(in++);
 
@@ -651,14 +652,23 @@ bool dWMPathManager_c::evaluateUnlockCondition(u8 *&in, SaveBlock *save, int sta
 
 				switch (subConditionType) {
 					case 0:
+					{
 						return compareOne == compareTwo;
+					}
 					case 1:
+					{
 						return compareOne != compareTwo;
+					}
 					case 2:
+					{
 						return compareOne < compareTwo;
+					}
 					case 3:
+					{
 						return compareOne > compareTwo;
+					}
 				}
+			}
 
 			case 15:
 				UnlockCmdReport("[%p] CondStk:%d end, returning CONSTANT 1\n", in, stack);

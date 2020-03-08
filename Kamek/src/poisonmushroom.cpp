@@ -87,7 +87,7 @@ daPoisonShroom_c *daPoisonShroom_c::build() {
 	}
 
 	void daPoisonShroom_c::yoshiCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
-		this->playerCollision(apThis, apOther);
+		return this->playerCollision(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCatD_Drill(ActivePhysics *apThis, ActivePhysics *apOther) {
@@ -96,43 +96,37 @@ daPoisonShroom_c *daPoisonShroom_c::build() {
 	}
 
 	bool daPoisonShroom_c::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) {
-		//Same as player but can't return daPoisonShroom_c::playerCollision cuz it's a void :<
+		this->_vf220(apOther->owner);
+		doStateChange(&StateID_Die);
 		return true;
 	}
 
 	bool daPoisonShroom_c::collisionCat7_GroundPoundYoshi(ActivePhysics *apThis, ActivePhysics *apOther) {
-		//Same as player but can't return daPoisonShroom_c::playerCollision cuz it's a void :<
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCat9_RollingObject(ActivePhysics *apThis, ActivePhysics *apOther) {
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCat3_StarPower(ActivePhysics *apThis, ActivePhysics *apOther){
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCat13_Hammer(ActivePhysics *apThis, ActivePhysics *apOther) {
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCatA_PenguinMario(ActivePhysics *apThis, ActivePhysics *apOther){
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCat14_YoshiFire(ActivePhysics *apThis, ActivePhysics *apOther){
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 	bool daPoisonShroom_c::collisionCat1_Fireball_E_Explosion(ActivePhysics *apThis, ActivePhysics *apOther) {
-		doStateChange(&StateID_Die);
-		return true;
+		return this->collisionCatD_Drill(apThis, apOther);
 	}
 
 
@@ -193,7 +187,7 @@ int daPoisonShroom_c::onCreate() {
 	this->resFile.data = getResource("PoisonMushroom", "g3d/PoisonMushroom.brres");
 	nw4r::g3d::ResMdl mdl = this->resFile.GetResMdl("PoisonMushroom");
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
-	SetupTextures_Map(&bodyModel, 0);
+	SetupTextures_MapObj(&bodyModel, 0);
 
 	// Animations start here
 	nw4r::g3d::ResAnmChr anmChr = this->resFile.GetResAnmChr((this->settings == 0) ? "outup" : "outdown");
@@ -326,7 +320,7 @@ void daPoisonShroom_c::updateModelMatrices() {
 
 		this->max_speed.y = -2;
 		this->speed.y = 0.0;
-		this->y_speed_inc = -0.0625;
+		this->y_speed_inc = -0.15;
 	}
 	void daPoisonShroom_c::executeState_Walk() {	
 		bool ret = calculateTileCollisions();
@@ -361,7 +355,7 @@ void daPoisonShroom_c::updateModelMatrices() {
 // Die State
 ///////////////
 	void daPoisonShroom_c::beginState_Die() {
-		dEn_c::dieFall_Begin();
+		this->removeMyActivePhysics();
 	}
 	void daPoisonShroom_c::executeState_Die() { 
 		PlaySound(this, SE_EMY_MECHAKOOPA_DAMAGE);

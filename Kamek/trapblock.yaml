@@ -1,6 +1,4 @@
 ---
-
-
 source_files: [../src/trapblock.cpp, ../src/poisonmushroom.cpp]
 hooks:
 

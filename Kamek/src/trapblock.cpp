@@ -2,6 +2,7 @@
 #include <game.h>
 #include <g3dhax.h>
 #include <sfx.h>
+extern "C" void PlaySoundWithFunctionB4(void *spc, nw4r::snd::SoundHandle *handle, int id, int unk);
 
 //Wrote by RedStoneMatt because CLF78 isn't able to do it :p
 
@@ -156,10 +157,12 @@ void daTrapBlock_c::executeState_Wait() {
 			anotherFlag = 2;
 			isGroundPound = false;
 		} else {
-			if((this->settings >> 24 & 0xF) == 0) { tile.tileNumber = 0x31; }
-			doStateChange(&daEnBlockMain_c::StateID_DownMove);
-			anotherFlag = 1;
-			isGroundPound = true;
+			if((this->settings >> 24 & 0xF) != 0) {
+				if((this->settings >> 24 & 0xF) == 0) { tile.tileNumber = 0x31; }
+				doStateChange(&daEnBlockMain_c::StateID_DownMove);
+				anotherFlag = 1;
+				isGroundPound = true;
+			}
 		}
 	}
 	if(this->wasIHit == 1 && this->doOneTime == 0) { //Was already hit ? Change the tiles.
