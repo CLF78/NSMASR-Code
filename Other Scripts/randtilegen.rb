@@ -160,11 +160,7 @@ g.section(*regular_ts1, *regular_ts2, *regular_ts3, *newer) do
 	g.regular_terrain
 end
 
-g.section(*%w(Pa1_magicsnow)) do
-	g.random(0xB4..0xB9, :horz)
-end
-
-g.section(*%w(Pa1_magicsnow_night)) do
+g.section(*%w(Pa1_magicsnow, Pa1_magicsnow_night)) do
 	g.random(0xB4..0xB9, :horz)
 end
 
@@ -192,12 +188,13 @@ g.section(*%w(Pa1_fortress_lava)) do
 		g.random(0x4C..0x4D, :horz)
 end
 
-g.section(*%w(Pa2_trees)) do
-		g.random([0x50, 0x51, 0x53, 0x63, 0x72])
-		g.random([0x54, 0x64, 0x74], :vert)
-		g.random([0x55, 0x65, 0x75], :vert)
-		g.random([0x52, 0x61], :horz_vdouble_top)
-		g.random([0x62, 0x71], :horz_vdouble_bottom)
+g.section(*%w(Pa2_trees, Pa2_trees_night)) do
+		g.random([0x01, 0x07])
+		g.random([0x10, 0x16])
+		g.random([0x12, 0x17])
+		g.random([0x21, 0x27])
+		g.random([0x40, 0x36])
+		g.random([0x42, 0x37])
 end
 
 File.open('C:\Dolphin\NSMASR\NewerRes\RandTiles.bin', 'wb') do |f|

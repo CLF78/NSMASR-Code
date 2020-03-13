@@ -1,7 +1,7 @@
 ORIGINAL IDEA
 Titovision1
 
-PRODUCERS/DIRECTORS
+PRODUCER/DIRECTOR
 CLF78
 
 NEWER WII CODEBASE
@@ -9,8 +9,13 @@ Treeki
 Tempus
 megazig
 
-LEVEL REMAKING
+ADDITIONAL CODE
+RedStoneMatt
 CLF78
+
+LEVEL REMAKES
+CLF78
+sam999
 
 LEVEL SPECIAL THANKS
 skawo
@@ -36,6 +41,7 @@ SPRITE REDESIGNS
 Newer Wii Team
 CLF78
 newluigidev
+Titovision
 AboodXD
 newsuperhackboys
 
@@ -45,18 +51,22 @@ CLF78
 
 UI DESIGN
 Newer Wii Team
+CLF78
 
 LOGO DESIGN
 Huseyin the Mighty
-CLF78
 
 WORLD MAP REMAKING
-Mimicry_Xrd
+CLF78
 
-WORLD MAP GRAPHICS
-Mimicry_Xrd
+WORLD MAP ARTISTS
+Newer Wii Team
+Stage 13-10
+CLF78
+SY24
+Huseyin the Mighty
 
-MUSIC REMIXERS
+MUSIC REMIXES
 Nintendo
 Super Brett Smith
 KeyBlam Tunes
@@ -68,10 +78,17 @@ Lu9
 StebTech
 SilentZorah
 
+ISO BUILDER
+Wiimm
+damysteryman
+DarkWurz
+CLF78
+Frenzies
+
 QUALITY ASSURANCE
 CLF78
 
-EXTERNAL TESTERS
+EXTERNAL TESTING
 Mario_TV
 Jadid
 RedStoneMatt
@@ -85,18 +102,11 @@ Mayro
 HorizonWii
 The Wii Hacking House
 
-ACKNOWLEDGEMENTS
-Newer Wii Team
-Reggie Next staff
-BrawlBox staff
-Riivolution staff
-
 SPECIAL THANKS
 Treeki
 Grop
 AboodXD
 Toms
-Frenzies
 ZementBlock
 cad111
 HorizonWii Community

@@ -378,3 +378,23 @@ hooks:
     branch_type: bl
     src_addr_pal: 0x80816370
     target_func: 'JrFloorFireHax'
+
+  - name: UniversalFlowerHack1
+    type: patch
+    addr_pal: 0x80077F8C
+    data: '60000000'
+    
+  - name: UniversalFlowerHack2
+    type: patch
+    addr_pal: 0x80077FC4
+    data: '60000000'
+    
+  - name: UniversalFlowerHack3
+    type: patch
+    addr_pal: 0x80077F9C
+    data: '4800002C'
+
+  - name: UniversalFlowerHack4
+    type: patch
+    addr_pal: 0x80077FB0
+    data: '48000018'
