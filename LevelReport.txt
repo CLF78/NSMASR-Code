@@ -48,8 +48,8 @@
 01-10 : File Clean Title
 01-40 : Broken Game Titlescreen
 01-43 : SMB Night Title
-01-44 : SMB Snow Night Title
-01-45 : SMB Snow Day Title
+01-44 : SMB Snow Day Title
+01-45 : SMB Snow Night Title
 01-46 : SMB Day Title
 01-47 : Hub Map Title
 01-48 : SMB Sky Title

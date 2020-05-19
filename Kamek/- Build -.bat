@@ -1,6 +1,4 @@
 @echo OFF
-set mypath=%~dp0
-set PATH=%PATH%;%mypath:~0,-1%\tools\devkitPPC\bin
 rmdir /s /q Build
 rmdir /s /q NewerASM
 mkdir Build

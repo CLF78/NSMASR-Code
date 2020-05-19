@@ -146,36 +146,20 @@ end
 
 g = RandTileGenerator.new
 
-regular_ts1 = %w(chika chika_u suichu_u suichu_u_cold nohara2)
-regular_ts1 += %w()
-regular_ts2 = %w(og_nohara)
+regular_ts1 = %w(chika chika_u suichu_u suichu_u_cold nohara2 snow_smb)
+regular_ts2 = %w()
 regular_ts3 = %w()
-newer = %w()
-newer += %w()
 
 regular_ts1.map!{ |x| "Pa1_#{x}" }
 regular_ts2.map!{ |x| "Pa2_#{x}" }
 regular_ts3.map!{ |x| "Pa3_#{x}" }
-g.section(*regular_ts1, *regular_ts2, *regular_ts3, *newer) do
+g.section(*regular_ts1, *regular_ts2, *regular_ts3) do
 	g.regular_terrain
 end
 
-g.section(*%w(Pa1_magicsnow, Pa1_magicsnow_night)) do
-	g.random(0xB4..0xB9, :horz)
-end
-
-g.section(*%w(Pa1_nohara)) do
+g.section(*%w(Pa1_nohara_smb)) do
 		g.regular_terrain
-		g.random([0x44, 0x54, 0x64, 0x74], :vert)
-		g.random([0x45, 0x55, 0x65, 0x75], :vert)
-		g.random(0x36..0x3B, :horz)
-		g.random(0x46..0x4B)
-		g.random(0x56..0x5B, :horz)
-		g.random([0x96, 0xA6, 0xB6, 0xC6], :vert)
-		g.random([0x97, 0xA7, 0xB7, 0xC7], :vert)
-		g.random(0x78..0x7D, :horz)
-		g.random(0x88..0x8D)
-		g.random(0x98..0x9D, :horz)
+		g.sub_terrain
 end
 
 g.section(*%w(Pa1_fortress_lava)) do

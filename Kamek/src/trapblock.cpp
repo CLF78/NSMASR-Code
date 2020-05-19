@@ -158,7 +158,6 @@ void daTrapBlock_c::executeState_Wait() {
 			isGroundPound = false;
 		} else {
 			if((this->settings >> 24 & 0xF) != 0) {
-				if((this->settings >> 24 & 0xF) == 0) { tile.tileNumber = 0x31; }
 				doStateChange(&daEnBlockMain_c::StateID_DownMove);
 				anotherFlag = 1;
 				isGroundPound = true;
