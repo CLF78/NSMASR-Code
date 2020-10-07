@@ -59,7 +59,7 @@ void dKPNode_s::setupNodeExtra() {
 	colour = "g3d/black.brres";
 
 	// one-time levels
-	if ((level >= 33) && (level <= 36) && (level == 41)) {
+	if ((level >= 30) && (level <= 37)) {
 		if (isUnlocked && !exitComplete)
 			colour = "g3d/red.brres";
 	}
@@ -72,7 +72,7 @@ void dKPNode_s::setupNodeExtra() {
 			if (exitComplete && secretComplete)
 				colour = "g3d/blue.brres";
 			else if (exitComplete || secretComplete)
-				colour = "g3d/blue.brres";
+				colour = "g3d/purple.brres";
 			else
 				colour = "g3d/red.brres";
 		} else {

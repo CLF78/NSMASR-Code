@@ -551,19 +551,67 @@ void dWMMap_c::doEffects() {
 	// Note: effect::spawn() takes name, unk, pos, rot, scale
 	const S16Vec efRot = {0x1800, 0, 0};
 
-	if (mapID == 2) {
-		// SMB12
-		VEC3 efPos1 = {2400.0f, -6450.0f, 7000.0f};
-		effects[0].spawn("Wm_cs_snow_b", 0, &efPos1, &efRot, 0);
+	if (mapID == 1) {
+		// Fullmap.
+		// Torches
+		static const VEC3 torchPos[6] = {
+			{8402.0f, -5528.0f, 7000.0f}, // Big Tower
+			{8444.0f, -5524.0f, 7000.0f}, // Tower
+			{8358.0f, -5524.0f, 7000.0f}, // Tower
+			{8420.0f, -5534.0f, 7000.0f}, // Tower
+			{8380.0f, -5534.0f, 7000.0f}, // Tower
+			{7804.0f, -5064.0f, 7000.0f}, // Castle
+		};
+		const VEC3 reallyBigScale = {1.6f, 1.6f, 1.6f};
+		const VEC3 bigScale = {1.2f, 1.2f, 1.2f};
+		const VEC3 smallScale = {0.25f, 0.25f, 0.25f};
+		for (int i = 0; i < 6; i++) {
+			const VEC3 *whichScale = &smallScale;
+			if (i == 0)
+				whichScale = &bigScale;
+			else if (i == 5)
+				whichScale = &reallyBigScale;
+			effects[i].spawn("Wm_cs_torch", 0, &torchPos[i], &efRot, whichScale);
+		}
+
+		// Mountain Snow
+		const VEC3 efPos = {6000.0f, -5250.0f, 7000.0f};
+		effects[6].spawn("Wm_cs_snow_b", 0, &efPos, &efRot, 0);
 	}
 
 	if (mapID == 4) {
-		// SMB13
-		VEC3 efPos2 = {1000.0f, -8250.0f, 7000.0f};
-		VEC3 efPos3 = {700.0f, -3650.0f, 7000.0f};
-		effects[0].spawn("Wm_cs_snow_a", 0, &efPos2, &efRot, 0);
-		effects[1].spawn("Wm_cs_snow_a", 0, &efPos3, &efRot, 0);
+		// Freezeflame Volcano -- DONE
+		const VEC3 efPos = {2200.0f, -2000.0f, 7000.0f};
+		effects[0].spawn("Wm_cs_firespark", 0, &efPos, &efRot, 0);
 	}
+
+	if (mapID == 6) {
+		// Koopa Planet -- DONE
+		const VEC3 efPos = {2200.0f, -2000.0f, 7000.0f};
+		effects[0].spawn("Wm_cs_firespark", 0, &efPos, &efRot, 0);
+	}
+
+	if (mapID == 7) {
+		// Koopa Core -- DONE
+		// Main area
+		const VEC3 efPos = {2500.0f, -2900.0f, 7000.0f};
+		effects[0].spawn("Wm_cs_firespark", 0, &efPos, &efRot, 0);
+		// Castle area
+		const VEC3 efPos2 = {4500.0f, -3800.0f, 7000.0f};
+		effects[1].spawn("Wm_cs_firespark", 0, &efPos2, &efRot, 0);
+		// Challenge House area
+		const VEC3 efPos3 = {2500.0f, -5500.0f, 7000.0f};
+		effects[2].spawn("Wm_cs_firespark", 0, &efPos2, &efRot, 0);
+	}
+
+	if (mapID == 3) {
+		// Mountain Backside -- DONE
+		VEC3 efPos = {3930.0f, -2700.0f, 7000.0f};
+		effects[0].spawn("Wm_cs_snow_a", 0, &efPos, &efRot, 0);
+		efPos.y -= 700.0f;
+		effects[1].spawn("Wm_cs_snow_a", 0, &efPos, &efRot, 0);
+	}
+
 }
 
 

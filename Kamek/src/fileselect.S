@@ -328,16 +328,16 @@ WarpZoneName:
 
 .align 4
 DefaultSavefileInfoData:
-.string "Choose a Game" #14
+.string "Yoshi's Island" #15
 .byte 0,0,0,0,0,0,0,0,0,0,0 # 11
-.byte 0,0,0,0,0,0,0 # 7
-.long 0xFFFFFFFF,0xFFFFFFFF
-.long 0xFF6A00FF,0xCC5100FF
-.long 0xFFFFFFFF,0xFFFFFFFF
-.short 0x18
-.byte 0x3C,0x1E
+.byte 0,0,0,0,0,0 # 6
+.long 0xFFFF99FF,0x1FB423FF
+.long 0x173714FF,0x3C9135FF
+.long 0xFFFF99FF,0x1FB423FF
+.short 0x75
+.byte 0x2E,0xB
 .byte 1,1
-.byte 0,46
+.byte 0,10
 
 DefaultSavefileInfoDataEnd:
 .long 0

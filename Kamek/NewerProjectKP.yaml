@@ -27,7 +27,7 @@ modules:
   - processed/spritetex.yaml
 #  - processed/gakenoko.yaml
   - processed/poweruphax.yaml
-  # - processed/heapbar.yaml
+#  - processed/heapbar.yaml
   - processed/randtiles.yaml
   - processed/objkinoko.yaml
   - processed/tilegod.yaml
@@ -68,6 +68,5 @@ modules:
   - processed/challengeStar.yaml
   - processed/singAlong.yaml
   - processed/pumpkinGoomba.yaml
-  - processed/trapblock.yaml
   # - processed/pengi.yaml
 #  - processed/actorlog.yaml

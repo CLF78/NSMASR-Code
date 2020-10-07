@@ -4,7 +4,6 @@
 #include <sfx.h>
 #include <stage.h>
 #include "boss.h"
-extern "C" void dAcPy_vf3F8(void* player, dEn_c* monster, int t);
 
 class daBalboa_c : public daBoss {
 	int onCreate();

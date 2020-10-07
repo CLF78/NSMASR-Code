@@ -1,7 +1,6 @@
 #include <game.h>
 #include <stage.h>
 #include "msgbox.h"
-#include "boss.h"
 
 const char *PalaceDudeFileList[] = {"OpeningScene", 0};
 
@@ -41,7 +40,7 @@ int dPalaceDude_c::onExecute() {
 
 			dMsgBoxManager_c::instance->showMessage(
 				settings & 0xFFFFFF, // message ID
-				true, // can cancel
+				false, // cannot cancel
 				delay // delay
 				);
 		}

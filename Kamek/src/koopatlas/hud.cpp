@@ -269,7 +269,8 @@ void dWMHud_c::loadHeaderInfo() {
 	if (LevelNumber->tagProc != 0)
 		tw2.tagProcessor = LevelNumber->tagProc;
 
-	float currentPos = 30.0f;
+	float currentPos = tw2.CalcStringWidth(levelNumber, wcslen(levelNumber));
+	currentPos += LevelNumber->trans.x + 12.0f;
 
 	// INFO
 	int w = nodeForHeader->levelNumber[0] - 1;

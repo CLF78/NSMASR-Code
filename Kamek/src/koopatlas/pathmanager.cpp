@@ -3,7 +3,6 @@
 #include "koopatlas/hud.h"
 #include "koopatlas/player.h"
 #include "koopatlas/map.h"
-#include "koopatlas/camera.h"
 #include <sfx.h>
 #include <stage.h>
 
@@ -153,7 +152,7 @@ void dWMPathManager_c::setup() {
 			waitAtStart = 1;
 
 		if (wm->isFirstPlay)
-			waitAtStart = 50;
+			waitAtStart = 280;
 
 		SpammyReport("saved path node: %d\n", save->current_path_node);
 		if (save->current_path_node >= pathLayer->nodeCount) {
@@ -643,7 +642,6 @@ bool dWMPathManager_c::evaluateUnlockCondition(u8 *&in, SaveBlock *save, int sta
 		u8 subConditionType = controlByte & 0x3F;
 		switch (subConditionType) {
 			case 0: case 1: case 2: case 3:
-			{
 				u8 one = *(in++);
 				u8 two = *(in++);
 
@@ -652,23 +650,14 @@ bool dWMPathManager_c::evaluateUnlockCondition(u8 *&in, SaveBlock *save, int sta
 
 				switch (subConditionType) {
 					case 0:
-					{
 						return compareOne == compareTwo;
-					}
 					case 1:
-					{
 						return compareOne != compareTwo;
-					}
 					case 2:
-					{
 						return compareOne < compareTwo;
-					}
 					case 3:
-					{
 						return compareOne > compareTwo;
-					}
 				}
-			}
 
 			case 15:
 				UnlockCmdReport("[%p] CondStk:%d end, returning CONSTANT 1\n", in, stack);
@@ -949,7 +938,7 @@ void dWMPathManager_c::execute() {
 		checkedForMoveAfterEndLevel = true;
 
 		static const int endLevels[11][3] = {
-			{1, 40, 1}, // W1 right
+			{1, 38, 1}, // W1 right
 			{2, 38, 2}, // W2 up
 			{3, 38, 0}, // W3 left
 			{4, 38, 1}, // W4 right
@@ -1541,7 +1530,7 @@ void dWMPathManager_c::activatePoint() {
 			return;
 		}
 
-		if ((l >= 32) && (l <= 35) && (l == 41)) {
+		if ((l >= 29) && (l <= 36)) {
 			SaveBlock *save = GetSaveFile()->GetBlock(-1);
 			u32 conds = save->GetLevelCondition(w, l);
 

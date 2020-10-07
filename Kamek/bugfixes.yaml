@@ -31,7 +31,6 @@ hooks:
     type: patch
     addr_pal: 0x809CB118
     data: '2C1C0003'
-
   - name: DisableTerrainShading
     type: patch
     addr_pal: 0x8008E6F8
@@ -42,7 +41,6 @@ hooks:
     branch_type: bl
     src_addr_pal: 0x8010191C
     target_func: 'TitleScreenFucker'
-
   - name: AnotherTSThing
     type: patch
     addr_pal: 0x8015D850
@@ -51,7 +49,7 @@ hooks:
   - name: TitleReplayLevels
     type: patch
     addr_pal: 0x802F4CD0
-    data: '0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002'
+    data: '0402 0002 0101 0104 0202 0002 0301 0306 0400 0402 0501 0503 0104 0900 0900'
 
   - name: NoTitleScreenMovie
     type: nop_insn
@@ -100,13 +98,11 @@ hooks:
     branch_type: bl
     src_addr_pal: 0x80133120
     target_func: 'newClimbSoundsJumpS'
-
   - name: ClimbSoundsJumpSS
     type: branch_insn
     branch_type: bl
     src_addr_pal: 0x80133134
     target_func: 'newClimbSoundsJumpSS'
-
   - name: ClimbSoundsJump
     type: branch_insn
     branch_type: bl
@@ -220,6 +216,7 @@ hooks:
     
   - name: TileGodLayerFix
     type: patch
+    addr_ntsc: 0xdeadbeef
     addr_pal: 0x807E16D0
     data: '88D2038F'
     
@@ -229,8 +226,9 @@ hooks:
     data: '48000014'
 
   - name: RockyWrenchFix
-    type: nop_insn
-    area_pal: 0x808A9448
+    type: patch
+    addr_pal: 0x808A9448
+    data: '60000000'
 
 #  - name: HeapChangeAttempt
 #    type: branch_insn
@@ -320,7 +318,6 @@ hooks:
     branch_type: bl
     src_addr_pal: 0x808399D4
     target_func: 'FuckLineLiftWithARake'
-
   - name: AlsoFuckTheLineLiftActivation
     type: branch_insn
     branch_type: b
@@ -367,8 +364,9 @@ hooks:
   #   target_func: 'AnmChrConstructWrapper'
 
   - name: BroozerCrashAvoidance2
-    type: nop_insn
-    area_pal: 0x809EB284
+    type: patch
+    addr_pal: 0x809EB284
+    data: '60000000'
 
   - name: BroozerCrashAvoidance3
     type: patch
@@ -380,30 +378,3 @@ hooks:
     branch_type: bl
     src_addr_pal: 0x80816370
     target_func: 'JrFloorFireHax'
-
-  - name: UniversalFlowerHack1
-    type: nop_insn
-    area_pal: 0x80077F8C
-    
-  - name: UniversalFlowerHack2
-    type: nop_insn
-    area_pal: 0x80077FC4
-    
-  - name: UniversalFlowerHack3
-    type: patch
-    addr_pal: 0x80077F9C
-    data: '4800002C'
-
-  - name: UniversalFlowerHack4
-    type: patch
-    addr_pal: 0x80077FB0
-    data: '48000018'
-
-#  - name: DisableLifeSaving
-#    type: patch
-#    addr_pal: 0x800E182C
-#    data: '38A00005'
-
-#  - name: DisableGoalWall
-#    type: nop_insn
-#    area_pal: 0x80A09B40

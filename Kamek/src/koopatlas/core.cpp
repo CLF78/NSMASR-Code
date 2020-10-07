@@ -4,7 +4,6 @@
 #include "music.h"
 
 extern "C" void LoadMapScene();
-extern u8 MaybeFinishingLevel[2];
 
 dScKoopatlas_c *dScKoopatlas_c::instance = 0;
 
@@ -177,7 +176,7 @@ bool WMInit_LoadResources2(void *ptr) {
 		wm->mapPath = wm->getMapNameForIndex(wm->currentMapID);
 		if (wm->mapPath == 0)
 			wm->mapPath = wm->getMapNameForIndex(0);
-		if (!strcmp(wm->mapPath, "/Maps/WarpZone.kpbin") || !strcmp(wm->mapPath, "/Maps/WarpZone2.kpbin"))
+		if (!strcmp(wm->mapPath, "/Maps/WSEL.kpbin"))
 			wm->warpZoneHacks = true;
 		else
 			wm->warpZoneHacks = false;

@@ -1,9 +1,4 @@
 .text
-.global _Z3absf
-_Z3absf:
-	fabs f1, f1
-	frsp f1, f1
-	blr
 
 .global JrFloorFireHax
 JrFloorFireHax:
@@ -16,6 +11,7 @@ JrFloorFireHax:
 	lis r4, 0x100
 	stw r4, 0x774(r30)
 	stw r4, 0x77C(r30)
+	blr
 
 .global TryAndFixScoreGlitch
 TryAndFixScoreGlitch:
@@ -612,7 +608,7 @@ ReplaceExceptionOccurred:
 #.long CRAPPYALLOC
 .data
 NewExceptionOccurred:
-.string "Mamma mia, the game has crashed!\nPlease take note of when the crash occurred\nand bug CLF78 so he fixes it.\n You can find him at https://discord.gg/A4WSCRZ.\n"
+.string "Whoops! Newer 1.0.2 has crashed.\nPlease take a screenshot of the info below\nand send it to newer@newerteam.com.\nYou can scroll through this report using the D-Pad.\n"
 UniLogStr: .string "[ULog] returning %8x to: %x > %x > %x > %x > %x > %x\n"
 #WillAlloc: .string "[AH] Will allocate %x bytes aligned by %x\n"
 #Alloced: .string "[AH] Allocated %p\n"

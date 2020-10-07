@@ -1,18 +1,19 @@
-Kamek/Build
 Kamek/processed
 Kamek/NewerASM
-Kamek/kamek_pal2.x
-Kamek/kamek_ntsc.x
-Kamek/kamek_ntsc2.x
-Kamek/kamek_jpn.x
-Kamek/kamek_jpn2.x
-Kamek/NewProject.yaml
+Kamek/tools/kamek_pal2.x
+Kamek/tools/kamek_ntsc.x
+Kamek/tools/kamek_ntsc2.x
+Kamek/tools/kamek_jpn.x
+Kamek/tools/kamek_jpn2.x
+Kamek/tools/kamek_kor.x
 Kamek/tools/__pycache__
 Kamek/tools/devkitPPC
 Kamek/tmp
-Kamek/- Build2 -.bat
 Layouts/fonts
 Level Previews
 Music
+Credits.txt
 DiaryLog.txt
+LevelReport.txt
+ToDel.txt
 Maps/Unused

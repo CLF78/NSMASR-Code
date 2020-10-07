@@ -1,32 +1,17 @@
 @echo OFF
-rmdir /s /q Build
-rmdir /s /q NewerASM
-mkdir Build
-mkdir NewerASM
-if %errorlevel%==0 goto mapfile
-pause
-exit
-
-:mapfile
 python tools/mapfile_tool.py
 if %errorlevel%==0 goto kamek
 pause
 exit
 
 :kamek
-python tools/kamek.py NewerProjectKP.yaml --no-rels --use-mw --gcc-type=powerpc-eabi --gcc-path=tools\devkitPPC\bin --gcc-append-exe --mw-path=tools --fast-hack
-if %errorlevel%==0 goto rename
-pause
-exit
-
-:rename
-python tools/renameNewer.py
+python tools/kamek.py NewerProjectKP.yaml --no-rels --gcc-path=tools\devkitPPC\bin --gcc-append-exe --use-mw --mw-path="C:\Program Files (x86)\Freescale\CW for MPC55xx and MPC56xx 2.10\PowerPC_EABI_Tools\Command_Line_Tools" --fast-hack
 if %errorlevel%==0 goto move
 pause
 exit
 
 :move
-move "%~dp0\Build\*" C:\Dolphin\NSMASR\NewerRes >nul
+move "%~dp0\NewerASM\*.bin" C:\Dolphin\NSMASR\NewerRes >nul
 if %errorlevel%==0 goto end
 pause
 exit

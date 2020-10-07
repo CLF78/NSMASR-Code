@@ -71,7 +71,7 @@ int dWorldCamera_c::onExecute() {
 	if (dScKoopatlas_c::instance->warpZoneHacks) {
 		currentX = 2040.0f;
 		currentY = -1460.0f;
-		zoomLevel = 2.8f;
+		zoomLevel = 3.4f;
 
 	} else if (panning) {
 		// Calculate where we are

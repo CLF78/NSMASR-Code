@@ -1,0 +1,1 @@
+This layout doesn't have a proper color animation for the "Press 2 to play" text. Reimport it with Benzin after exporting ;)

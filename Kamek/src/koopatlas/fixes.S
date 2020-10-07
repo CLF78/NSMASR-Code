@@ -1,4 +1,7 @@
 .text
+#ifndef __MWERKS__
+#include <asm_setup.S>
+#endif
 .global ClearLastPowerupStoreTypeAfterGameOver
 .extern LastPowerupStoreType
 ClearLastPowerupStoreTypeAfterGameOver:

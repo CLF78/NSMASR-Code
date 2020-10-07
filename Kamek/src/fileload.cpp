@@ -1,7 +1,5 @@
 #include "fileload.h"
 
-extern "C" void UncompressBackward(void *bottom);
-
 
 void *LoadFile(FileHandle *handle, const char *name) {
 
@@ -22,35 +20,6 @@ void *LoadFile(FileHandle *handle, const char *name) {
 
 	return handle->filePtr;
 }
-
-/*void *LoadCompressedFile(FileHandle *handle, const char *name) {
-
-	int entryNum = DVDConvertPathToEntrynum(name);
-
-	DVDHandle dvdhandle;
-	if (!DVDFastOpen(entryNum, &dvdhandle)) {
-		return 0;
-	}
-
-	u32 infoBlock[0x20 / sizeof(u32)] __attribute__ ((aligned(32)));
-	DVDReadPrio(&dvdhandle, infoBlock, 0x20, dvdhandle.length - 8, 2);
-
-	// Reverse it!
-	infoBlock[1] = (infoBlock[1] >> 24) | ((infoBlock[1] >> 8) & 0xFF00) | ((infoBlock[1] & 0xFF00) << 8) | ((infoBlock[1] & 0xFF) << 24);
-
-	u32 uncompSize = dvdhandle.length + infoBlock[1];
-	handle->length = uncompSize;
-	handle->filePtr = EGG__Heap__alloc((uncompSize+0x1F) & ~0x1F, 0x20, GetArchiveHeap());
-
-	int ret = DVDReadPrio(&dvdhandle, handle->filePtr, (dvdhandle.length+0x1F) & ~0x1F, 0, 2);
-
-	DVDClose(&dvdhandle);
-
-	UncompressBackward((void*)((u32)handle->filePtr + dvdhandle.length));
-
-
-	return handle->filePtr;
-}*/
 
 bool FreeFile(FileHandle *handle) {
 	if (!handle) return false;

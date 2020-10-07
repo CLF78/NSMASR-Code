@@ -1484,18 +1484,18 @@ SkawoHatesMe:
 	lwzx r4, r27, r0
 	cmpwi r0, 28
 	bnelr
-	lis r5, FireflowerFileName@h
-	ori r5, r5, FireflowerFileName@l
+	lis r5, SkawoFucksDucks@h
+	ori r5, r5, SkawoFucksDucks@l
 	blr
 SkawoStillHatesMe:
 	lwzx r4, r4, r0
 	cmpwi r0, 28
 	bnelr
-	lis r4, FireflowerModelName@h
-	ori r4, r4, FireflowerModelName@l
+	lis r4, DuckFuckersUnited@h
+	ori r4, r4, DuckFuckersUnited@l
 	blr
 .data
-FireflowerFileName: .string "g3d/I_fireflower.brres"
-FireflowerModelName: .string "I_fireflower"
+SkawoFucksDucks: .string "g3d/I_fireflower.brres"
+DuckFuckersUnited: .string "I_fireflower"
 .align 4
 

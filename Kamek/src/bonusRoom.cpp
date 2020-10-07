@@ -3,7 +3,6 @@
 #include <g3dhax.h>
 #include <sfx.h>
 #include <stage.h>
-#include <playerAnim.h>
 
 extern "C" void *MakeMarioEnterDemoMode();
 extern "C" void *MakeMarioExitDemoMode();
