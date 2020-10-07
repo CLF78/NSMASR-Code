@@ -170,6 +170,8 @@ DefaultSavefileInfo:
 	addi r4, r3, 0x6FC
 	lis r5, DefaultSavefileInfoData@h
 	ori r5, r5, DefaultSavefileInfoData@l
+	lis r6, DefaultSavefileInfoDataEnd@h
+	ori r6, r6, DefaultSavefileInfoDataEnd@l
 
 DSFICopyLoop:
 	lwz r7, 0(r5)
@@ -282,3 +284,6 @@ DefaultSavefileInfoData:
 .byte 0x3C,0x1E  # Map Saturation / Lightness
 .byte 1,1  # Music ID / World ID
 .byte 0,46  # Titlescreen World/Level (both -1)
+
+DefaultSavefileInfoDataEnd:
+.long 0

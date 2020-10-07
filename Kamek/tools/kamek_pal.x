@@ -128,7 +128,6 @@ SECTIONS {
 	continueFromStrongBox2 = 0x808AAFD0;
 	continueFromStrongBox = 0x808AA4D8;
 
-	_8042A788 = 0x8042A788;
 	playFanfare__FPvi = 0x8019C390;
 	somethingAboutSound__FPv = 0x8019CB30;
 
@@ -255,7 +254,6 @@ SECTIONS {
 
 	init__18StandOnTopColliderFP13dStageActor_cfffffsUcP7Point2d = 0x800DB270;
 	__ct__18StandOnTopColliderFv = 0x800DB220;
-	__dt__18StandOnTopColliderFv = 0x80044400;
 
 
 	__dt__13BasicColliderFv = 0x800DAEF0;
@@ -1014,7 +1012,6 @@ SECTIONS {
 
 	/* This is preliminary and kinda strange, most of these just point to ScnLeaf for now */
 	setup__Q23m3d6proc_cFPvPUi = 0x80165110;
-	returnUnknown__Q23m3d6proc_cFv = 0x8000F720;
 
 	__ct__Q23m3d9scnLeaf_cFv = 0x8016A150;
 	__dt__Q23m3d9scnLeaf_cFv = 0x8016A170;
@@ -1357,11 +1354,9 @@ SECTIONS {
 	_Z8snprintfPciPKcz = 0x802E19D8;
 	_Z6strcatPKcS0_ = 0x802E1D2C;
 
-	_Z6memsetPvij = 0x800046B4;
 	sprintf__FPcPCce = 0x802E1ACC;
 	snprintf__FPcUlPCce = 0x802E19D8;
 	memcmp__FPCvPCvUi = 0x802DF388;
-	_Z6strcatPKcS0_ = 0x802E1D2C;
 
 	_Znaj = 0x802B9350;
 
@@ -1757,7 +1752,6 @@ SECTIONS {
 	HandlesOverallScale = 0x8009ea50;
 	posIsInZone = 0x800b5730;
 	ScreenPositionClass = 0x8042a2e8;
-	ShakeScreen = 0x800d8d50;
 
 	/* daEnemy_c */
 	/*FIXME bad vtable address :( */
