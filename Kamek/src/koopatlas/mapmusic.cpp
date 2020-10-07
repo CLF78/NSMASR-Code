@@ -1,4 +1,5 @@
 #include <game.h>
+#include <sfx.h>
 #include "koopatlas/mapmusic.h"
 #include "music.h"
 
@@ -87,7 +88,7 @@ void dKPMusic::execute() {
 			nw4r::db::Exception_Printf_("Switching brstm files to song %d.\n", s_nextSong);
 
 			char brstmPath[48];
-			sprintf(brstmPath, "/Sound/new/map%d.er", s_nextSong);
+			sprintf(brstmPath, "/Sound/stream/map%d.brstm", s_nextSong);
 
 			u8 *sound = (u8*)(s_handle.GetSound());
 			u8 *player = sound+0x110;

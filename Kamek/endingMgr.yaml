@@ -13,4 +13,3 @@ hooks:
   - name: DisablePeachDmEscort
     type: nop_insn
     area_pal: 0x80B49E80
-

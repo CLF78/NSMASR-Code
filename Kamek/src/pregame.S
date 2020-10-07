@@ -1,5 +1,4 @@
-.set sp,1
-.set rtoc,2
+#include <asm_setup.S>
 
 .text
 

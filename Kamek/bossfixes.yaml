@@ -1,0 +1,8 @@
+---
+source_files: [../src/boss.cpp, ../src/bossfixes.S]
+hooks:
+  - name: JrFloorFireHax
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x80816370
+    target_func: 'JrFloorFireHax'

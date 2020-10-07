@@ -46,8 +46,6 @@ int daEnFlipBlock_c::onCreate() {
 
 	allocator.unlink();
 
-
-
 	blockInit(pos.y);
 
 	physicsInfo.x1 = -8;
@@ -110,15 +108,12 @@ daEnFlipBlock_c *daEnFlipBlock_c::build() {
 
 	void *buffer = AllocFromGameHeap1(sizeof(daEnFlipBlock_c));
 	daEnFlipBlock_c *c = new(buffer) daEnFlipBlock_c;
-
-
 	return c;
 }
 
 
 void daEnFlipBlock_c::blockWasHit(bool isDown) {
 	pos.y = initialY;
-
 	doStateChange(&StateID_Flipping);
 }
 
@@ -164,6 +159,7 @@ void daEnFlipBlock_c::beginState_Flipping() {
 	flipsRemaining = 7;
 	physics.removeFromList();
 }
+
 void daEnFlipBlock_c::executeState_Flipping() {
 	if (isGroundPound)
 		rot.x += 0x800;
@@ -178,11 +174,11 @@ void daEnFlipBlock_c::executeState_Flipping() {
 		}
 	}
 }
+
 void daEnFlipBlock_c::endState_Flipping() {
 	physics.setup(this, &physicsInfo, 3, currentLayerID);
 	physics.addToList();
 }
-
 
 
 bool daEnFlipBlock_c::playerOverlaps() {

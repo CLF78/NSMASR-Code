@@ -6,4 +6,3 @@ hooks:
     branch_type: b
     src_addr_pal: 0x80830BD8
     target_func: 'APDebugDraw(void)'
-

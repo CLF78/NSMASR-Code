@@ -88,6 +88,7 @@ void APDebugDrawer::drawXlu() {
 
 	GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
 	GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+
 //	GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_RASC, GX_CC_ZERO);
 //	GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 //	GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
@@ -118,13 +119,6 @@ void APDebugDrawer::drawXlu() {
 	ActivePhysics *ap = ActivePhysics::globalListHead;
 
 	while (ap) {
-//		if (ap->owner->name == PLAYER)
-//			OSReport("Player has : DistToC=%f,%f DistToEdge=%f,%f Pos=%f,%f Scale=%f,%f\n",
-//					ap->info.xDistToCenter, ap->info.yDistToCenter,
-//					ap->info.xDistToEdge, ap->info.yDistToEdge,
-//					ap->owner->pos.x, ap->owner->pos.y,
-//					ap->owner->scale.x, ap->owner->scale.y);
-
 		u32 uptr = (u32)ap;
 		u8 r = (uptr>>16)&0xFF;
 		u8 g = (uptr>>8)&0xFF;
@@ -274,7 +268,7 @@ void APDebugDrawer::drawXlu() {
 	}
 
 
-	// Now, the hardest one.. CollisionMgr_c!
+	// Now, the hardest one... CollisionMgr_c!
 	fBase_c *fb = 0;
 	while ((fb = fBase_c::searchByBaseType(2, fb))) {
 		u8 *testMe = ((u8*)fb) + 0x1EC;

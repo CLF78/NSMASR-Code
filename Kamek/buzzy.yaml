@@ -1,0 +1,28 @@
+---
+source_files: [../src/bigmet.S]
+hooks:
+  - name: BigMetSlidingFix
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x809B6F60
+    target_func: 'BigMetSlidingFix'
+
+  - name: BigMetPowFix
+    type: add_func_pointer
+    src_addr_pal: 0x80AD8A64
+    target_func: 'BigMetPowFix'
+
+  - name: DisableBigMetPenguinSlideIgnoring
+    type: patch
+    addr_pal: 0x809B6EF0
+    data: '38600000'
+
+  - name: DisableBigMetFireballIgnoring
+    type: patch
+    addr_pal: 0x809B6EC0
+    data: '38600000'
+
+  - name: DisableBigMetIceballIgnoring
+    type: patch
+    addr_pal: 0x809B6EB0
+    data: '38600000'

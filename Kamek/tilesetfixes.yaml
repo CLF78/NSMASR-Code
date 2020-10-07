@@ -1,0 +1,37 @@
+---
+source_files: [../src/tilesetfixer.cpp]
+hooks:
+  - name: DisableTerrainShading
+    type: patch
+    addr_pal: 0x8008E6F8
+    data: '38600000'
+
+  - name: DisableTilesetSlots
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x80081718
+    target_func: 'TilesetFixerHack(void *, void *, int, int)'
+
+  - name: DisableTilesetSlots2
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x800817C4
+    target_func: 'TilesetFixerHack(void *, void *, int, int)'
+
+  - name: UniversalFlowerHack1
+    type: nop_insn
+    area_pal: 0x80077F8C
+    
+  - name: UniversalFlowerHack2
+    type: nop_insn
+    area_pal: 0x80077FC4
+    
+  - name: UniversalFlowerHack3
+    type: patch
+    addr_pal: 0x80077F9C
+    data: '4800002C'
+
+  - name: UniversalFlowerHack4
+    type: patch
+    addr_pal: 0x80077FB0
+    data: '48000018'

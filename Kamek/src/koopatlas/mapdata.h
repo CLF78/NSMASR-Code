@@ -290,6 +290,7 @@ class dKPNodeExtra_c {
 		mHeapAllocator_c mallocator;
 		mMtx matrix;
 		m3d::mdl_c model;
+		m3d::anmClr_c clrAnm;
 };
 
 #endif

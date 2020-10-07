@@ -1,10 +1,12 @@
-.text
+#include <asm_setup.S>
+
+.global GenericCorseClear
 .extern loadArc__Q23m2d13EmbedLayout_cFPCcb
 .extern loadAnimations__Q23m2d13EmbedLayout_cFPPCci
 .extern loadGroups__Q23m2d13EmbedLayout_cFPPCcPCii
 .extern getPanes__Q23m2d13EmbedLayout_cCFPPCcPPQ34nw4r3lyt4Panei
 
-.global GenericCorseClear
+.text
 GenericCorseClear:
 	stwu r1, -0x10(r1)
 	mflr r0
@@ -22,6 +24,7 @@ GenericCorseClear:
 	bne didLoad
 	li r3, 0
 	b return
+
 didLoad:
 	addi r3, r31, 0x70
 	lis r4, CorseClearBrlytName@h
@@ -48,7 +51,6 @@ didLoad:
 
 	lwz r3, 0x90(r31)
 	stw r3, 0x36C(r31)
-
 	addi r3, r31, 0x70
 	lis r4, CorseClearPaneNames@h
 	ori r4, r4, CorseClearPaneNames@l
@@ -57,6 +59,7 @@ didLoad:
 	bl getPanes__Q23m2d13EmbedLayout_cCFPPCcPPQ34nw4r3lyt4Panei
 
 	li r3, 1
+
 return:
 	lwz r0, 0x14(r1)
 	lwz r31, 0xC(r1)
@@ -74,9 +77,9 @@ A00_inText: .string "A00_inText"
 A02_loopText: .string "A02_loopText"
 A01_outText: .string "A01_outText"
 N_marioClear_00: .string "N_marioClear_00"
+
 .align 4
 CorseClearGroupAnimIDs: .long 0, 1, 2
 CorseClearAnims: .long CCInText, CCLoopText, CCOutText
 CorseClearGroups: .long A00_inText, A02_loopText, A01_outText
 CorseClearPaneNames: .long N_marioClear_00
-

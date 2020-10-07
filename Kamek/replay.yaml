@@ -10,13 +10,12 @@ hooks:
    branch_type: bl
    src_addr_pal: 0x80102238
    target_func: 'replayEnd'
- # this is commented out because it's called by the creditsMgr's dance value
- # loader; due to a conflict
- # - name: ReplayHookRecord
- #   type: branch_insn
- #   branch_type: b
- #   src_addr_pal: 0x8006A1B4
- #   target_func: 'replayRecord'
+# this is commented out because it's called by the creditsMgr's dance value loader due to a conflict
+# - name: ReplayHookRecord
+#   type: branch_insn
+#   branch_type: b
+#   src_addr_pal: 0x8006A1B4
+#   target_func: 'replayRecord'
 # - name: LuigiOverride
 #   type: branch_insn
 #   branch_type: b

@@ -2,9 +2,8 @@
 source_files: []
 hooks:
   - name: DisableBlockSnakeIce
-    type: patch
-    addr_pal: 0x80AA6FC4
-    data: '60000000'
+    type: nop_insn
+    area_pal: 0x80AA6FC4
 
 #  - name: ChangeBlockSnakeModel
 #    type: patch
@@ -30,4 +29,3 @@ hooks:
   - name: DisableBlockSnakeAnmTexSrt3
     type: nop_insn
     area_pal: [0x80AA6D98, 0x80AA6DA8]
-

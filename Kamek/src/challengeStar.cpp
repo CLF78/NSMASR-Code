@@ -3,11 +3,8 @@
 #include <g3dhax.h>
 #include <sfx.h>
 
-
 extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
-
 extern int GlobalStarsCollected;
-
 
 class dChallengeStar : public dEn_c {
 	int onCreate();
@@ -38,13 +35,10 @@ class dChallengeStar : public dEn_c {
 
 };
 
-
 void dChallengeStar::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) { 
-
 	if (collected) {
 		this->Delete(1);
 		return; }
-
 
 	PlaySoundAsync(this, SE_OBJ_BROOM_KEY_SHOW);
 	SpawnEffect("Wm_ob_greencoinkira_a", 0, &this->pos, &(S16Vec){0,0,0}, &(Vec){0.8, 0.8, 0.8});
@@ -55,41 +49,44 @@ void dChallengeStar::playerCollision(ActivePhysics *apThis, ActivePhysics *apOth
 	}
 	
 	collected = true;
-
 	this->Delete(1);
 }
 
-void dChallengeStar::yoshiCollision(ActivePhysics *apThis, ActivePhysics *apOther) { this->playerCollision(apThis, apOther); }
+void dChallengeStar::yoshiCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
+	this->playerCollision(apThis, apOther);
+}
+
 bool dChallengeStar::collisionCat3_StarPower(ActivePhysics *apThis, ActivePhysics *apOther) {
 	this->playerCollision(apThis, apOther);
 	return true;
 }
+
 bool dChallengeStar::collisionCat9_RollingObject(ActivePhysics *apThis, ActivePhysics *apOther) {
 	this->playerCollision(apThis, apOther);
 	return true;
 }
+
 bool dChallengeStar::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) {
 	this->playerCollision(apThis, apOther);
 	return true;
 }
+
 bool dChallengeStar::collisionCat7_GroundPoundYoshi(ActivePhysics *apThis, ActivePhysics *apOther) {
 	this->playerCollision(apThis, apOther);
 	return true;
 }
+
 bool dChallengeStar::collisionCatA_PenguinMario(ActivePhysics *apThis, ActivePhysics *apOther) {
 	this->playerCollision(apThis, apOther);
 	return true;
 }
-
 
 dChallengeStar *dChallengeStar::build() {
 	void *buffer = AllocFromGameHeap1(sizeof(dChallengeStar));
 	return new(buffer) dChallengeStar;
 }
 
-
-int dChallengeStar::onCreate() {
-	
+int dChallengeStar::onCreate() {	
 	collected = false;
 	char die = this->settings & 0xF;
 	if (GetSpecificPlayerActor(die) == 0) { this->Delete(1); return 2; }
@@ -134,7 +131,6 @@ int dChallengeStar::onCreate() {
 	return true;
 }
 
-
 int dChallengeStar::onDelete() {
 	return true;
 }
@@ -143,7 +139,6 @@ int dChallengeStar::onDraw() {
 	bodyModel.scheduleForDrawing();
 	return true;
 }
-
 
 void dChallengeStar::updateModelMatrices() {
 	matrix.translation(pos.x, pos.y, pos.z);
@@ -161,4 +156,3 @@ int dChallengeStar::onExecute() {
 	this->rot.y += 0x200;
 	return true;
 }
-

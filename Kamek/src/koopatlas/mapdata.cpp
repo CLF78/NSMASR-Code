@@ -59,20 +59,17 @@ void dKPNode_s::setupNodeExtra() {
 	colour = "g3d/black.brres";
 
 	// one-time levels
-	if ((level >= 30) && (level <= 37)) {
+	if ((level >= 33) && (level <= 36) && (level == 41)) {
 		if (isUnlocked && !exitComplete)
 			colour = "g3d/red.brres";
 	}
-	// the shop
-	else if (level == 99)
-		colour = "g3d/shop.brres";
 
 	else if (isUnlocked) {
 		if (hasSecret) {
 			if (exitComplete && secretComplete)
 				colour = "g3d/blue.brres";
 			else if (exitComplete || secretComplete)
-				colour = "g3d/purple.brres";
+				colour = "g3d/blue.brres";
 			else
 				colour = "g3d/red.brres";
 		} else {
@@ -87,9 +84,17 @@ void dKPNode_s::setupNodeExtra() {
 	this->extra->mallocator.link(-1, GameHeaps[0], 0, 0x20);
 
 	nw4r::g3d::ResFile rg(getResource("cobCourse", colour));
-	this->extra->model.setup(rg.GetResMdl("cobCourse"), &this->extra->mallocator, 0x224, 1, 0);
+	nw4r::g3d::ResMdl nodemdl = rg.GetResMdl("cobCourse");
+	this->extra->model.setup(nodemdl, &this->extra->mallocator, 0x224, 1, 0);
 	this->extra->matrix.identity();
 	SetupTextures_MapObj(&this->extra->model, 0);
+
+	// setup the color animation
+	nw4r::g3d::ResAnmClr anmRes = rg.GetResAnmClr("cobCourseOpen");
+	this->extra->clrAnm.setup(nodemdl, anmRes, &this->extra->mallocator, 0, 1);
+	this->extra->clrAnm.bind(&this->extra->model, anmRes, 0, 0);
+	this->extra->model.bindAnim(&this->extra->clrAnm, 0.0f);
+
 
 	this->extra->mallocator.unlink();
 }
@@ -285,26 +290,3 @@ const dKPWorldDef_s *dKPMapData_c::findWorldDef(int id) const {
 
 	return 0;
 }
-
-
-/******************************************************************************
- * Generic Layer
- ******************************************************************************/
-
-
-/******************************************************************************
- * Tile Layer
- ******************************************************************************/
-
-
-/******************************************************************************
- * Doodad Layer
- ******************************************************************************/
-
-
-/******************************************************************************
- * Path Layer
- ******************************************************************************/
-
-
-

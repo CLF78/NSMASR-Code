@@ -1,0 +1,16 @@
+source_files: []
+hooks:
+  - name: 2CastleFix
+    type: patch
+    addr_pal: 0x8015530C
+    data: '280000FF'
+
+  - name: 1-1 BG Fix
+    type: patch
+    addr_pal: 0x801180AC
+    data: '38000003'
+
+#  - name: FailedLavaWaves
+#    type: patch
+#    addr_pal: 0x8011F57C
+#    data: '38A00001'

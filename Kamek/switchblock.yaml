@@ -1,4 +1,5 @@
 ---
+# Requires msgbox.yaml
 source_files: [../src/switchblock.S, ../src/palaceDude.cpp]
 hooks:
   - name: PrepareReplay_SwitchPatch
@@ -28,8 +29,6 @@ hooks:
     src_addr_pal: 0x80081A4C
     branch_type: b
     target_func: 'CheckBehaviourOverride_EndPatch'
-
-
 
   - name: BuildPalaceDude
     type: add_func_pointer

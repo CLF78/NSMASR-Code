@@ -1,6 +1,5 @@
 #include "fileload.h"
 
-
 void *LoadFile(FileHandle *handle, const char *name) {
 
 	int entryNum = DVDConvertPathToEntrynum(name);
@@ -34,9 +33,6 @@ bool FreeFile(FileHandle *handle) {
 	return true;
 }
 
-
-
-
 File::File() {
 	m_loaded = false;
 }
@@ -55,17 +51,6 @@ bool File::open(const char *filename) {
 
 	return (ret != 0);
 }
-
-/*bool File::openCompressed(const char *filename) {
-	if (m_loaded)
-		close();
-
-	void *ret = LoadCompressedFile(&m_handle, filename);
-	if (ret != 0)
-		m_loaded = true;
-
-	return (ret != 0);
-}*/
 
 void File::close() {
 	if (!m_loaded)
@@ -92,4 +77,3 @@ u32 File::length() {
 	else
 		return 0xFFFFFFFF;
 }
-

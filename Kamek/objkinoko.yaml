@@ -10,5 +10,3 @@ hooks:
     type: add_func_pointer
     src_addr_pal: 0x80974248
     target_func: 'daObjKinoko_c::drawHook(void)'
-
-

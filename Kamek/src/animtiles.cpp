@@ -23,12 +23,12 @@ void DoTiles(void* self) {
 	header = (AnimDef_Header*)LoadFile(&fh, "/NewerRes/AnimTiles.bin");
 	
 	if (!header) {
-		OSReport("anim load fail\n");
+		OSReport("File header missing\n");
 		return;
 	}
 	
 	if (header->magic != 'NWRa') {
-		OSReport("anim info incorrect\n");
+		OSReport("Magic check failed\n");
 		FreeFile(&fh);
 		return;
 	}
@@ -50,21 +50,4 @@ void DoTiles(void* self) {
 
 void DestroyTiles(void *self) {
 	FreeFile(&fh);
-}
-
-
-extern "C" void CopyAnimTile(u8 *target, int tileNum, u8 *source, int frameNum) {
-	int tileRow = tileNum >> 5; // divided by 32
-	int tileColumn = tileNum & 31; // modulus by 32
-
-	u8 *baseRow = target + (tileRow * 2 * 32 * 1024);
-	u8 *baseTile = baseRow + (tileColumn * 32 * 4 * 2);
-
-	u8 *sourceRow = source + (frameNum * 2 * 32 * 32);
-
-	for (int i = 0; i < 8; i++) {
-		memcpy(baseTile, sourceRow, 32*4*2);
-		baseTile += (2 * 4 * 1024);
-		sourceRow += (2 * 32 * 4);
-	}
 }

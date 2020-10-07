@@ -1,0 +1,12 @@
+---
+source_files: [../src/thwomp.S]
+hooks:
+  - name: ThwompNewAutoDestruction
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x809F5E44
+    target_func: 'ThwompNewAutoDestruction'
+
+  - name: ThwompNeverDieOutOfZone
+    type: nop_insn
+    area_pal: 0x809F5E40

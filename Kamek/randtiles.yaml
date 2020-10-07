@@ -4,7 +4,7 @@ hooks:
   - name: ModifyTilemapClassSize
     type: patch
     addr_pal: 0x80083598
-    data: '3860 0C3C'
+    data: '38600C3C'
 
   - name: LoadRandTiles
     type: branch_insn
@@ -27,5 +27,4 @@ hooks:
   - name: AHackOfGiganticProportions
     type: patch
     addr_pal: 0x80086B4C
-    data: '4800 0120'
-
+    data: '48000120'

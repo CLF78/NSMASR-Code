@@ -486,12 +486,17 @@ void dThunderCloud::executeState_Lightning() {
 
 	switch (timer) {
 		case 0:
+		{
 			charge.spawn("Wm_en_birikyu", 0, &(Vec){pos.x, pos.y, pos.z}, &(S16Vec){0,0,0}, &(Vec){1.5, 1.5, 1.5});
 			break;
+		}
 		case 1:
+		{
 			charge.spawn("Wm_en_birikyu", 0, &(Vec){pos.x, pos.y, pos.z}, &(S16Vec){0,0,0}, &(Vec){1.5, 1.5, 1.5});
 			break;
+		}
 		case 2:		
+		{
 			PlaySound(this, SE_BOSS_JR_ELEC_APP); 
 			PlaySound(this, SE_BOSS_JR_DAMAGE_ELEC); 
 
@@ -500,20 +505,29 @@ void dThunderCloud::executeState_Lightning() {
 
 			bolt.spawn("Wm_jr_electricline", 0, &(Vec){pos.x, pos.y + boltpos, pos.z}, &(S16Vec){0,0,0}, &(Vec){1.0, boltsize/36.0, 1.0});
 			break;
+		}
 		case 3:
+		{
 			this->Lightning.removeFromList();
 			charge.spawn("Wm_mr_electricshock_biri02_s", 0, &pos, &(S16Vec){0,0,0}, &(Vec){1.5, 1.5, 1.5});
 			break;
+		}
 		case 4:
+		{
 			charge.spawn("Wm_mr_electricshock_biri02_s", 0, &pos, &(S16Vec){0,0,0}, &(Vec){1.5, 1.5, 1.5});
 			break;
+		}
 		case 5:
+		{
 			if (stationary) { doStateChange(&StateID_Wait); }
 			else 			{ doStateChange(&StateID_Follow); }
 			break;
+		}
 		default:
+		{
 			charge.spawn("Wm_mr_electricshock_biri02_s", 0, &pos, &(S16Vec){0,0,0}, &(Vec){1.5, 1.5, 1.5});
 			break;
+		}
 	}
 
 	if(this->anm.isAnimationDone() && this->anm.getCurrentFrame() != 0.0) {

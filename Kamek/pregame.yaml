@@ -31,4 +31,3 @@ hooks:
   - {name: PGLH_picGetFix9, type: add_func_pointer, src_addr_pal: 0x80B88874, target_func: 'P_bat_00'}
   - {name: PGLH_picGetFix10, type: add_func_pointer, src_addr_pal: 0x80B88878, target_func: 'P_bat_00'}
   - {name: PGLH_picGetFix11, type: add_func_pointer, src_addr_pal: 0x80B888D4, target_func: 'P_bat_00'}
-

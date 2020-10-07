@@ -4,6 +4,7 @@
 #include "music.h"
 
 extern "C" void LoadMapScene();
+extern u8 MaybeFinishingLevel[2];
 
 dScKoopatlas_c *dScKoopatlas_c::instance = 0;
 
@@ -19,7 +20,6 @@ CREATE_STATE_E(dScKoopatlas_c, TitleConfirmHitWait);
 CREATE_STATE_E(dScKoopatlas_c, PlayerChangeWait);
 CREATE_STATE_E(dScKoopatlas_c, EasyPairingWait);
 CREATE_STATE_E(dScKoopatlas_c, PowerupsWait);
-CREATE_STATE_E(dScKoopatlas_c, ShopWait);
 CREATE_STATE_E(dScKoopatlas_c, CoinsWait);
 CREATE_STATE_E(dScKoopatlas_c, SaveOpen);
 CREATE_STATE_E(dScKoopatlas_c, SaveSelect);
@@ -176,7 +176,7 @@ bool WMInit_LoadResources2(void *ptr) {
 		wm->mapPath = wm->getMapNameForIndex(wm->currentMapID);
 		if (wm->mapPath == 0)
 			wm->mapPath = wm->getMapNameForIndex(0);
-		if (!strcmp(wm->mapPath, "/Maps/WSEL.kpbin"))
+		if (!strcmp(wm->mapPath, "/Maps/WarpZone.kpbin") || !strcmp(wm->mapPath, "/Maps/WarpZone2.kpbin"))
 			wm->warpZoneHacks = true;
 		else
 			wm->warpZoneHacks = false;
@@ -259,9 +259,6 @@ bool WMInit_SetupExtra(void *ptr) {
 	// note: world_camera is not created here
 	// because we require it earlier
 	// it is created in dScKoopatlas_c::onCreate
-
-	SpammyReport("creating SHOP\n");
-	wm->shop = (dWMShop_c*)CreateParentedObject(WM_SHOP, wm, 0, 2);
 
 	SpammyReport("creating Star Coin Menu\n");
 	wm->coins = (dWMStarCoin_c*)CreateParentedObject(WM_STARCOIN, wm, 0, 0);
@@ -750,19 +747,6 @@ void dScKoopatlas_c::executeState_PowerupsWait() {
 	}
 
 }
-
-
-/**********************************************************************/
-// STATE_ShopWait : Wait for the user to exit the Shop screen.
-void dScKoopatlas_c::executeState_ShopWait() {
-
-	if (!shop->visible) {
-		state.setState(&StateID_Normal);
-		hud->unhideAll();
-	}
-
-}
-
 
 /**********************************************************************/
 // STATE_StarCoin : Wait for the user to exit the Star Coin screen.

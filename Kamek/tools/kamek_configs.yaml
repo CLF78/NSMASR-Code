@@ -12,6 +12,3 @@
     kor: 'kamek_kor.x'
   }
   dynamic_link: true
-#  rel_area_start: 0x807684C0
-#  rel_area_end: 0x80B75CA8
-  

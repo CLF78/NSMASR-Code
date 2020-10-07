@@ -24,10 +24,7 @@ daFireLaser_c *daFireLaser_c::build() {
 	return new(buffer) daFireLaser_c;
 }
 
-
 CREATE_STATE(daFireLaser_c, pewpewpew);
-
-
 
 
 int daFireLaser_c::onCreate() {
@@ -59,14 +56,13 @@ int daFireLaser_c::onDraw() {
 }
 
 
-
 // Pew Pew State
 
 void daFireLaser_c::beginState_pewpewpew() { 
 	this->timer = 0;
 }
+
 void daFireLaser_c::executeState_pewpewpew() { 
-	
 	
 	if (dFlagMgr_c::instance->flags & this->eventFlag) {
 		
@@ -100,8 +96,7 @@ void daFireLaser_c::executeState_pewpewpew() {
 			else if (this->direction == 7) {	// NE
 				xlaunch = this->spitspeed;
 				ylaunch = -this->spitspeed; }
-			
-			
+						
 			dStageActor_c *spawner = CreateActor(106, 0, this->pos, 0, 0);
 			spawner->speed.x = xlaunch;
 			spawner->speed.y = ylaunch;
@@ -116,19 +111,7 @@ void daFireLaser_c::executeState_pewpewpew() {
 	else { this->timer = 0; }
 	
 }
+
 void daFireLaser_c::endState_pewpewpew() { 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

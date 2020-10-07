@@ -2,7 +2,7 @@
 # SingAlong = WM_KILLERBULLET (0x276)
 # SongBlock = WM_KILLER       (0x275)
 # SongPrize = WM_SINKSHIP     (0x277)
-
+# Requires levelspecial.yaml and growup.yaml
 source_files: [../src/bonusRoom.cpp]
 
 hooks:

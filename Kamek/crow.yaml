@@ -1,0 +1,7 @@
+---
+source_files: []
+hooks:
+  - name: FrontCrow
+    type: patch
+    addr_pal: 0x80ACF6A0
+    data: '45ABE000' # 5500.0f

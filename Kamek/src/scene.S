@@ -1,33 +1,28 @@
-.extern currentHeap
-.extern MakeScene
-.extern DVDClass
-.extern GetSceneLightInfo
-.extern GetRes
-.extern GetAnmScn
-.extern BindAnmScn
+#include <asm_setup.S>
+
 .extern AssignAnmScnToLightInfo
+.extern BindAnmScn
+.extern currentHeap
+.extern DVDClass
+.extern GetAnmScn
+.extern GetRes
+.extern GetSceneLightInfo
 .extern LoadBlight
 .extern LoadBlmap
-
-
-.text
-
-.set sp,1
-.set rtoc,2
+.extern MakeScene
+.extern Zero
 
 .global LoadMapScene
+
+.text
 LoadMapScene:
 	stwu sp, -0x30(sp)
 	mflr r0
 	stw r0, 0x34(sp)
-
 	stw r31, 0x2C(sp)
 
-
-
-	lis r3, currentHeap@h
-	ori r3, r3, currentHeap@l
-	lwz r3, 0(r3)
+	lis r3, currentHeap@ha
+	lwz r3, currentHeap@l(r3)
 
 	li r4, 36	#Light count
 	li r5, 8	#Ambient light count
@@ -37,7 +32,6 @@ LoadMapScene:
 
 	bl MakeScene
 
-
 	# Now make the actual scene!
 	# Get light info
 	li r3, 0
@@ -45,9 +39,8 @@ LoadMapScene:
 	mr r31, r3
 
 	# Get scene/scene.brres
-	lis r3, DVDClass@h
-	ori r3, r3, DVDClass@l
-	lwz r3, 0(r3)
+	lis r3, DVDClass@ha
+	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
 
 	lis r4, EnvWorld@h
@@ -78,18 +71,16 @@ LoadMapScene:
 	li r5, -1			#Dunno
 	li r6, 3			#Dunno
 
-	lis r9, Zero@h
-	ori r9, r9, Zero@l
-	lfs f1, 0(r9)		#Dunno
+	lis r9, Zero@ha
+	lfs f1, Zero@l(r9)		#Dunno
 
 	bl AssignAnmScnToLightInfo
 
 
 	# Now set up the rest of the scene
 	# Get blight
-	lis r3, DVDClass@h
-	ori r3, r3, DVDClass@l
-	lwz r3, 0(r3)
+	lis r3, DVDClass@ha
+	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
 
 	lis r4, EnvWorld@h
@@ -105,12 +96,9 @@ LoadMapScene:
 	mr r3, r31
 	bl LoadBlight
 
-
-
 	# Do the same for blmap
-	lis r3, DVDClass@h
-	ori r3, r3, DVDClass@l
-	lwz r3, 0(r3)
+	lis r3, DVDClass@ha
+	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
 
 	lis r4, EnvWorld@h
@@ -126,27 +114,19 @@ LoadMapScene:
 	lwz r3, 0x14(r31)
 	bl LoadBlmap
 
-
-	# DONE!!
+	# Done
 	lwz r31, 0x2C(sp)
-
 	lwz r0, 0x34(sp)
 	mtlr r0
 	addi sp, sp, 0x30
 	blr
 
 
-
-
-
-
 .data
 EnvWorld:	.string "Env_world"
 SceneBrres:	.string "scene/scene.brres"
 MainSelect:	.string "MainSelect"
-Zero:		.float 0.0
 BlightW1:	.string "light/W8.blight"
 BlmapW1:	.string "light/W8.blmap"
 
 .align 4
-

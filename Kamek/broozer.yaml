@@ -1,0 +1,11 @@
+---
+source_files: []
+hooks:
+  - name: BroozerCrashAvoidance1
+    type: nop_insn
+    area_pal: 0x809EB284
+
+  - name: BroozerCrashAvoidance2
+    type: patch
+    addr_pal: 0x809EC5B4
+    data: '38600001'

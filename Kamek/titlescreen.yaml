@@ -1,0 +1,22 @@
+---
+source_files: [../src/titlescreen.S]
+hooks:
+  - name: TitleScreenStageChanger
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x8010191C
+    target_func: 'TitleScreenStageChanger'
+
+  - name: TitleReplayLevels
+    type: patch
+    addr_pal: 0x802F4CD0
+    data: '0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002 0002'
+
+  - name: NoTitleScreenMovie
+    type: nop_insn
+    area_pal: 0x80781FB8
+
+  - name: AnotherTSThing
+    type: patch
+    addr_pal: 0x8015D850
+    data: '38600000'

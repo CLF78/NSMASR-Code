@@ -16,7 +16,6 @@ class daBonePiece_c : public dStageActor_c {
 		m3d::mdl_c model;
 };
 
-/*****************************************************************************/
 // Glue Code
 daBonePiece_c *daBonePiece_c::build() {
 	void *buffer = AllocFromGameHeap1(sizeof(daBonePiece_c));
@@ -57,25 +56,16 @@ int daBonePiece_c::onCreate() {
 		else
 			rotation = (sourceRotation * 0x800) - 0x3800;
 
-		rotation = -rotation;
-
-		rot.z = rotation;
+		rot.z = -rotation;
 	}
 
 	if ((settings >> 20) & 1) {
 		rot.y = 0x8000;
 	}
 
-	collider.init(this,
-			/*xOffset=*/0.0f, /*yOffset=*/0.0f,
-			/*topYOffset=*/0,
-			/*rightSize=*/16.0f, /*leftSize=*/-16.0f,
-			/*rotation=*/rot.z, /*_45=*/1
-			);
-
+	collider.init(this, 0.0f, 0.0f, 0, 16.0f, -16.0f, rot.z, 1); // X Offset, Y Offset, Top Y Offset, Right Size, Left Size, Rotation, _45
 	collider._47 = 0xA;
 	collider.flags = 0x80180 | 0xC00;
-
 	collider.addToList();
 
 	return true;
@@ -100,9 +90,5 @@ int daBonePiece_c::onExecute() {
 
 int daBonePiece_c::onDraw() {
 	model.scheduleForDrawing();
-
 	return true;
 }
-
-
-

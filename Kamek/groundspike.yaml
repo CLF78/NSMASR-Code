@@ -1,0 +1,32 @@
+---
+source_files: []
+hooks:
+  - name: StarsDontKillSpikesUD
+    type: add_func_pointer
+    src_addr_pal: 0x80AFF4D8
+    target_func: 'ReturnNone'
+
+  - name: StarsDontKillSpikesD
+    type: add_func_pointer
+    src_addr_pal: 0x80AFF784
+    target_func: 'ReturnNone'
+
+  - name: StarsDontKillSpikesU
+    type: add_func_pointer
+    src_addr_pal: 0x80AFFA30
+    target_func: 'ReturnNone'
+
+  - name: StarsDontKillSpikesLR
+    type: add_func_pointer
+    src_addr_pal: 0x80AFFCDC
+    target_func: 'ReturnNone'
+
+  - name: StarsDontKillSpikesR
+    type: add_func_pointer
+    src_addr_pal: 0x80AFFF88
+    target_func: 'ReturnNone'
+
+  - name: StarsDontKillSpikesL
+    type: add_func_pointer
+    src_addr_pal: 0x80B00234
+    target_func: 'ReturnNone'

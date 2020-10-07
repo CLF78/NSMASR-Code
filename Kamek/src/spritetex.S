@@ -1,3 +1,5 @@
+#include <asm_setup.S>
+
 .extern sprintf
 .extern GenerateRandomNumber
 .extern BombSleepState
@@ -5,21 +7,8 @@
 .extern Cloud_death_execute
 .extern Cloud_execute
 
-
-#ifndef __MWERKS__
-.set r0,0;   .set r1,1;   .set r2,2; .set r3,3;   .set r4,4
-.set r5,5;   .set r6,6;   .set r7,7;   .set r8,8;   .set r9,9
-.set r10,10; .set r11,11; .set r12,12; .set r13,13; .set r14,14
-.set r15,15; .set r16,16; .set r17,17; .set r18,18; .set r19,19
-.set r20,20; .set r21,21; .set r22,22; .set r23,23; .set r24,24
-.set r25,25; .set r26,26; .set r27,27; .set r28,28; .set r29,29
-.set r30,30; .set r31,31; .set f0,0; .set f2,2; .set f3,3
-#endif
-
 .text
 .align 4
-
-.set sp, 1
 
 .global BigBlockSound
 .extern Delete__7fBase_cFv
@@ -60,21 +49,6 @@ BigBlockSound:
 .global BigBlockLeapingItem
 BigBlockLeapingItem:
 	oris r0, r0, 0xD00
-	blr
-
-.global BooZOrder
-BooZOrder:
-	mr r3, r30
-	lwz r4, 4(r30)
-	extrwi. r4, r4, 4,4
-	beqlr
-
-	lis r4, Float_5000@h
-	ori r4, r4, Float_5000@l
-	lfs f1, 0xB4(r30)
-	lfs f2, 0(r4)
-	fadds f1, f1, f2
-	stfs f1, 0xB4(r30)
 	blr
 
 .global GetTexFilenameForR5, TexFilenameBuffer, TexFormatString
@@ -865,29 +839,6 @@ TEX_HuckitBallsInherit:
 	or r4, r4, r10
 	blr
 
-.global BomheiForceFacingDirection
-BomheiForceFacingDirection:
-	stb r3, 0x348(r30)
-
-	lwz r6, 4(r30)
-	clrlwi r6, r6, 28
-	cmpwi r6, 0
-	beqlr
-	subi r6, r6, 1
-	stb r6, 0x348(r30)
-	blr
-
-.global BomheiCollisionCallback
-.extern collisionCallback__5dEn_cFP13ActivePhysicsP13ActivePhysics
-BomheiCollisionCallback:
-	lwz r5, 4(r4)
-	lhz r5, 8(r5)
-	cmpwi r5, 0x70 #hammerbros
-	beqlr
-	cmpwi r5, 0x72 #lift hammerbros
-	beqlr
-	b collisionCallback__5dEn_cFP13ActivePhysicsP13ActivePhysics
-
 .global JustOneBomb
 .extern ContinueFromJustOneBomb
 JustOneBomb:
@@ -1595,17 +1546,8 @@ TEX_CloudLT_Ca:
 	ori r4, r4, CloudC@l
 	blr
 
-
-
-.global BigMetPowFix
-.extern OriginalPowBlockActivated
-BigMetPowFix:
-	lwz r5, 4(r3)
-	extrwi. r5, r5, 4,4
-	beqlr
-	b OriginalPowBlockActivated
-
 .global TogeMetPowFix
+.extern OriginalPowBlockActivated
 TogeMetPowFix:
 	lwz r6, 4(r3)
 	extrwi r6, r6, 4,4
@@ -1768,6 +1710,3 @@ CloudB:
 CloudC:
 	.string "wny_mist.2"
 .align 4
-
-Float_5000: .float 5000.0
-

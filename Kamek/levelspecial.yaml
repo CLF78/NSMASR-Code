@@ -1,7 +1,7 @@
 ---
 # Replaces TAG_THUNDER
-
-source_files: [../src/levelspecial.cpp]
+# Requires growup.yaml
+source_files: [../src/levelspecial.cpp, ../src/levelspecial.S]
 hooks:
   - name: LevelSpecial_Create
     type: add_func_pointer
@@ -34,3 +34,9 @@ hooks:
     branch_type: b
     src_addr_pal: 0x80926200
     target_func: 'FuckinBubbles(void)'
+
+  - name: BGScaleFix
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x8011857C
+    target_func: 'BGScaleFix'

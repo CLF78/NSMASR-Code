@@ -1,5 +1,6 @@
 #include <game.h>
 #include <sfx.h>
+
 const char *ChestnutFileList[] = {"chestnut", 0};
 
 class daEnChestnut_c : public dEn_c {
@@ -96,7 +97,6 @@ int daEnChestnut_c::onCreate() {
 
 	allocator.unlink();
 
-
 	// Scale us
 	scale.x = scale.y = scale.z = (1.0f + (float(rawScale) * 0.5f));
 
@@ -120,7 +120,6 @@ int daEnChestnut_c::onCreate() {
 
 	// WE'RE READY
 	doStateChange(&StateID_Idle);
-
 	return true;
 }
 
@@ -145,13 +144,11 @@ int daEnChestnut_c::onExecute() {
 	model.calcWorld(false);
 
 	model._vf1C();
-
 	return true;
 }
 
 int daEnChestnut_c::onDraw() {
 	model.scheduleForDrawing();
-
 	return true;
 }
 
@@ -167,17 +164,13 @@ float daEnChestnut_c::nearestPlayerDistance() {
 			}
 		}
 	}
-
 	return bestSoFar;
 }
-
-
 
 void daEnChestnut_c::beginState_Idle() {
 	playLoopedAnimation("wait");
 }
 void daEnChestnut_c::endState_Idle() { }
-
 
 void daEnChestnut_c::executeState_Idle() {
 	if (ignorePlayers)
@@ -190,7 +183,6 @@ void daEnChestnut_c::executeState_Idle() {
 	else if (dist < shakeWindow)
 		doStateChange(&StateID_Shake);
 }
-
 
 
 void daEnChestnut_c::beginState_Shake() {
@@ -212,7 +204,6 @@ void daEnChestnut_c::executeState_Shake() {
 }
 
 
-
 void daEnChestnut_c::beginState_Fall() {
 	animation.setUpdateRate(0.0f); // stop animation
 
@@ -220,8 +211,7 @@ void daEnChestnut_c::beginState_Fall() {
 
 	belowSensor.flags = SENSOR_LINE;
 	if (breaksBlocks)
-		belowSensor.flags |= SENSOR_10000000 | SENSOR_BREAK_BLOCK | SENSOR_BREAK_BRICK;
-	// 10000000 makes it pass through bricks
+		belowSensor.flags |= SENSOR_10000000 | SENSOR_BREAK_BLOCK | SENSOR_BREAK_BRICK; // 10000000 makes it pass through bricks
 
 	belowSensor.lineA = -size << 12;
 	belowSensor.lineB = size << 12;
@@ -236,7 +226,6 @@ void daEnChestnut_c::beginState_Fall() {
 	nw4r::snd::SoundHandle handle;
 	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_DEMO_OP_PRESENT_THROW_2308f, 1);
 }
-
 void daEnChestnut_c::endState_Fall() { }
 
 void daEnChestnut_c::executeState_Fall() {
@@ -250,9 +239,8 @@ void daEnChestnut_c::executeState_Fall() {
 }
 
 
-
 void daEnChestnut_c::beginState_Explode() {
-	OSReport("Entering Explode\n");
+	OSReport("Entering explode\n");
 	playAnimation("break");
 	animation.setUpdateRate(2.0f);
 
@@ -265,18 +253,15 @@ void daEnChestnut_c::endState_Explode() { }
 
 void daEnChestnut_c::executeState_Explode() {
 	timeSpentExploding++;
-
 	if (timeSpentExploding == 10) {
 		S16Vec efRot = {0,0,0};
 		SpawnEffect("Wm_en_burst_ss", 0, &pos, &efRot, &scale);
 		spawnObject();
 	}
-
 	if (animation.isAnimationDone()) {
 		Delete(1);
 	}
 }
-
 
 
 bool daEnChestnut_c::CreateIceActors() {
@@ -293,9 +278,11 @@ bool daEnChestnut_c::CreateIceActors() {
 	return frzMgr.Create_ICEACTORs(&info, 1);
 }
 
+
 u32 daEnChestnut_c::canBePowed() {
 	return true;
 }
+
 void daEnChestnut_c::powBlockActivated(bool isNotMPGP) {
 	if (!isNotMPGP)
 		return;
@@ -305,12 +292,11 @@ void daEnChestnut_c::powBlockActivated(bool isNotMPGP) {
 		doStateChange(&StateID_Fall);
 }
 
+
 bool daEnChestnut_c::collisionCat1_Fireball_E_Explosion(ActivePhysics *apThis, ActivePhysics *apOther) {
 	SpawnEffect("Wm_en_igafirehit", 0, &pos, &rot, &scale);
-
 	if (acState.getCurrentState() != &StateID_Explode)
 		doStateChange(&StateID_Explode);
-
 	return true;
 }
 
@@ -341,7 +327,7 @@ void daEnChestnut_c::spawnObject() {
 
 	aPhysics.removeFromList();
 
-	OSReport("Crap %d, %d, %08x\n", objNumber, things[objNumber*2], acSettings);
+	OSReport("Spawning %d, %d, %08x\n", objNumber, things[objNumber*2], acSettings);
 	dStageActor_c *ac =
 		dStageActor_c::create((Actors)things[objNumber*2], acSettings, &acPos, 0, currentLayerID);
 

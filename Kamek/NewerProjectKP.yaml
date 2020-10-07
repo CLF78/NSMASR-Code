@@ -1,72 +1,72 @@
 output_dir: "NewerASM"
 code_address: 0x808D9000
 modules:
-  - processed/prolog.yaml
-  - processed/corseClear.yaml
+# Stuff that has to be earlier in the file
+  - processed/common.yaml
   - processed/apDebug.yaml
-  - processed/hardMode.yaml
-#  - processed/layoutDebug.yaml
-  - processed/creditsMgr.yaml
-  - processed/endingMgr.yaml
-  - processed/chestnut.yaml
-  - processed/flipblock.yaml
-  - processed/fileselect.yaml
-  - processed/magicplatform.yaml
-  - processed/cutScene.yaml
-  - processed/bonepiece.yaml
-  - processed/bugfixes.yaml
-  - processed/koopatlas.yaml
-  - processed/pregame.yaml
-  - processed/layouthax.yaml
-  - processed/animtiles.yaml
-  - processed/soundPlayer.yaml
-  - processed/bowserKey.yaml
-  - processed/levelspecial.yaml
-  - processed/mrsun.yaml
-  - processed/firelaser.yaml
-  - processed/spritetex.yaml
-#  - processed/gakenoko.yaml
-  - processed/poweruphax.yaml
-#  - processed/heapbar.yaml
-  - processed/randtiles.yaml
-  - processed/objkinoko.yaml
-  - processed/tilegod.yaml
-  - processed/linegod.yaml
-  - processed/tilesetfixer.yaml
-  - processed/switchblock.yaml
-  - processed/eventblock.yaml
   - processed/msgbox.yaml
-  - processed/replay.yaml
-  - processed/growup.yaml
-  - processed/eventlooper.yaml
-  - processed/spritespawner.yaml
-  - processed/spriteswapper.yaml
-  - processed/compression.yaml
-#  - processed/crowdclapper.yaml
+  - processed/koopatlas.yaml
+
+# The rest here can be ordered anyway we want
+  - processed/animtiles.yaml
   - processed/blocksnake.yaml
-  - processed/classic_controller.yaml
-  - processed/topman.yaml
-  - processed/bossMegaGoomba.yaml
-  - processed/bossFuzzyBear.yaml
-  - processed/bossThwompaDomp.yaml
-  - processed/bossRamboo.yaml
-  - processed/bossBalboaWrench.yaml
-  - processed/bossWrenchThrow.yaml
-  - processed/bossSamurshai.yaml
-  - processed/bossPodouble.yaml
-  - processed/bossTopman.yaml
-  - processed/bossCaptainBowser.yaml
-  - processed/bossBridgeBowser.yaml
+  - processed/bobomb.yaml
+  - processed/bonepiece.yaml
+  - processed/boo.yaml
+  - processed/bossfixes.yaml
+  - processed/bowser.yaml
+  - processed/broozer.yaml
+  - processed/bugfixes.yaml
+  - processed/buzzy.yaml
+  - processed/challengeStar.yaml
+  - processed/chestnut.yaml
+  - processed/clowncar.yaml
+  - processed/compression.yaml
+  - processed/corseClear.yaml
+  - processed/creditsMgr.yaml
+  - processed/crow.yaml
+  - processed/cutScene.yaml
   - processed/effectVideo.yaml
+  - processed/electricLine.yaml
+  - processed/endingMgr.yaml
+  - processed/eventblock.yaml
+  - processed/eventlooper.yaml
+  - processed/exception.yaml
   - processed/fakeStarCoin.yaml
+  - processed/fileselect.yaml
+  - processed/firelaser.yaml
+  - processed/flipblock.yaml
+  - processed/gigagoomba.yaml
+  - processed/groundspike.yaml
+  - processed/growup.yaml
+  - processed/hardMode.yaml
+  - processed/layouthax.yaml
+  - processed/levelspecial.yaml
+  - processed/linegod.yaml
+  - processed/magicplatform.yaml
+  - processed/makeYourOwn.yaml
+  - processed/meteor.yaml
+  - processed/mrsun.yaml
+  - processed/music.yaml
+  - processed/objkinoko.yaml
+  - processed/poweruphax.yaml
+  - processed/pregame.yaml
+  - processed/pumpkinGoomba.yaml
+  - processed/randtiles.yaml
+  - processed/replay.yaml
+  - processed/redring.yaml
   - processed/shyguy.yaml
   - processed/shyguyGiants.yaml
-  - processed/meteor.yaml
-  - processed/electricLine.yaml
-  - processed/thundercloud.yaml
-  - processed/makeYourOwn.yaml
-  - processed/challengeStar.yaml
   - processed/singAlong.yaml
-  - processed/pumpkinGoomba.yaml
-  # - processed/pengi.yaml
-#  - processed/actorlog.yaml
+  - processed/spritespawner.yaml
+  - processed/spriteswapper.yaml
+  - processed/spritetex.yaml
+  - processed/stagefixes.yaml
+  - processed/switchblock.yaml
+  - processed/thundercloud.yaml
+  - processed/tilegod.yaml
+  - processed/tilesetfixes.yaml
+  - processed/titlescreen.yaml
+  - processed/topman.yaml
+  - processed/trapblock.yaml
+  - processed/thwomp.yaml

@@ -21,6 +21,7 @@
 #include <rvl/GXFrameBuffer.h>
 #include <rvl/tpl.h>
 #include <newer.h>
+
 void *EGG__Heap__alloc(unsigned long size, int unk, void *heap);
 void EGG__Heap__free(void *ptr, void *heap);
 
@@ -50,10 +51,10 @@ struct FireworkInfo {
 
 extern void *SoundRelatedClass;
 
-extern u16 DanceValues_AnimSpeed; // 80427C2E
+extern u16 DanceValues_AnimSpeed;         // 80427C2E
 extern u8 DanceValues_DummyBlockAndGrass; // 8042A049
-extern u8 DanceValues_Bahps; // 8042A04A
-extern u8 DanceValues_CreditsControl; // 8042A04B
+extern u8 DanceValues_Bahps;              // 8042A04A
+extern u8 DanceValues_CreditsControl;     // 8042A04B
 
 class dFlipbookRenderer_c : public m3d::proc_c {
 	public:
@@ -145,17 +146,9 @@ class dCreditsMgr_c : public dActorState_c {
 
 		bool endingMode;
 
-//		USING_STATES(dCreditsMgr_c);
-//		DECLARE_STATE(Wait);
-//		DECLARE_STATE(PlayLayoutAnim);
-//		DECLARE_STATE(Flipping);
-
 		static dCreditsMgr_c *build();
 		static dCreditsMgr_c *instance;
 };
-// CREATE_STATE(dCreditsMgr_c, Wait);
-// CREATE_STATE(dCreditsMgr_c, PlayLayoutAnim);
-// CREATE_STATE(dCreditsMgr_c, Flipping);
 
 dCreditsMgr_c *dCreditsMgr_c::instance = 0;
 
@@ -167,7 +160,6 @@ dCreditsMgr_c *dCreditsMgr_c::build() {
 
 int dCreditsMgr_c::onCreate() {
 	NoMichaelBuble = true;
-
 	instance = this;
 
 	if (!loadLayout())
@@ -186,9 +178,6 @@ int dCreditsMgr_c::onCreate() {
 	bool result = renderer.setup(&renderer.allocator);
 
 	renderer.loadNewBG(0, false);
-
-	//acState.setState(&StateID_Wait);
-
 	return true;
 }
 
@@ -200,6 +189,8 @@ int dCreditsMgr_c::onDelete() {
 	scriptLoader.unload();
 	return layout.free() && titleLayout.free();
 }
+
+
 extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
 int dCreditsMgr_c::onExecute() {
 	danceTimer++;
@@ -253,8 +244,7 @@ int dCreditsMgr_c::onExecute() {
 				{"Wm_ob_fireworks_k", 2.000000f, 78.000000f, 44}, // ends @ 359
 				{"Wm_ob_fireworks_g", 309.000000f, 25.000000f, 42}, // ends @ 401
 				{"Wm_ob_fireworks_star", 222.000000f, 78.000000f, 44}, // ends @ 445
-				//{"Wm_ob_fireworks_y", 269.000000f, 23.000000f, 38}, // ends @ 483
-				{0, 0.0f, 0.0f, 0},
+				{0, 0.0f, 0.0f, 0}
 			};
 
 			fireworksCountdown = fwInfo[fwID].delay;
@@ -327,6 +317,7 @@ int dCreditsMgr_c::onExecute() {
 				case 5: // Show text
 					layout.enableNonLoopAnim(0);
 					break;
+
 				case 6: // Hide text
 					layout.enableNonLoopAnim(1);
 					break;
@@ -354,9 +345,11 @@ int dCreditsMgr_c::onExecute() {
 				case 8:
 					titleLayoutVisible = true;
 					break;
+
 				case 9:
 					titleLayoutVisible = false;
 					break;
+
 				case 10:
 					whatAnim = *(read++);
 					titleLayout.enableNonLoopAnim(whatAnim);
@@ -365,32 +358,41 @@ int dCreditsMgr_c::onExecute() {
 				case 11:
 					endingMode = true;
 					break;
+
 				case 12:
 					enableZoom();
 					break;
+
 				case 13:
 					playerWinAnim();
 					break;
+
 				case 14:
 					disableZoom();
 					break;
+
 				case 15:
 					playerLookUp();
 					break;
+
 				case 16:
 					theEnd();
 					break;
+
 				case 17:
 					exitStage();
 					exitInterpreter = true;
 					break;
+
 				case 18:
 					GetTheEnd()->willHide = true;
 					break;
+
 				case 19:
 					fireworks = true;
 					fireworksCountdown = 25;
 					break;
+
 				case 20:
 					fireworks = false;
 					break;
@@ -404,11 +406,10 @@ int dCreditsMgr_c::onExecute() {
 	titleLayout.execAnimations();
 	titleLayout.update();
 
-	//acState.execute();
 	renderer.execute();
-
 	return true;
 }
+
 
 int dCreditsMgr_c::onDraw() {
 	renderer.scheduleForDrawing();
@@ -492,8 +493,8 @@ bool dCreditsMgr_c::loadTitleLayout() {
 	return titleLayoutLoaded;
 }
 
-extern "C" dCourse_c::rail_s *GetRail(int id);
 
+extern "C" dCourse_c::rail_s *GetRail(int id);
 void dCreditsMgr_c::doAutoscroll(int pathID) {
 	OSReport("Activating Autoscroll with path %d\n", pathID);
 
@@ -541,10 +542,10 @@ void dCreditsMgr_c::doAutoscroll(int pathID) {
 	}
 }
 
+
 void dCreditsMgr_c::animComplete() {
 	positionPlayers();
 }
-
 
 void dCreditsMgr_c::positionPlayers() {
 	dCourse_c *course = dCourseFull_c::instance->get(GetAreaNum());
@@ -610,10 +611,13 @@ void dCreditsMgr_c::enableZoom() {
 	zoom.unkValue6 = 0;
 	zoom.firstFlag = 0;
 }
+
 void dCreditsMgr_c::disableZoom() {
 	BgGmBase::manualZoomEntry_s &zoom = dBgGm_c::instance->manualZooms[0];
 	zoom.unkValue6 = 100;
 }
+
+
 void dCreditsMgr_c::playerWinAnim() {
 	// who won?
 	// First, get the amounts
@@ -656,13 +660,16 @@ void dCreditsMgr_c::playerWinAnim() {
 	}
 }
 
+
 void dCreditsMgr_c::playerLookUp() {
 	_120 |= 8;
 	lookAtMode = 2; // Higher maximum distance
 }
+
 void dCreditsMgr_c::theEnd() {
 	GetTheEnd()->willShow = true;
 }
+
 void dCreditsMgr_c::exitStage() {
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
 	bool wasPreviouslyBeat = (save->bitfield & 2) != 0;
@@ -679,7 +686,6 @@ Vec2 dCreditsMgr_c::_vf70() {
 	v->y = -320.0f;
 	return (const Vec2){12345.0f, 67890.f};
 }
-
 
 
 void EFBMagic2() {
@@ -705,6 +711,7 @@ void EFBMagic2() {
 		GXInvalidateTexAll();
 	}
 }
+
 
 void dFlipbookRenderer_c::execute() {
 	if (flipFrame == 7) {
@@ -782,6 +789,7 @@ static void setupGXForDrawingCrap() {
 	GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
 }
 
+
 void dFlipbookRenderer_c::drawXlu() {
 	if (!isEnabled || flipFrame < 2)
 		return;
@@ -818,6 +826,7 @@ void dFlipbookRenderer_c::drawXlu() {
 	float efbBottom = efbYCentre - efbHalfHeight;
 
 	float efbExCoord = (efbEffectiveHeight + sinThing + sinThing) * 0.5f;
+
 	// TPL SPECIFIC VERTICAL VARIABLES
 	float tplHalfHeight = cwci->screenHeight * 0.5f;
 	float tplTop = screenTop;
@@ -870,9 +879,7 @@ void dFlipbookRenderer_c::drawXlu() {
 
 	if (!drawBackside) {
 		// Flipping right side: EFB
-
 		efbTexture.load(GX_TEXMAP0);
-
 		GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
 		// EFB Right (Flipped)
@@ -893,9 +900,7 @@ void dFlipbookRenderer_c::drawXlu() {
 
 	} else {
 		// Flipping left side
-
 		GXLoadTexObj(&bgTexObj[1], GX_TEXMAP0);
-
 		GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
 		// TPL Left (Flipped))
@@ -940,7 +945,6 @@ void dFlipbookRenderer_c::drawOpa() {
 	GXEnd();
 }
 
-#include <rvl/OSCache.h>
 
 void dFlipbookRenderer_c::loadNewBG(int bgID, bool isBackface) {
 	OSReport("Will load BG: %d\n", bgID);
@@ -966,13 +970,8 @@ void dFlipbookRenderer_c::loadNewBG(int bgID, bool isBackface) {
 		tplBufferSize[setID] = bufSize;
 	}
 
-	//CXUncompContextLH context;
-	//CXInitUncompContextLH(&context, tplBuffer);
-	//int result = CXReadUncompLH(&context, sourceBuf, 0x1000000);
-	//OSReport("Source buf: %p / Dest buf: %p / Dest size: %d (0x%x)\n", sourceBuf, tplBuffer, bufSize, bufSize);
-	//OSReport("CXReadUncompLH result: %d\n", result);
 	CXUncompressLZ(sourceBuf, tplBuffer[setID]);
-	OSReport("Butts. Decompressing %p to %p.\n", sourceBuf, tplBuffer[setID]);
+	OSReport("Decompressing %p to %p.\n", sourceBuf, tplBuffer[setID]);
 
 	TPLBind((TPLPalettePtr)tplBuffer[setID]);
 	TPLDescriptorPtr desc = TPLGet((TPLPalettePtr)tplBuffer[setID], 0);
@@ -997,21 +996,8 @@ dFlipbookRenderer_c::~dFlipbookRenderer_c() {
 }
 
 
-
 extern "C" void replayRecord();
-
 void LoadDanceValues() {
-	/*
-	//OSReport("AnmSpd: %4d / DBAG: 0x%02x / Bahp: 0x%02x / Cred: 0x%02x\n",
-	//	DanceValues_AnimSpeed, DanceValues_DummyBlockAndGrass, DanceValues_Bahps, DanceValues_CreditsControl);
-	if (DanceValues_CreditsControl > 0)
-		OSReport("[ORIG DANCE] Credits Control: 0x%02x\n", DanceValues_CreditsControl);
-	// if (DanceValues_DummyBlockAndGrass > 0)
-	// 	OSReport("[ORIG DANCE] DummyBlockAndGrass: 0x%02x\n", DanceValues_DummyBlockAndGrass);
-	if (DanceValues_Bahps > 0)
-		OSReport("[ORIG DANCE] Bahps: 0x%02x\n", DanceValues_Bahps);
-	*/
-
 	dCreditsMgr_c *cred = dCreditsMgr_c::instance;
 
 	if (!cred)
@@ -1019,7 +1005,6 @@ void LoadDanceValues() {
 	danceInfo_s *cmd = cred->danceCommand;
 	if (!cmd)
 		return;
-	//OSReport("TIMER: %d\n", cred->danceTimer);
 
 	if (cred->danceTimer == cmd->when) {
 		//OSReport("Timer reached %d, triggering dance 0x%02x, next is at %d\n", cmd->when, cmd->bahpFlag, cmd[1].when);
@@ -1027,7 +1012,6 @@ void LoadDanceValues() {
 		DanceValues_DummyBlockAndGrass = cmd->dummyBlockFlag;
 		DanceValues_Bahps = cmd->bahpFlag;
 		DanceValues_CreditsControl = cmd->creditsFlag;
-
 		cred->danceCommand++;
 	} else {
 		DanceValues_AnimSpeed = 120;
@@ -1035,8 +1019,18 @@ void LoadDanceValues() {
 		DanceValues_Bahps = 0;
 		DanceValues_CreditsControl = 0;
 	}
-
 	replayRecord();
 }
 
 
+void WriteAsciiToTextBox(nw4r::lyt::TextBox *tb, const char *source) {
+	int i = 0;
+	wchar_t buffer[1024];
+	while (i < 1023 && source[i]) {
+		buffer[i] = source[i];
+		i++;
+	}
+	buffer[i] = 0;
+
+	tb->SetString(buffer);
+}

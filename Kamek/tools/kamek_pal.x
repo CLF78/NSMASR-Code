@@ -11,7 +11,7 @@ SECTIONS {
 	YoshiStateOrig = 0x8014BA60;
 	Exception_Printf___Q24nw4r2dbFPCce = 0x80234BC0;
 
-	ContinueFromFuckLineLiftActivation = 0x80839B04;
+	ContinueFromFixLineLiftActivation = 0x80839B04;
 
 	GabonRock_DropOutState = 0x80998CF0;
 	GabonRock_CrushState = 0x80998CB0;
@@ -152,7 +152,7 @@ SECTIONS {
 	continueFromMpPauseFix3 = 0x801412A4;
 	CheckIfSinglePlayer = 0x800FCAD0;
 
-	TextWriterCrapContinue = 0x800E598C;
+	TextWriterStuffContinue = 0x800E598C;
 	StockWMInit_LoadEffects__FPv = 0x80926B10;
 
 	CleanUpEffectThings__Fv = 0x80093520;
@@ -1562,7 +1562,7 @@ SECTIONS {
 	process__Q23m3d8anmClrFv = 0x80166310;
 
 	setup__Q23m3d8anmClr_cFQ34nw4r3g3d6ResMdlQ34nw4r3g3d9ResAnmClrP12mAllocator_cPUii = 0x80165D70;
-	bind__Q23m3d8anmClr_cFPQ23m3d5mdl_cQ34nw4r3g3d9ResAnmClrii = 0x80166110;
+	bind__Q23m3d8anmClr_cFPQ23m3d5mdl_cQ34nw4r3g3d9ResAnmClrib = 0x80166110;
 
 	getFrameForEntry__Q23m3d8anmClrFv = 0x80166420;
 	setFrameForEntry__Q23m3d8anmClrFfi = 0x80166430;
@@ -1827,6 +1827,29 @@ SECTIONS {
 
 	spawnCoinJump__7StageE4FRC7Point3diii = 0x80066630;
 	sub_800757B0__14collisionMgr_cFP7Point3dPfUcic = 0x800757B0;
+
+	_Z26WriteParsedStringToTextBoxPN4nw4r3lyt7TextBoxEPKwiPA1_13__va_list_tagPN7dScript5Res_cE = 0x800C9F70;
+	CheckForUSD1ShadowEntry__FPQ34nw4r3lyt7TextBox = 0x800C9BF0;
+	GetExtUserDataNum__Q34nw4r3lyt4PaneCFv = 0x802AC5A0;
+
+	_ZN3EGG6Screen14loadIntoCameraEN4nw4r3g3d6CameraE = 0x802D1300;
+	_ZN3EGG12LookAtCamera15calculateMatrixEv = 0x802BECF0;
+	_ZN3EGG12ProjectOrtho18setOrthoOntoCameraERN4nw4r3g3d6CameraE = 0x802C0110;
+	_ZN3m2d13EmbedLayout_c5buildEPKcPNS_8ResAcc_cE = 0x800C8A60;
+	_ZN3m3d5mdl_c8bindAnimEPNS_6banm_cE = 0x8016A070;
+	_ZN3m3d5mdl_c18scheduleForDrawingEv = 0x8016A220;
+	_ZN3mEf3es25spawnEPKcjPK4VEC3PK6S16VecS5_ = 0x8016D3C0;
+
+	returnFromGlobalSizes = 0x80097F40;
+	returnFromGlobalSpeedUpdatesA = 0x80065624;
+	returnFromGlobalSpeedUpdatesB = 0x80095734;
+	returnFromGlobalSpeedUpdatesB2 = 0x8009576C;
+	returnFromModifyCollision = 0x8008C3E4;
+	returnFromModifyCollision2 = 0x8008C408;
+	returnFromRiderInitA = 0x800DB694;
+	returnFromRiderInitB = 0x800DB6B8;
+	returnFromRiderInitC = 0x800DB6EC;
+	returnFromRiderInitD = 0x800DB700;
 
 
 	.text : {

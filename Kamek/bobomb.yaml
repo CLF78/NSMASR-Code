@@ -1,0 +1,25 @@
+---
+source_files: [../src/bobomb.S]
+hooks:
+  - name: HigherBobombTileExplosionRadius
+    type: patch
+    addr_pal: 0x809CB118
+    data: '2C1C0003'
+
+  - {name: BombMouseHole1, type: patch, addr_pal: 0x80ACE51C, data: '00000200'}
+  - {name: BombMouseHole2, type: patch, addr_pal: 0x80ACE528, data: '00000201'}
+  - {name: BombMouseHole3, type: patch, addr_pal: 0x80ACE538, data: '00000200'}
+  - {name: BombMouseHole4, type: patch, addr_pal: 0x80ACE544, data: '00040200'}
+  - {name: BombMouseHole5, type: patch, addr_pal: 0x80ACE550, data: '00040200'}
+  - {name: BombMouseHole6, type: patch, addr_pal: 0x80ACE55C, data: '00040200'}
+
+  - name: BomheiForceFacingDirection
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x809C9020
+    target_func: 'BomheiForceFacingDirection'
+
+  - name: BomheiCollisionCallback
+    type: add_func_pointer
+    src_addr_pal: 0x80ACE5D0
+    target_func: 'BomheiCollisionCallback'

@@ -1,13 +1,11 @@
-.text
-#ifndef __MWERKS__
 #include <asm_setup.S>
-#endif
+
 .global ClearLastPowerupStoreTypeAfterGameOver
 .extern LastPowerupStoreType
-ClearLastPowerupStoreTypeAfterGameOver:
-	lis r4, LastPowerupStoreType@h
-	ori r4, r4, LastPowerupStoreType@l
-	li r5, 0
-	stw r5, 0(r4)
-	blr
 
+.text
+ClearLastPowerupStoreTypeAfterGameOver:
+	li r5, 0
+	lis r4, LastPowerupStoreType@ha
+	stw r5, LastPowerupStoreType@l(r4)
+	blr

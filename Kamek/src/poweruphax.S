@@ -1,6 +1,7 @@
+#include <asm_setup.S>
+
 .text
 .align 4
-.set sp, 1
 
 .extern returnFromGPSFASixth
 .extern daEnItem_c__GetWhetherPlayerCanGetPowerupOrNot
@@ -17,17 +18,7 @@
 .extern doneSettingThePowerupTexture
 .extern doneSettingThePowerupTexture2
 .extern returnFromPowerupSoundChange
-
-#ifndef __MWERKS__
-.set r0,0;   .set r1,1;   .set r2,2; .set r3,3;   .set r4,4
-.set r5,5;   .set r6,6;   .set r7,7;   .set r8,8;   .set r9,9
-.set r10,10; .set r11,11; .set r12,12; .set r13,13; .set r14,14
-.set r15,15; .set r16,16; .set r17,17; .set r18,18; .set r19,19
-.set r20,20; .set r21,21; .set r22,22; .set r23,23; .set r24,24
-.set r25,25; .set r26,26; .set r27,27; .set r28,28; .set r29,29
-.set r30,30; .set r31,31; .set f0,0; .set f2,2; .set f3,3
-.set f1,1;   .set f30,30; .set f31,31
-#endif
+.extern Zero
 
 .global DisableHatForHammer
 DisableHatForHammer:
@@ -60,8 +51,8 @@ GetInfoFromDumbTable:
 
 .global FukidashiFix
 FukidashiFix:
-	lis r7, ZeroFloat@h
-	ori r7, r7, ZeroFloat@l
+	lis r7, Zero@h
+	ori r7, r7, Zero@l
 	
 	lis r8, FukidashiTable2@h
 	ori r8, r8, FukidashiTable2@l
@@ -646,21 +637,6 @@ isHammerForToad:
 	lfsx f31, r8, r9
 	b continueToadPowerupSet
 
-
-
-
-
-
-.global CheckExistingPowerup
-CheckExistingPowerup:
-
-	lwz r3, 0x14E0(r3)
-	blr
-
-
-
-
-
 .global AcPyCtorHS
 AcPyCtorHS:
 	stwu r1, -0x10(r1)
@@ -908,9 +884,6 @@ SomeTable:
 	.long SomeTable_802F56C0
 	.long SomeTable_802F56C0
 	.long SomeTable_802F56C0
-
-ZeroFloat:
-	.float 0.0
 
 OneFloat:
 	.float 1.0
@@ -1484,18 +1457,18 @@ SkawoHatesMe:
 	lwzx r4, r27, r0
 	cmpwi r0, 28
 	bnelr
-	lis r5, SkawoFucksDucks@h
-	ori r5, r5, SkawoFucksDucks@l
+	lis r5, FireflowerFileName@h
+	ori r5, r5, FireflowerFileName@l
 	blr
 SkawoStillHatesMe:
 	lwzx r4, r4, r0
 	cmpwi r0, 28
 	bnelr
-	lis r4, DuckFuckersUnited@h
-	ori r4, r4, DuckFuckersUnited@l
+	lis r4, FireflowerModelName@h
+	ori r4, r4, FireflowerModelName@l
 	blr
 .data
-SkawoFucksDucks: .string "g3d/I_fireflower.brres"
-DuckFuckersUnited: .string "I_fireflower"
+FireflowerFileName: .string "g3d/I_fireflower.brres"
+FireflowerModelName: .string "I_fireflower"
 .align 4
 

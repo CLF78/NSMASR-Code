@@ -555,106 +555,92 @@ hooks:
 
 
 
-  - name: FuckinCastleLarryNull
+  - name: CastleLarryReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B76CD8
 
-  - name: FuckinLarryNull
+  - name: LarryReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B81F8C
 
-
-  - name: FuckinCastleLemmyNull
+  - name: CastleLemmyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B777F0
 
-  - name: FuckinLemmyNull
+  - name: LemmyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B82E38
 
-
-  - name: FuckinCastleWendyNull
+  - name: CastleWendyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B7ADB8
 
-  - name: FuckinWendyNull
+  - name: WendyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B8768C
 
-
-  - name: FuckinCastleLudwigNull
+  - name: CastleLudwigReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B783C8
 
-  - name: FuckinLudwigNull
+  - name: LudwigReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B84120
 
-
-  - name: FuckinCastleIggyNull
+  - name: CastleIggyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B75FC8
 
-  - name: FuckinIggyNull
+  - name: IggyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B7BC70
 
-
-  - name: FuckinCastleMortonNull
+  - name: CastleMortonReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B790A8
 
-  - name: FuckinMortonNull
+  - name: MortonReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B853F0
 
-
-  - name: FuckinCastleRoyNull
+  - name: CastleRoyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B79E10
 
-  - name: FuckinRoyNull
+  - name: RoyReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B86458
 
-
-  - name: FuckinKamekNull
+  - name: KamekReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B7CC24
 
-
-  - name: FuckinBowserNull
-    type: add_func_pointer
-    target_func: 'ReturnTrue'
-    src_addr_pal: 0x80B7E848
-
-
-  - name: FuckinJrANull
+  - name: JrAReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B804FC
 
-  - name: FuckinJrBNull
+  - name: JrBReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B80C04
 
-  - name: FuckinJrCNull
+  - name: JrCReturnNull
     type: add_func_pointer
     target_func: 'ReturnTrue'
     src_addr_pal: 0x80B814B0
