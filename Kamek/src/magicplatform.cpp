@@ -174,12 +174,7 @@ int daEnMagicPlatform_c::onCreate() {
 			physics.addToList();
 			break;
 		case SolidOnTop:
-			sotCollider.init(this,
-					/*xOffset=*/0.0f, /*yOffset=*/0.0f,
-					/*topYOffset=*/0,
-					/*rightSize=*/fWidth, /*leftSize=*/0,
-					/*rotation=*/0, /*_45=*/1
-					);
+			sotCollider.init(this, 0.0f, 0.0f, 0, fWidth, 0, 0, 1);
 
 			// What is this for. I dunno
 			sotCollider._47 = 0xA;

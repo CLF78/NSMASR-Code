@@ -1,0 +1,9 @@
+---
+- friendly_name: "New Super Mario Bros. Wii (Korean Version)"
+  short_name: 'n'
+  include_dirs: ['include', 'src']
+  defines: {'TOURNAMENT_EXISTS'}
+  multi_build: {
+    kor: 'kamek_kor.x'
+  }
+  dynamic_link: true

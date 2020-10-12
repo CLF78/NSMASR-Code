@@ -1,13 +1,13 @@
 ---
 source_files: [../src/lift.S]
 hooks:
-  - name: FuckLineLiftWithARake
+  - name: FixLineLift
     type: branch_insn
     branch_type: bl
     src_addr_pal: 0x808399D4
     target_func: 'FixLineLift'
 
-  - name: AlsoFuckTheLineLiftActivation
+  - name: FixLineLiftActivation
     type: branch_insn
     branch_type: b
     src_addr_pal: 0x80839B00

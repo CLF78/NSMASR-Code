@@ -257,7 +257,7 @@ void LevelSpecial_Update(LevelSpecial *self) {
 				MarioJumpMax = 3.628;
 				break;
 	
-			case 4:											// Mario Size
+			case 4:											// Set Time
 				break;
 		
 			case 5:											// Global Enemy Size

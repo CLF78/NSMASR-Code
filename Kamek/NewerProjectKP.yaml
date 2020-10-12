@@ -40,7 +40,6 @@ modules:
   - processed/groundspike.yaml
   - processed/growup.yaml
   - processed/hardMode.yaml
-  - processed/layouthax.yaml
   - processed/levelspecial.yaml
   - processed/linegod.yaml
   - processed/magicplatform.yaml
@@ -49,6 +48,7 @@ modules:
   - processed/mrsun.yaml
   - processed/music.yaml
   - processed/objkinoko.yaml
+  - processed/pause.yaml
   - processed/poweruphax.yaml
   - processed/pregame.yaml
   - processed/pumpkinGoomba.yaml

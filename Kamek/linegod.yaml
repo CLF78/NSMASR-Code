@@ -1,6 +1,5 @@
 ---
 # Replaces RIVER_MGR
-
 source_files: [../src/linegod.cpp, ../src/linegod.S]
 hooks:
   - name: LineGodCreate
@@ -22,10 +21,10 @@ hooks:
   - name: BgActorSetInfoFix
     type: branch_insn
     branch_type: b
-    src_addr_pal: 0x8007EA60
+    src_addr_pal: 0x8007EA70
     target_func: 'BgActorSetInfoFix'
     
   - name: LineGodMemFix
     type: patch
     addr_pal: 0x80898798
-    data: '3860 0400'
+    data: '38600400'

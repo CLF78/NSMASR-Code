@@ -1,15 +1,15 @@
 #include <asm_setup.S>
 
+.extern ContinueFromFixLineLiftActivation
+
 .global FixLineLiftActivation
 .global FixLineLift
-.extern ContinueFromFixLineLiftActivation
 
 .text
 FixLineLift:
 	stfs f0, 0x324(r28)
-	lis r4, floaty@h
-	ori r4, r4, floaty@l
-	lfs f0, 0(r4)
+	lis r4, floaty@ha
+	lfs f0, floaty@l(r4)
 	stfs f0, 0x318(r28)
 	stfs f0, 0x31C(r28)
 	blr
@@ -28,7 +28,6 @@ myLineLiftActivator:
 	li r31, 0
 	stw r30, 0x8(r1)
 	lwz r30, 0x518(r3)
-	b llaStartLoop
 
 llaStartLoop:
 	cmpwi r30, 0

@@ -8,7 +8,6 @@
     ntsc: 'kamek_ntsc.x',
     ntsc2: 'kamek_ntsc2.x',
     jpn: 'kamek_jpn.x',
-    jpn2: 'kamek_jpn2.x',
-    kor: 'kamek_kor.x'
+    jpn2: 'kamek_jpn2.x'
   }
   dynamic_link: true

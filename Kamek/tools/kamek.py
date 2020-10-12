@@ -17,7 +17,6 @@ import elftools.elf.elffile as elf
 import hooks
 import yaml
 
-version_str = 'Kamek 0.3 by Treeki and RoadRunnerWMC'
 u32 = struct.Struct('>I')
 
 verbose = True
@@ -639,7 +638,6 @@ class KamekProject(object):
 
 
 def main():
-    print(version_str)
     print('')
 
     if len(sys.argv) < 2:

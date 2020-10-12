@@ -2,9 +2,12 @@
 
 .global EndSCM
 .global newClimbSounds
+.global newClimbSoundsAttack
 .global newClimbSoundsJump
 .global newClimbSoundsJumpS
 .global newClimbSoundsJumpSS
+.global newClimbSoundsLand
+
 .extern OSReport
 .extern StagePtr
 
@@ -38,20 +41,16 @@ newClimbSoundsJumpSS:
 	li r7, 0x138
 	b effectNewClimbSounds
 
-.global newClimbSoundsLand
 newClimbSoundsLand:
 	li r7, 0x139
 	b effectNewClimbSounds
 
-.global newClimbSoundsAttack
 newClimbSoundsAttack:
 	li r7, 0x13A
-	b effectNewClimbSounds
 
 effectNewClimbSounds:
-	lis r6, StagePtr@h
-	ori r6, r6, StagePtr@l
-	lwz r6, 0(r6)
+	lis r6, StagePtr@ha
+	lwz r6, StagePtr@l(r6)
 	lhz r6, 0x120C(r6)
 	cmpwi r6, 14
 	beq pngn
