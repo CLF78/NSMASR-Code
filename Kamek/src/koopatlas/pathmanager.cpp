@@ -734,6 +734,13 @@ bool dWMPathManager_c::doingThings() {
 void dWMPathManager_c::execute() {
 	dScKoopatlas_c *wm = dScKoopatlas_c::instance;
 
+	for (int i = 0; i < pathLayer->nodeCount; i++) {
+		dKPNode_s *node = pathLayer->nodes[i];
+		if (node->type == dKPNode_s::LEVEL && !node->isNew) {
+			node->extra->clrAnm.process();
+		}
+	}
+
 	if (isEnteringLevel) {
 		if (levelStartWait > 0) {
 			levelStartWait--;
@@ -843,6 +850,7 @@ void dWMPathManager_c::execute() {
 					S16Vec efRot = {0x2000,0,0};
 					Vec efScale = {0.8f,0.8f,0.8f};
 					SpawnEffect("Wm_cs_pointlight", 0, &efPos, &efRot, &efScale);
+					node->isNew = false;
 				}
 			}
 		}

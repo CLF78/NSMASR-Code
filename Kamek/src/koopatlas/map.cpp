@@ -513,9 +513,7 @@ void dWMMap_c::renderPathLayer(dKPLayer_s *layer) {
 			node->extra->model.setDrawMatrix(node->extra->matrix);
 			node->extra->model.setScale(0.8f, 0.8f, 0.8f);
 			node->extra->model.calcWorld(false);
-
 			node->extra->model.scheduleForDrawing();
-			node->extra->clrAnm.process();
 		}
 	}
 }
