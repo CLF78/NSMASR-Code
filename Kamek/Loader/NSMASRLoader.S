@@ -155,7 +155,6 @@ start:
 
 checkKor:
 	# The original address has the same value for both these regions, so we load 0x807689BE instead
-	li        r6, '3'
 	lwz       r3, -0x394(r5)
 	clrlwi    r3, r3, 16
 	cmpwi     r3, 0x7128
@@ -585,7 +584,7 @@ PanicWithMessage:
 	mr        r5, r3
 	lis       r3, MASTERHI
 	ori       r3, r3, MASTERLO+OSFatalData@l
-	lis       r4, MASTERHI+4
+	lis       r4, MASTERHI
 	ori       r4, r4, MASTERLO+OSFatalData@l+4
 	callFunc  OSFatal
 

@@ -1,0 +1,67 @@
+<!-- Regions in order: PAL, NTSC-U, NTSC-J, NTSC-K, NTSC-W (not added yet)-->
+<!-- Save name change -->
+<memory offset="0x802F148C" value="4E415344656D6F" original="7769696D6A3264" />
+<memory offset="0x802F118C" value="4E415344656D6F" original="7769696D6A3264" />
+<memory offset="0x802F0FAC" value="4E415344656D6F" original="7769696D6A3264" />
+<memory offset="0x802F17CC" value="4E415344656D6F" original="7769696D6A3264" />
+<!-- Inject Newer loader (requires OG value) -->
+<memory offset="0x80328478" value="803482C0" original="8015BC60" />
+<memory offset="0x80328130" value="803482C0" original="8015BB20" />
+<memory offset="0x80327E98" value="803482C0" original="8015B930" />
+<memory offset="0x80334E60" value="8034F2A0" original="8015C060" />
+<!-- Expand ArchiveHeap -->
+<memory offset="0x800E4A84" value="3C600140" original="3C600120" />
+<memory offset="0x800E4994" value="3C600140" original="3C600120" />
+<memory offset="0x800E4914" value="3C600140" original="3C600120" />
+<memory offset="0x800E4AA4" value="3C600140" original="3C600120" />
+<!-- Expand 2DHeap -->
+<memory offset="0x800B64EC" value="3C800032" original="3C800030" />
+<memory offset="0x800B649C" value="3C800032" original="3C800030" />
+<memory offset="0x800B641C" value="3C800032" original="3C800030" />
+<memory offset="0x800B65AC" value="3C800032" original="3C800030" />
+<!-- Force non-Japanese font -->
+<memory offset="0x801B0204" value="38000000" original="5400FFFE" />
+<memory offset="0x801B00C4" value="38000000" original="5400FFFE" />
+<memory offset="0x801AFED4" value="38000000" original="5400FFFE" />
+<memory offset="0x801B0604" value="38000000" original="5400FFFE" />
+<!-- Title screen fixes -->
+<memory offset="0x8015D850" value="4E800020" original="38600000" />
+<memory offset="0x8015D710" value="4E800020" original="38600000" />
+<memory offset="0x8015D520" value="4E800020" original="38600000" />
+<memory offset="0x8015DC50" value="4E800020" original="38600000" />
+<!-- Disable debug key sequence (requires OG value) -->
+<memory offset="0x800E4E84" value="38600000" original="3863330C" />
+<memory offset="0x800E4D70" value="38600000" original="3863300C" />
+<memory offset="0x800E4CF0" value="38600000" original="38632E2C" />
+<memory offset="0x800E4E80" value="38600000" original="3863364C" />
+<!-- Disable unnecessary exception info -->
+<memory offset="0x800E4E8C" value="38600021" original="3860003F" />
+<memory offset="0x800E4D78" value="38600021" original="3860003F" />
+<memory offset="0x800E4CF8" value="38600021" original="3860003F" />
+<memory offset="0x800E4E88" value="38600021" original="3860003F" />
+<!-- Inject Loader -->
+<memory offset="0x8034F2A0" valuefile="Loader.bin" /><!-- KR -->
+<!-- Disable OSHalt -->
+<memory offset="0x801AF710" value="4E800020" original="9421FFD0" />
+<memory offset="0x801AF5D0" value="4E800020" original="9421FFD0" />
+<memory offset="0x801AF3E0" value="4E800020" original="9421FFD0" />
+<memory offset="0x801AD48C" value="4E800020" original="9421FFD0" />
+<!-- Disable BCA (2 patches per region) -->
+<memory offset="0x801D2E53" value="71" original="DA" />
+<memory offset="0x801D2E6B" value="71" original="DA" />
+<memory offset="0x801D2D13" value="71" original="DA" />
+<memory offset="0x801D3253" value="71" original="DA" />
+<memory offset="0x801D2D2B" value="71" original="DA" />
+<memory offset="0x801D2B23" value="71" original="DA" />
+<memory offset="0x801D2B3B" value="71" original="DA" />
+<memory offset="0x801D326B" value="71" original="DA" />
+<!--Wii Strap Screen Skip (3 patches per region, non-PAL untested, requires OG value)-->
+<memory offset="0x803286C0" value="8015D0A0" original="8015CF10"/>
+<memory offset="0x803286CC" value="8015D010" original="8015CED0"/>
+<memory offset="0x803286D8" value="8015CFC0" original="8015CE80"/>
+<memory offset="0x80328378" value="8015CF60" original="8015CDD0"/>
+<memory offset="0x80328384" value="8015CED0" original="8015CD90"/>
+<memory offset="0x80328390" value="8015CE80" original="8015CD40"/>
+<memory offset="0x803280E0" value="8015CD70" original="8015CBE0"/>
+<memory offset="0x803280EC" value="8015CCE0" original="8015CBA0"/>
+<memory offset="0x803280F8" value="8015CC90" original="8015CB50"/>

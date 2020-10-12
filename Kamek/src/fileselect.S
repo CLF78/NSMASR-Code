@@ -4,20 +4,15 @@
 .extern enableNonLoopAnim__Q23m2d13EmbedLayout_cFib
 .extern findTextBoxByName__Q23m2d17EmbedLayoutBase_cCFPCc
 .extern findPictureByName__Q23m2d17EmbedLayoutBase_cCFPCc
-.extern GetBlock__8SaveFileFi
 .extern GrabExitInfoForFileSelect
 .extern InsertIntIntoTextBox1
 .extern ResetAllCompletionCandidates__Fv
-.extern SaveFileBuffer
-.extern SaveFileInstance
-.extern UpdateSavefileChecksums
 
 .global A00_window
 .global CDHolderGroup
 .global DefaultSavefileInfo
 .global DFNiceTitle
 .global DFNiceWorldName
-.global FixUpExistingSavefile
 .global FSDummyBrlanName, FSDummyGroup, FSDummyPane
 .global FSHideCD
 .global FSShowCD_OpenWait
@@ -182,63 +177,6 @@ DSFICopyLoop:
 	blt DSFICopyLoop
 	blr
 
-FixUpExistingSavefile:
-	stwu r1, -0x10(r1)
-	mflr r0
-	stw r0, 0x14(r1)
-	stw r31, 0xC(r1)
-	stw r30, 8(r1)
-	mr r30, r3
-	li r31, 0
-
-fixBlock:
-	lis r3, SaveFileInstance@ha
-	lwz r3, SaveFileInstance@l(r3)
-	mr r4, r31
-	bl GetBlock__8SaveFileFi
-
-	lbz r4, 2(r3)
-	clrlwi. r4, r4, 31
-	beq dontFixThisOne
-	bl DefaultSavefileInfo
-
-dontFixThisOne:
-	# This is the one whose checksum is checked
-	lis r3, SaveFileBuffer@h
-	ori r3, r3, SaveFileBuffer@l
-	addi r3, r3, 0x6A0
-	mulli r4, r31, 0x980
-	add r3, r3, r4
-	lbz r4, 2(r3)
-	clrlwi. r4, r4, 31
-	beq dontFixThisOne2
-	bl DefaultSavefileInfo
-
-dontFixThisOne2:
-	addi r31, r31, 1
-	cmpwi r31, 6
-	blt fixBlock
-
-	lis r3, SaveFileBuffer@h
-	ori r3, r3, SaveFileBuffer@l
-	subi r3, r3, 0x20
-	bl UpdateSavefileChecksums
-
-	lis r3, SaveFileInstance@ha
-	lwz r3, SaveFileInstance@l(r3)
-	bl UpdateSavefileChecksums
-
-	mr r3, r30
-	lwz r30, 8(r1)
-	lwz r31, 0xC(r1)
-	lwz r0, 0x14(r1)
-	mtlr r0
-	addi r1, r1, 0x10
-	blr
-
-.section .ctors,4
-.long FixUpExistingSavefile
-
 .data
 FSDummyBrlanName: .string "fileSelectBase_18_DummyAnim.brlan"
 FSDummyGroup: .string "DummyGroup"
@@ -274,9 +212,8 @@ WarpZoneName:
 
 .align 4
 DefaultSavefileInfoData:
-.string "Choose a Game" # Game name
-.long 0, 0, 0, 0 # Padding to 32
-.short 0 # Padding to 32
+.string "Choose a Game" # Game name (14 bytes)
+.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 # Padding to 32
 .long 0xFFFFFFFF,0xFFFFFFFF  # File Text
 .long 0xFF6A00FF,0xCC5100FF  # File Background
 .long 0xFFFFFFFF,0xFFFFFFFF  # Map Text

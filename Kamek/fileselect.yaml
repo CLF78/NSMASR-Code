@@ -99,6 +99,3 @@ hooks:
 
 # Inject data when creating a save
   - {name: DefaultSavefileInfo, type: branch_insn, branch_type: b, src_addr_pal: 0x800CE100, target_func: 'DefaultSavefileInfo'}
-
-# Fix existing saves
-  - {name: FixUpExistingSavefile, type: branch_insn, branch_type: b, src_addr_pal: 0x800CF900, target_func: 'FixUpExistingSavefile'}
