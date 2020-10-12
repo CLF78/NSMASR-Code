@@ -1,14 +1,15 @@
-<!-- Regions in order: PAL, NTSC-U, NTSC-J, NTSC-K, NTSC-W (not added yet)-->
+<!-- Regions in order: PAL, NTSC-U, NTSC-J, NTSC-K, NTSC-W (sometimes it's the same as NTSC-K so it is omitted) -->
 <!-- Save name change -->
 <memory offset="0x802F148C" value="4E415344656D6F" original="7769696D6A3264" />
 <memory offset="0x802F118C" value="4E415344656D6F" original="7769696D6A3264" />
 <memory offset="0x802F0FAC" value="4E415344656D6F" original="7769696D6A3264" />
 <memory offset="0x802F17CC" value="4E415344656D6F" original="7769696D6A3264" />
-<!-- Inject Newer loader (requires OG value) -->
+<!-- Inject Newer loader -->
 <memory offset="0x80328478" value="803482C0" original="8015BC60" />
 <memory offset="0x80328130" value="803482C0" original="8015BB20" />
 <memory offset="0x80327E98" value="803482C0" original="8015B930" />
 <memory offset="0x80334E60" value="8034F2A0" original="8015C060" />
+<memory offset="0x80333218" value="8034F2A0" original="8015C060" />
 <!-- Expand ArchiveHeap -->
 <memory offset="0x800E4A84" value="3C600140" original="3C600120" />
 <memory offset="0x800E4994" value="3C600140" original="3C600120" />
@@ -29,7 +30,7 @@
 <memory offset="0x8015D710" value="4E800020" original="38600000" />
 <memory offset="0x8015D520" value="4E800020" original="38600000" />
 <memory offset="0x8015DC50" value="4E800020" original="38600000" />
-<!-- Disable debug key sequence (requires OG value) -->
+<!-- Disable debug key sequence -->
 <memory offset="0x800E4E84" value="38600000" original="3863330C" />
 <memory offset="0x800E4D70" value="38600000" original="3863300C" />
 <memory offset="0x800E4CF0" value="38600000" original="38632E2C" />
@@ -45,7 +46,7 @@
 <memory offset="0x801AF710" value="4E800020" original="9421FFD0" />
 <memory offset="0x801AF5D0" value="4E800020" original="9421FFD0" />
 <memory offset="0x801AF3E0" value="4E800020" original="9421FFD0" />
-<memory offset="0x801AD48C" value="4E800020" original="9421FFD0" />
+<memory offset="0x801AFB10" value="4E800020" original="9421FFD0" />
 <!-- Disable BCA (2 patches per region) -->
 <memory offset="0x801D2E53" value="71" original="DA" />
 <memory offset="0x801D2E6B" value="71" original="DA" />
@@ -55,7 +56,7 @@
 <memory offset="0x801D2B23" value="71" original="DA" />
 <memory offset="0x801D2B3B" value="71" original="DA" />
 <memory offset="0x801D326B" value="71" original="DA" />
-<!--Wii Strap Screen Skip (3 patches per region, non-PAL untested, requires OG value)-->
+<!--Wii Strap Screen Skip (3 patches per region) -->
 <memory offset="0x803286C0" value="8015D0A0" original="8015CF10"/>
 <memory offset="0x803286CC" value="8015D010" original="8015CED0"/>
 <memory offset="0x803286D8" value="8015CFC0" original="8015CE80"/>
@@ -65,3 +66,9 @@
 <memory offset="0x803280E0" value="8015CD70" original="8015CBE0"/>
 <memory offset="0x803280EC" value="8015CCE0" original="8015CBA0"/>
 <memory offset="0x803280F8" value="8015CC90" original="8015CB50"/>
+<memory offset="0x803350A8" value="8015D4A0" original="8015D310"/>
+<memory offset="0x803350B4" value="8015D410" original="8015D2D0"/>
+<memory offset="0x803350C0" value="8015D3C0" original="8015D280"/>
+<memory offset="0x80333460" value="8015D4A0" original="8015D310"/>
+<memory offset="0x8033346C" value="8015D410" original="8015D2D0"/>
+<memory offset="0x80333478" value="8015D3C0" original="8015D280"/>

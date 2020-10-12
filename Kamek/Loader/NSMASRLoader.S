@@ -90,18 +90,17 @@ KRAddr:
 	.string "KR"
 	.byte 0
 TWAddr:
-	# Need to check these ports later
 	.long 0x8015FC70 # OSReport_TW
 	.long 0x801AFB10 # OSFatal_TW
 	.long 0x801CABC0 # DVDConvertPathToEntrynum_TW
 	.long 0x801CAED0 # DVDFastOpen_TW
 	.long 0x801CB060 # DVDReadPrio_TW
 	.long 0x801CAF40 # DVDClose_TW
-	.long 0x802B9050 # HeapAlloc_TW
-	.long 0x802B9300 # HeapFree_TW
+	.long 0x802B9200 # HeapAlloc_TW
+	.long 0x802B94B0 # HeapFree_TW
 	.long 0x80382D48 # GameHeapArray_TW
 	.long 0x804354EC # ArchiveHeap_TW
-	.long 0x802E1E14 # sprintf_TW
+	.long 0x802E1D1C # sprintf_TW
 	.string "TW"
 	.byte 0
 
