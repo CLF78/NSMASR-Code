@@ -471,7 +471,7 @@ void dWMPathManager_c::unlockPaths() {
 
 		//SpammyReport("Path %d: %d\n", i, path->isAvailable);
 		// if this path is not "always available", then nuke its alpha
-		path->setLayerAlpha((path->isAvailable == dKPPath_s::ALWAYS_AVAILABLE) ? 255 : 0);
+		path->setLayerAlpha((path->isAvailable == dKPPath_s::ALWAYS_AVAILABLE) ? 255 : 129);
 	}
 
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
@@ -510,7 +510,7 @@ void dWMPathManager_c::unlockPaths() {
 			UnlockCmdReport("[%p] Cmd %d: Affected %d: AvailabilityData written\n", in, cmdID, i);
 			// NEWLY_AVAILABLE is set later, when that stuff is figured out
 
-			path->setLayerAlpha(value ? 255 : 0);
+			path->setLayerAlpha(value ? 255 : 129);
 			UnlockCmdReport("[%p] Cmd %d: Affected %d: Layer alpha applied\n", in, cmdID, i);
 		}
 
@@ -548,7 +548,7 @@ void dWMPathManager_c::unlockPaths() {
 				newlyAvailablePaths++;
 
 				// set this path's alpha to 0, we'll fade it in later
-				path->setLayerAlpha(0);
+				path->setLayerAlpha(129);
 			}
 		}
 
@@ -591,7 +591,7 @@ void dWMPathManager_c::unlockPaths() {
 				if (nextPath->isAvailable == dKPPath_s::AVAILABLE) {
 					nextPath->isAvailable = dKPPath_s::NEWLY_AVAILABLE;
 					newlyAvailablePaths++;
-					nextPath->setLayerAlpha(0);
+					nextPath->setLayerAlpha(129);
 				}
 
 				dKPNode_s *nextNode = nextPath->getOtherNodeTo(currentNode);
@@ -616,7 +616,7 @@ void dWMPathManager_c::unlockPaths() {
 	for (int i = 0; i < pathLayer->nodeCount; i++) {
 		dKPNode_s *node = pathLayer->nodes[i];
 
-		node->setLayerAlpha((node->isUnlocked() & !node->isNew) ? 255 : 0);
+		node->setLayerAlpha((node->isUnlocked() & !node->isNew) ? 255 : 129);
 	}
 }
 
@@ -801,7 +801,7 @@ void dWMPathManager_c::execute() {
 
 				panningCameraToPaths = true;
 			} else
-				unlockingAlpha = 0;
+				unlockingAlpha = 129;
 
 			nw4r::snd::SoundHandle something;
 			PlaySoundWithFunctionB4(SoundRelatedClass, &something, SE_OBJ_GEN_LOAD, 1);
@@ -814,7 +814,7 @@ void dWMPathManager_c::execute() {
 		if (dWorldCamera_c::instance->panning)
 			return;
 		panningCameraToPaths = false;
-		unlockingAlpha = 0;
+		unlockingAlpha = 129;
 	}
 
 	if (unlockingAlpha != -1) {

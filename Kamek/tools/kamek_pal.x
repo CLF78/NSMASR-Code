@@ -237,7 +237,6 @@ SECTIONS {
 	BombSleepState = 0x80B12A88;
 	NoFreezie = 0x800A0B08;
 	GameTimer = 0x8042A350;
-	GameTimerB = 0x80D25BF8;
 
 	DoSceneChange__FUsUiUi = 0x800E1F50;
 

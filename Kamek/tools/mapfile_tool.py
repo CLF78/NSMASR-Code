@@ -4,7 +4,7 @@ import os
 import yaml
 
 original = 'pal'
-todo = ['pal2', 'ntsc', 'ntsc2', 'jpn', 'jpn2', 'kor']
+todo = ['pal2', 'ntsc', 'ntsc2', 'jpn', 'jpn2', 'kor', 'twn']
 fix_for = {}
 version_str = 'Kamek 0.3 by Treeki and RoadRunnerWMC'
 
@@ -466,6 +466,47 @@ def fix_offs_kor_v1(offs):
         return offs + 0x55F0
 
     return offs
+
+
+def fix_offs_twn_v1(offs):
+    offs = fix_offs_kor(offs)
+
+    if 0x80302278 <= offs <= 0x803097DF:
+        return offs - 0x1C30
+    elif 0x803097E0 <= offs <= 0x8035E35E:
+        return offs - 0x1C40
+    elif 0x8035E380 <= offs <= 0x807684C0:
+        return offs - 0x1C00
+    elif 0x807A1A6C <= offs <= 0x807A1A98:
+        return offs - 0x1C
+    elif 0x807A1AA8 <= offs <= 0x807A1ADC:
+        return offs - 0x2C
+    elif 0x807A1AE0 <= offs <= 0x807A2298:
+        return offs - 0x20
+    elif 0x807A22AC <= offs <= 0x807A2BC0:
+        return offs - 0x30
+    elif 0x807A2BD4 <= offs <= 0x807A2C10:
+        return offs - 0x40
+    elif 0x807A2C28 <= offs <= 0x807A2C94:
+        return offs - 0x54
+    elif 0x807A2CA0 <= offs <= 0x8094D337:
+        return offs - 0x50
+    elif 0x8094D33B <= offs <= 0x8094D668:
+        return offs - 0x5C
+    elif 0x8094D670 <= offs <= 0x8094F420:
+        return offs - 0x60
+    elif 0x8094F438 <= offs <= 0x8094F68B:
+        return offs - 0x68
+    elif 0x8094F69C <= offs <= 0x8095110F:
+        return offs - 0x78
+    elif 0x80951258 <= offs <= 0x80951B3C:
+        return offs - 0x80
+    elif 0x80951B94 <= offs <= 0x8095264C:
+        return offs - 0x88
+    elif 0x809526B8 <= offs <= 0x809957DC:
+        return offs - 0x90
+    elif offs >= 0x809957E0:
+        return offs - 0x80
 
 
 def do_mapfile(src, dest, fix_offset):

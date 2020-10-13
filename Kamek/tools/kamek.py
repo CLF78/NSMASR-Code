@@ -287,6 +287,8 @@ class KamekBuilder:
                     s_name = s_name.replace('jpn', 'JP_')
                 elif 'kor' in s_name:
                     s_name = s_name.replace('kor', 'KR_')
+                elif 'twn' in s_name:
+                    s_name = s_name.replace('twn', 'TW_')
                 if '2' not in s_name:
                     s_name += '1'
 
