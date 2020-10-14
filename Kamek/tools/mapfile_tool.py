@@ -469,7 +469,7 @@ def fix_offs_kor_v1(offs):
 
 
 def fix_offs_twn_v1(offs):
-    offs = fix_offs_kor(offs)
+    offs = fix_offs_kor_v1(offs)
 
     if 0x80302278 <= offs <= 0x803097DF:
         return offs - 0x1C30
@@ -507,6 +507,7 @@ def fix_offs_twn_v1(offs):
         return offs - 0x90
     elif offs >= 0x809957E0:
         return offs - 0x80
+    return offs
 
 
 def do_mapfile(src, dest, fix_offset):

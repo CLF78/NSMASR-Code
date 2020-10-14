@@ -4,12 +4,12 @@
 <memory offset="0x802F118C" value="4E415344656D6F" original="7769696D6A3264" />
 <memory offset="0x802F0FAC" value="4E415344656D6F" original="7769696D6A3264" />
 <memory offset="0x802F17CC" value="4E415344656D6F" original="7769696D6A3264" />
-<!-- Inject Newer loader -->
-<memory offset="0x80328478" value="803482C0" original="8015BC60" />
-<memory offset="0x80328130" value="803482C0" original="8015BB20" />
-<memory offset="0x80327E98" value="803482C0" original="8015B930" />
-<memory offset="0x80334E60" value="8034F2A0" original="8015C060" />
-<memory offset="0x80333218" value="8034F2A0" original="8015C060" />
+<!-- Fast Boot Sequence and Inject Newer Loader -->
+<memory offset="0x80328428" value="8015BAB08015BB008015BB508015BBA08015BC30803482C08015BD30800E51E0800E52208015C1508015C2408015BDF08015C1B08015BF608015C1D08015C2208015BE808015BEC08015BF108015BFA08015C020" original="8015BD30" />
+<memory offset="0x803280E0" value="8015B9708015B9C08015BA108015BA608015BAF080347F808015BBF0800E50D0800E51108015C0108015C1008015BCB08015C0708015BE208015C0908015C0E08015BD408015BD808015BDD08015BE608015BEE0" original="8015BBF0" />
+<memory offset="0x80327E48" value="8015B7808015B7D08015B8208015B8708015B90080347CE08015BA00800E5050800E50908015BE208015BF108015BAC08015BE808015BC308015BEA08015BEF08015BB508015BB908015BBE08015BC708015BCF0" original="8015BA00" />
+<memory offset="0x80334E10" value="8015BEB08015BF008015BF508015BFA08015C03080354CA08015C130800E51E0800E52208015C5508015C6408015C1F08015C5B08015C3608015C5D08015C6208015C2808015C2C08015C3108015C3A08015C420" original="8015C130" />
+<memory offset="0x803331C8" value="8015BEB08015BF008015BF508015BFA08015C030803530608015C130800E51E0800E52208015C5508015C6408015C1F08015C5B08015C3608015C5D08015C6208015C2808015C2C08015C3108015C3A08015C420" />
 <!-- Expand ArchiveHeap -->
 <memory offset="0x800E4A84" value="3C600140" original="3C600120" />
 <memory offset="0x800E4994" value="3C600140" original="3C600120" />
@@ -25,11 +25,6 @@
 <memory offset="0x801B00C4" value="38000000" original="5400FFFE" />
 <memory offset="0x801AFED4" value="38000000" original="5400FFFE" />
 <memory offset="0x801B0604" value="38000000" original="5400FFFE" />
-<!-- Title screen fixes -->
-<memory offset="0x8015D850" value="4E800020" original="38600000" />
-<memory offset="0x8015D710" value="4E800020" original="38600000" />
-<memory offset="0x8015D520" value="4E800020" original="38600000" />
-<memory offset="0x8015DC50" value="4E800020" original="38600000" />
 <!-- Disable debug key sequence -->
 <memory offset="0x800E4E84" value="38600000" original="3863330C" />
 <memory offset="0x800E4D70" value="38600000" original="3863300C" />
@@ -40,22 +35,17 @@
 <memory offset="0x800E4D78" value="38600021" original="3860003F" />
 <memory offset="0x800E4CF8" value="38600021" original="3860003F" />
 <memory offset="0x800E4E88" value="38600021" original="3860003F" />
-<!-- Inject Loader -->
-<memory offset="0x8034F2A0" valuefile="Loader.bin" /><!-- KR -->
-<!-- Disable OSHalt -->
-<memory offset="0x801AF710" value="4E800020" original="9421FFD0" />
-<memory offset="0x801AF5D0" value="4E800020" original="9421FFD0" />
-<memory offset="0x801AF3E0" value="4E800020" original="9421FFD0" />
-<memory offset="0x801AFB10" value="4E800020" original="9421FFD0" />
-<!-- Disable BCA (2 patches per region) -->
-<memory offset="0x801D2E53" value="71" original="DA" />
-<memory offset="0x801D2E6B" value="71" original="DA" />
-<memory offset="0x801D2D13" value="71" original="DA" />
-<memory offset="0x801D3253" value="71" original="DA" />
-<memory offset="0x801D2D2B" value="71" original="DA" />
-<memory offset="0x801D2B23" value="71" original="DA" />
-<memory offset="0x801D2B3B" value="71" original="DA" />
-<memory offset="0x801D326B" value="71" original="DA" />
+<!-- Loader -->
+<memory offset="0x803482C0" valuefile="LoaderP.bin" original="666F756E6420" />
+<memory offset="0x80347F80" valuefile="LoaderU.bin" original="666F756E6420" />
+<memory offset="0x80347CE0" valuefile="LoaderJ.bin" original="666F756E6420" />
+<memory offset="0x80354CA0" valuefile="LoaderK.bin" original="666F756E6420" />
+<memory offset="0x80353060" valuefile="LoaderT.bin" original="666F756E6420" />
+<!-- Remove BCA Check -->
+<memory offset="0x800CA0B8" value="60000000" original="4BF3C6C9" />
+<memory offset="0x800C9FC8" value="60000000" original="4BF3C7B9" />
+<memory offset="0x800C9F48" value="60000000" original="4BF3C839" />
+<memory offset="0x800CA0D8" value="60000000" original="4BF3C6A9" />
 <!--Wii Strap Screen Skip (3 patches per region) -->
 <memory offset="0x803286C0" value="8015D0A0" original="8015CF10"/>
 <memory offset="0x803286CC" value="8015D010" original="8015CED0"/>

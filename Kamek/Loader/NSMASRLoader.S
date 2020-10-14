@@ -1,8 +1,28 @@
 # (c)Ninji 2010-2013, CLF78 2020
 
 # Constants
-.set MASTERHI, 0x8000
-.set MASTERLO, 0x1800
+.set region, '' # Set region value for ISO builder
+
+.if (region == 'P' || region == 'p') # SMNP
+    .set MASTERHI, 0x8034
+    .set MASTERLO, 0x82C0
+.elseif (region == 'U' || region == 'u' || region == 'E' || region == 'e') # SMNE
+    .set MASTERHI, 0x8034
+    .set MASTERLO, 0x7F80
+.elseif (region == 'J' || region == 'j') # SMNJ
+    .set MASTERHI, 0x8034
+    .set MASTERLO, 0x7CE0
+.elseif (region == 'K' || region == 'k') # SMNK
+    .set MASTERHI, 0x8035
+    .set MASTERLO, 0x4CA0
+.elseif (region == 'T' || region == 't' || region == 'W' || region == 'w') # SMNW
+    .set MASTERHI, 0x8035
+    .set MASTERLO, 0x3060
+.else # No region, set it to the Riivolution location
+	.set MASTERHI, 0x8000
+	.set MASTERLO, 0x1800
+.endif
+
 TEST_REGION = 0x80768D50
 
 # Macros
