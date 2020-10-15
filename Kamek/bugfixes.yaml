@@ -97,9 +97,15 @@ hooks:
   - {name: PowEvent1, type: branch_insn, branch_type: b, src_addr_pal: 0x80892DFC, target_func: 'PowEvent'}
   - {name: PowEvent2, type: branch_insn, branch_type: b, src_addr_pal: 0x80893044, target_func: 'PowEvent'}
 
+  - name: RegionFreeSaves
+    type: patch
+    addr_pal: 0x800CF8B8
+    data: '48000014'
+
   - name: RockyWrenchFix
     type: nop_insn
     area_pal: 0x808A9448
+
 
 # Force Toad Spawn
   - name: ToadTest

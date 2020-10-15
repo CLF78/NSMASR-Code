@@ -13,7 +13,7 @@
 .extern returnFromFlowerBuild4
 
 # Data
-.extern ObjHana, ObjHanaBrres
+.extern ObjHana
 .extern ObjKusa, ObjKusaBrres
 .extern Pa1Daishizen
 

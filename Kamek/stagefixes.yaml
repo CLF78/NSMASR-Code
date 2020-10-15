@@ -10,6 +10,11 @@ hooks:
     addr_pal: 0x801180AC
     data: '38000003'
 
+  - name: HomeStageFix
+    type: patch
+    addr_pal: 0x800BB84C
+    data: '4800003C'
+
 #  - name: FailedLavaWaves
 #    type: patch
 #    addr_pal: 0x8011F57C
