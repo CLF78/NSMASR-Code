@@ -394,10 +394,10 @@ class KamekBuilder:
 
                     # It's C/C++
                     elif os.path.splitext(sourcefile)[1].lower() in cext and fast_hack:
-                        fast_cpp.write('//\n// %s\n//\n\n' % sourcefile)
+                        #fast_cpp.write('//\n// %s\n//\n\n' % sourcefile)
 
                         with open(sourcefile) as sf:
-                            fast_cpp.write(sf.read())
+                            shutil.copyfileobj(sf, fast_cpp, -1)
 
                         fast_cpp.write('\n')
                         continue

@@ -15,8 +15,3 @@ hooks:
   - name: NoTitleScreenMovie
     type: nop_insn
     area_pal: 0x80781FB8
-
-  - name: AnotherTSThing
-    type: patch
-    addr_pal: 0x8015D850
-    data: '38600000'

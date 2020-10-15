@@ -1,5 +1,5 @@
 ---
-source_files: [../src/tilesetfixer.cpp]
+source_files: [../src/tilesetfixer.cpp, ../src/flower.S]
 hooks:
   - name: DisableTerrainShading
     type: patch
@@ -18,20 +18,32 @@ hooks:
     src_addr_pal: 0x800817C4
     target_func: 'TilesetFixerHack(void *, void *, int, int)'
 
-  - name: UniversalFlowerHack1
-    type: nop_insn
-    area_pal: 0x80077F8C
-    
-  - name: UniversalFlowerHack2
-    type: nop_insn
-    area_pal: 0x80077FC4
-    
-  - name: UniversalFlowerHack3
-    type: patch
-    addr_pal: 0x80077F9C
-    data: '4800002C'
+  - name: FlowerHack1
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x80077FC4
+    target_func: 'FlowerCheck'
 
-  - name: UniversalFlowerHack4
-    type: patch
-    addr_pal: 0x80077FB0
-    data: '48000018'
+  - name: FlowerHack2
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x808762D8
+    target_func: 'FlowerBuild1'
+
+  - name: FlowerHack3
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x80876364
+    target_func: 'FlowerBuild2'
+
+  - name: FlowerHack4
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x808763C8
+    target_func: 'FlowerBuild3'
+
+  - name: FlowerHack5
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x80876568
+    target_func: 'FlowerBuild4'

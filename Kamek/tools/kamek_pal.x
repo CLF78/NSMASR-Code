@@ -1844,6 +1844,22 @@ SECTIONS {
 	returnFromRiderInitC = 0x800DB6EC;
 	returnFromRiderInitD = 0x800DB700;
 
+	NoFlowers = 0x80077FCC;
+	HasFlowers = 0x80077FC8;
+	Pa1Daishizen = 0x8097266C;
+	returnFromFlowerBuild1 = 0x808762EC;
+	returnFromFlowerBuild2 = 0x80876654;
+	returnFromFlowerBuild2ItsGrassland = 0x8087636C;
+	returnFromFlowerBuild2ItsDaishizen = 0x80876388;
+	returnFromFlowerBuild3 = 0x80876404;
+	returnFromFlowerBuild3ItsGrassland = 0x808763D0;
+	returnFromFlowerBuild3ItsDaishizen = 0x808763EC;
+	returnFromFlowerBuild4 = 0x80876580;
+	ObjHanaBrres = 0x8097267C;
+	ObjKusa = 0x80972718;
+	ObjKusaBrres = 0x80972704;
+	
+
 
 	.text : {
 		FILL (0)
