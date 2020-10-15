@@ -3,7 +3,6 @@
 # Sys functions
 .extern DVDClass
 .extern GetRes
-.extern OSReport
 .extern strcmp
 
 # Code
@@ -14,7 +13,7 @@
 .extern returnFromFlowerBuild4
 
 # Data
-.extern ObjHanaBrres
+.extern ObjHana, ObjHanaBrres
 .extern ObjKusa, ObjKusaBrres
 .extern Pa1Daishizen
 
@@ -31,10 +30,6 @@
 # your tileset to the tileset name list at the end of this file.
 
 FlowerCheck:
-	lis r3, M1@h
-	ori r3, r3, M1@l
-	crclr 4*cr1+eq
-	bl OSReport
 	mr r3, r26
 	lis r4, Pa1NoharaSmb@h
 	ori r4, r4, Pa1NoharaSmb@l
@@ -77,15 +72,11 @@ IsPa1Daishizen:
 	b returnFromFlowerBuild1
 
 IsPa1NoharaSmb:
-	lis r3, M2@h
-	ori r3, r3, M2@l
-	crclr 4*cr1+eq
-	bl OSReport
 	li r28, 2
 	b returnFromFlowerBuild1
 
 
-# First of the three arc file loaders. Loads the arc file based on r28's content.
+# First of the three arc file loaders. Loads the brres file based on r28's content.
 FlowerBuild2:
 	cmpwi r28, 0
 	beq ItsGrassland
@@ -103,17 +94,13 @@ ItsDaishizen:
 
 # Copy this block!
 ItsNoharaSmb:
-	lis r3, M3@h
-	ori r3, r3, M3@l
-	crclr 4*cr1+eq
-	bl OSReport
 	lis r3, DVDClass@ha
 	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
-	lis r4, ObjHanaSmb@h
-	ori r4, r4, ObjHanaSmb@l
-	lis r5, ObjHanaBrres@h
-	ori r5, r5, ObjHanaBrres@l
+	lis r4, ObjHana@h
+	ori r4, r4, ObjHana@l
+	lis r5, ObjHanaSmb@h
+	ori r5, r5, ObjHanaSmb@l
 	bl GetRes
 	b returnFromFlowerBuild2
 
@@ -135,17 +122,13 @@ ItsDaishizen3:
 	b returnFromFlowerBuild3ItsDaishizen
 
 ItsNoharaSmb3:
-	lis r3, M4@h
-	ori r3, r3, M4@l
-	crclr 4*cr1+eq
-	bl OSReport
 	lis r3, DVDClass@ha
 	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
-	lis r4, ObjHanaSmb@h
-	ori r4, r4, ObjHanaSmb@l
-	lis r5, ObjHanaBrres@h
-	ori r5, r5, ObjHanaBrres@l
+	lis r4, ObjHana@h
+	ori r4, r4, ObjHana@l
+	lis r5, ObjHanaSmb@h
+	ori r5, r5, ObjHanaSmb@l
 	bl GetRes
 	b returnFromFlowerBuild3
 
@@ -172,20 +155,15 @@ ItsGrassOrDaishizen:
 
 # Use this block instead ;)
 ItsNoharaSmb4:
-	lis r3, M5@h
-	ori r3, r3, M5@l
-	crclr 4*cr1+eq
-	bl OSReport
 	lis r3, DVDClass@ha
 	lwz r3, DVDClass@l(r3)
 	addi r3, r3, 4
-	lis r4, ObjKusaSmb@h
-	ori r4, r4, ObjKusaSmb@l
-	lis r5, ObjKusaBrres@h
-	ori r5, r5, ObjKusaBrres@l
+	lis r4, ObjKusa@h
+	ori r4, r4, ObjKusa@l
+	lis r5, ObjKusaSmb@h
+	ori r5, r5, ObjKusaSmb@l
 	bl GetRes
 	b returnFromFlowerBuild4
-
 
 .data
 .align 4
@@ -193,18 +171,8 @@ ItsNoharaSmb4:
 # Tilesets go here
 Pa1NoharaSmb: .string 'Pa1_nohara_smb'
 
-.align 4
-# Flower arc files go here
-ObjHanaSmb: .string 'obj_hana_smb'
+# Flower brres files go here
+ObjHanaSmb: .string 'g3d/obj_hana_smb.brres'
 
-.align 4
-# Grass arc files go here
-ObjKusaSmb: .string 'obj_kusa_smb'
-
-.align 4
-# FUCK
-M1: .string "Checking tileset name...\n"
-M2: .string "Compare for noharasmb returned true\n"
-M3: .string "Did first arc check on noharasmb, tryna load the file...\n"
-M4: .string "Did second arc check on noharasmb, tryna load the file...\n"
-M5: .string "The game wants the grass arc for noharasmb, tryna load the file...\n"
+# Grass brres files go here
+ObjKusaSmb: .string 'g3d/obj_kusa_smb.brres'

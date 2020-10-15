@@ -1855,7 +1855,7 @@ SECTIONS {
 	returnFromFlowerBuild3ItsGrassland = 0x808763D0;
 	returnFromFlowerBuild3ItsDaishizen = 0x808763EC;
 	returnFromFlowerBuild4 = 0x80876580;
-	ObjHanaBrres = 0x8097267C;
+	ObjHana = 0x80972690;
 	ObjKusa = 0x80972718;
 	ObjKusaBrres = 0x80972704;
 	
