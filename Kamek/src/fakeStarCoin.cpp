@@ -142,7 +142,6 @@ int daFakeStarCoin::onCreate() {
 	this->scale.y = 1.0;
 	this->scale.z = 1.0;
 
-	this->pos.x -= 120.0;
 	this->pos.z = 3300.0;
 	
 	this->onExecute();

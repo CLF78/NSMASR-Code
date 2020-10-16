@@ -1859,6 +1859,9 @@ SECTIONS {
 	ObjKusa = 0x80972718;
 	ObjKusaBrres = 0x80972704;
 	
+	LoadBreffKoopa = 0x80920350;
+	returnFromBreffLoadPatch = 0x809201F0;
+	
 
 
 	.text : {

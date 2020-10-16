@@ -1,14 +1,5 @@
 #include <asm_setup.S>
 
-.global AutoScrollInjector
-.global CameraLockPosition
-.global EFBStuff
-.global PlayerRotInjector
-.global PlayerRotInjector2
-.global PlayerRotInjector3
-.global StaffCreditsAddAllCoins
-.global StaffCreditsNoScore
-.global lockedPlayerRotation
 .extern BG_GM_ptr
 .extern CameraLockEnabled
 .extern ContinueFromEFBMagic2
@@ -18,6 +9,16 @@
 .extern StaffCreditsAddCoin
 .extern continueAddToCoinCount
 .extern continueAddToScore
+
+.global AutoScrollInjector
+.global CameraLockPosition
+.global EFBStuff
+.global PlayerRotInjector
+.global PlayerRotInjector2
+.global PlayerRotInjector3
+.global StaffCreditsAddAllCoins
+.global StaffCreditsNoScore
+.global lockedPlayerRotation
 
 .text
 StaffCreditsAddAllCoins:

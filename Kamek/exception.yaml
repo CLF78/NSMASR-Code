@@ -4,7 +4,7 @@ hooks:
   - name: ReplaceExceptionOccurred
     type: branch_insn
     branch_type: bl
-    src_addr_pal: 0x80234CE0
+    src_addr_pal: 0x80234CD8
     target_func: 'ReplaceExceptionOccurred'
 
   - {name: DeleteMainInfo, type: patch, addr_pal: 0x8034D410, data: '00000000'}

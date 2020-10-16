@@ -1,5 +1,5 @@
 ---
-source_files: [../src/sceneGlue.cpp, ../src/sceneGlue.S]
+source_files: [../src/sceneGlue.cpp]
 hooks:
   - name: DoOpeningLevel
     type: branch_insn
@@ -11,12 +11,6 @@ hooks:
     type: patch
     addr_pal: 0x80124DDC
     data: '28001234'
-
-  - name: WrapExitStage
-    type: branch_insn
-    src_addr_pal: 0x80102370
-    branch_type: b
-    target_func: 'ExitStageWrapper'
 
   - name: DisableCutsceneMusic
     type: patch

@@ -11,5 +11,6 @@ hooks:
     area_pal: 0x80B4A020
 
   - name: DisablePeachDmEscort
-    type: nop_insn
-    area_pal: 0x80B49E80
+    type: patch
+    addr_pal: 0x80B49E74
+    data: '48000010'

@@ -1,9 +1,8 @@
 ---
-# Replaces AC_LIFT_SEESAW
-
+# Replaces SHIP_WINDOW
 source_files: [../src/fakeStarCoin.cpp]
 hooks:
   - name: FakeStarCoinAdd
     type: add_func_pointer
-    src_addr_pal: 0x80969438
+    src_addr_pal: 0x8097B0D0
     target_func: 'daFakeStarCoin::build(void)'

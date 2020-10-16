@@ -16,7 +16,6 @@ Custom Sprites:
  17 : WM_KILLER : Song Block
  18 : WM_BOSS_IGGY : Bone Piece
  22 : WM_KINOKO_STAR : Pumpkin Goomba
- 49 : AC_LIFT_SEESAW : Fake Star Coin
  79 : EN_HELPOS : Event Looper
  88 : EN_BOYON : Actor Spawner
  89 : EN_REMOCON_TORIMOCHI : Timed Actor Spawner
@@ -36,6 +35,7 @@ Custom Sprites:
 282 : EN_WALLINSECT : Mr Sun
 319 : WM_GRID : Flip Block
 320 : REMO_SLIDE_DOOR : Falling Chestnut
+324 : SHIP_WINDOW : Fake Star Coin
 332 : LIFT_TORIDE_ROLL : Effect Video
 350 : DUMMY_DOOR_PARENT : Fire Laser
 351 : DUMMY_DOOR_CHILD : Shy Guy
@@ -92,7 +92,6 @@ EN_GAKE_NOKO
 EN_GHOST_JUGEM
 EN_IWAO
 MOVIE
-SHIP_WINDOW
 SLOW_QUICK_TAG
 TARZAN_ROPE
 WALLINSECT_MGR
