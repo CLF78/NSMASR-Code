@@ -48,19 +48,11 @@ typedef struct { f32 x, y, z, w; } Quaternion, *QuaternionPtr, Qtrn, *QtrnPtr;
 
 typedef struct { f32 frame, value, slope; } HermiteKey;
 
+#include "rvl/mtx.h"
+
 extern "C" const char * strrchr ( const char * str, int character );
 extern "C" int strcmp ( const char * str1, const char * str2 );
 
-#include "rvl/mtx.h"
-
-
-// Stop the auto completion from whining
-#ifdef __CLANG
-inline void *operator new(unsigned int size, void *ptr) { return ptr; }
-float abs(float value);
-double abs(double value);
-#endif
-#ifndef __CLANG
 inline void *operator new(size_t size, void *ptr) { return ptr; }
 
 inline float abs(float value) {
@@ -69,7 +61,6 @@ inline float abs(float value) {
 inline double abs(double value) {
 	return __fabs(value);
 }
-#endif
 
 
 struct tree_node {
@@ -78,8 +69,6 @@ struct tree_node {
 };
 
 /* Virtual Function Helpers */
-//#define VF_BEGIN(type, obj, id, vtable_offset) \
-//	{ type __VFUNC = (((u32)(obj))+(vtable_offset));
 #define VF_BEGIN(type, obj, id, vtable_offset) \
 	{ type __VFUNC = ((type*)(*((void**)(((u32)(obj))+(vtable_offset)))))[(id)];
 
@@ -105,21 +94,7 @@ void FreeFromGameHeap1(void *block);
 
 float GetHermiteCurveValue(float current_frame, HermiteKey* keys, unsigned int key_count);
 
-/* Archive */
-/*#ifdef REGION_PAL
-	#define ARC_TABLE ((*((void**)0x8042A318))+4)
-	#define RAW_ARC_TABLE (*((void**)0x8042A318))
-#endif
-
-#ifdef REGION_NTSC
-	#define ARC_TABLE ((*((void**)0x8042A038))+4)
-	#define RAW_ARC_TABLE (*((void**)0x8042A038))
-#endif
-
-char *RetrieveFileFromArc(void *table, char *name, char *path);
-char *RetrieveFileFromArcAlt(void *table, char *name, char *path);*/
-
-extern void *ArchiveHeap; // PAL 0x8042A72C, NTSC 0x8042A44C
+extern void *ArchiveHeap;
 
 namespace nw4r { namespace math { float FrSqrt(float); }}
 float sqrtf(float x) {
@@ -134,12 +109,12 @@ float sqrtf(float x) {
 
 typedef struct
 {
-    u8   *destp;                         // Write-destination pointer:                     4B
+    u32  *destp;                         // Write-destination pointer:                     4B
     s32  destCount;                      // Remaining size to write:                     4B
     s32  forceDestCount;                 // Forcibly set the decompression size             4B
     u16  huffTable9 [ 1 << (9 + 1) ];    // Huffman encoding table: 2048B
     u16  huffTable12[ 1 << (5 + 1) ];    // Huffman encoding table: 128B
-    u16  *nodep;                         // Node during a Huffman table search: 4B
+    u32  *nodep;                         // Node during a Huffman table search: 4B
     s32  tableSize9;                     // Table size during a load: 4B
     s32  tableSize12;                    // Table size during a load: 4B
     u32  tableIdx;                       // Index for the table load position: 4B

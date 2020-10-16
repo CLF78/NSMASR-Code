@@ -2,7 +2,6 @@
 #define __KAMEK_STAGE_H
 
 #include <common.h>
-#include <course.h>
 
 #define STAGE_01		0
 #define STAGE_02		1
@@ -58,7 +57,6 @@ enum StageGroup {
 	Invalid = 11
 };
 
-
 //enum SceneTypes {
 //	BOOT = 0,
 //	AUTO_SELECT = 1,
@@ -74,7 +72,6 @@ enum StageGroup {
 //	MULTI_PLAY_COURSE_SELECT = 11
 //}	
 
-
 enum SceneParameters {
 	SOMETHING_TODO_WITH_MOVIE = 1,
 	SOMETHING_TODO_WITH_MOVIE2 = 2,
@@ -87,7 +84,6 @@ enum PowerupStoreTypes {
 	EXIT_LEVEL = 2  // Loses powerups, resets to previous state
 };
 
-
 enum Wipes {
 	FADE_OUT = 0,
 	CIRCLE_WIPE = 1,
@@ -98,27 +94,8 @@ enum Wipes {
 	GLITCH_GASM = 6
 };
 
-
 void ExitStage(int scene, int sceneParams, int powerupStoreType, int wipe);
 
 extern PowerupStoreTypes LastPowerupStoreType;
 
-
-
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

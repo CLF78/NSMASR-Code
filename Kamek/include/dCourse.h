@@ -17,12 +17,26 @@ class dCourse_c {
 		};
 
 		struct settings_s {
+			enum CourseFlag {
+				UNK = 8,
+				WRAP_ACROSS_EDGES = 1,
+			};
+
+			enum ToadHouseFlag {
+				GREEN_HOUSE = 3,
+				RED_HOUSE = 2,
+				YELLOW_HOUSE = 1,
+			};
+
 			u64 defaultFlags;
-			s16 courseFlag;
+			u16 courseFlag;
 			s16 timeLimit;
-			u8 _[4];
+			u8 creditsFlag;
+			u8 unk[3];
 			u8 startEntrance;
-			u8 __[3];
+			u8 ambushFlag;
+			u8 toadHouseFlag;
+			u8 __;
 		};
 
 		struct bounding_s {
@@ -31,29 +45,29 @@ class dCourse_c {
 			s32 yBoundSpecialTop;
 			s32 yBoundSpecialBottom;
 			u16 entryID;
-			u16 lockToBottom;
-			u32 unknown;
+			u16 yScrollEnabled;
+			u8 _[4];
 		};
 
 		struct unk_s {
-			u16 unk1;
+			u8 _[2];
+			u16 unk;
 			u16 unk2;
-			u16 unk3;
-			u16 unk4;
+			u8 __[2];
 		};
 
 		struct bg_s {
 			u16 entryID;
-			u16 xScrollRate;
-			u16 yScrollRate;
-			u16 yPosOffset;
-			u16 xPosOffset;
+			s16 xScrollRate;
+			s16 yScrollRate;
+			s16 yPosOffset;
+			s16 xPosOffset;
 			u16 fileID1;
 			u16 fileID2;
 			u16 fileID3;
-			u16 unk1;
-			u16 scale;
-			u32 unk2;
+			u8 _[3];
+			u8 scale;
+			u8 __[4];
 		};
 
 		struct nextGoto_s {
@@ -61,23 +75,25 @@ class dCourse_c {
 				NO_ENTRY = 0x80,
 				CONNECTED_PIPE = 8,
 				LINK_FORWARD = 4,
+				UNKNOWN_FLAG = 2,
 				CONNECTED_REVERSE = 1,
 			};
 
-			s16 xPos;
-			s16 yPos;
-			s16 cameraXPos;
-			s16 cameraYPos;
+			u16 xPos;
+			u16 yPos;
+			s16 cameraXPos; // ?
+			s16 cameraYPos; // ?
 			u8 entryID;
 			u8 destArea;
 			u8 destEntrance;
 			u8 type;
-			u8 unk1;
+			u8 _; // Could be player suppression like in NSMBU?
 			u8 zoneID;
 			u8 layerID;
 			u8 pathID;
-			u16 flags;
-			u16 unk2;
+			u8 __; // Could be player distance like in NSMBU?
+			u8 flags;
+			u16 pathExitDirection;
 		};
 
 		struct sprite_s {
@@ -88,12 +104,12 @@ class dCourse_c {
 			u32 settings;
 			u8 zoneID;
 			u8 layerID;
-			u16 unused;
+			u8 _[2];
 		};
 
 		struct load_s {
 			u16 type;
-			u16 unused;
+			u8 _[2];
 		};
 
 		struct zone_s {
@@ -105,38 +121,36 @@ class dCourse_c {
 			u16 terrainShading;
 			u8 entryID;
 			u8 boundingID;
-			u8 scrollMode;
-			u8 zoomMode;
-			u8 unk10;
+			u8 camMode;
+			u8 camZoom;
+			u8 relatedToEventCamera;
 			u8 visibility;
 			u8 fgID;
 			u8 bgID;
-			u8 mpBias;
-			u8 unk3;
+			u8 mpBias; // Values known up to 3, but RE says it goes up to 7. Needs testing.
+			u8 _;
 			u8 music;
 			u8 audioModifier;
 		};
 
 		struct rect_s {
-			s16 xPos;
-			s16 yPos;
-			s16 xSize;
-			s16 ySize;
+			u16 xPos;
+			u16 yPos;
+			u16 xSize;
+			u16 ySize;
 			u8 entryID;
-			u8 unused[3];
+			u8 _[3];
 		};
 
 		struct cameraFlag_s {
-			u32 unk1;
-			u32 unk2;
-			u32 unk3;
-			u8 unk4;
-			u8 scrollMode;
-			u8 zoomMode;
-			u8 unk5;
-			u16 unk6;
-			u8 eventID;
-			u8 unk7;
+			u8 _[12];
+			u8 boundingId;
+			u8 camMode;
+			u8 camZoom;
+			u8 zone_byte_0x10;
+			u8 __[2];
+			u8 eventId;
+			u8 ___;
 		};
 
 		struct rail_s {
@@ -145,7 +159,7 @@ class dCourse_c {
 			};
 
 			u8 entryID;
-			u8 unknown;
+			u8 _;
 			u16 startNode;
 			u16 nodeCount;
 			u16 flags;
@@ -156,8 +170,8 @@ class dCourse_c {
 			u16 yPos;
 			float speed;
 			float accel;
-			short unk1;
-			short unk2;
+			s16 delay;
+			u8 _[2];
 		};
 
 
