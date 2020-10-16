@@ -73,7 +73,7 @@ int EffectVideo::onExecute() {
 				// Values 676-746 require Iggy (sprites 337/372) or the Magic Fireball Spawn Area
 				// Values 747-821 require Bowser Jr. (sprites 211/405/406) or the Bowser Jr. Castle Cutscene (sprite 408)
 				// Values 822-906 require Kamek (sprite 383)
-				// Values 907-981 require Bowser (sprite 419) and Bowser Fireballs (sprite 449) with the custom code
+				// Values 907-981 require Bowser (sprite 419) or Bowser Fireballs (sprite 449) with the custom code
 				// Values 982-1045 require Larry (sprites 189/192) or the Magic Fireball Spawn Area
 				// Values 1046-1109 require Lemmy (sprites 340/381)
 				// Values 1110-1174 require Ludwig (sprites 348/365)

@@ -51,7 +51,6 @@ dScKoopatlas_c *dScKoopatlas_c::build() {
 }
 
 bool WMInit_StartLoading(void*);
-bool WMInit_LoadStaticFiles(void*);
 bool StockWMInit_LoadEffects(void*);
 bool WMInit_LoadSIAnims(void*);
 bool WMInit_EndLoading(void*);
@@ -63,7 +62,6 @@ bool WMInit_SetupWipe(void*);
 
 ChainedFunc initFunctions[] = {
 	WMInit_StartLoading,
-	WMInit_LoadStaticFiles,
 	StockWMInit_LoadEffects,
 	WMInit_LoadSIAnims,
 	WMInit_EndLoading,
@@ -121,10 +119,6 @@ bool WMInit_StartLoading(void *ptr) {
 
 	DVD_Start();
 	return true;
-}
-
-bool WMInit_LoadStaticFiles(void *ptr) {
-	return dKPMusic::loadInfo();
 }
 
 bool WMInit_LoadSIAnims(void *ptr) {
