@@ -366,8 +366,8 @@ void daMegaGoomba_c::dieFall_Execute() {
 void daMegaGoomba_c::setupBodyModel() {
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
-	this->resFile.data = getResource("kuriboBoss", "g3d/kuriboBoss.brres");
-	nw4r::g3d::ResMdl mdl = this->resFile.GetResMdl("kuriboBig");
+	this->resFile.data = getResource(MGarcNameList[1], "g3d/kuriboBoss.brres");
+	nw4r::g3d::ResMdl mdl = this->resFile.GetResMdl(MGarcNameList[0]);
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
 	SetupTextures_Enemy(&bodyModel, 0);
 

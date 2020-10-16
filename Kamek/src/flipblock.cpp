@@ -40,8 +40,8 @@ CREATE_STATE(daEnFlipBlock_c, Flipping);
 int daEnFlipBlock_c::onCreate() {
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
-	resFile.data = getResource("block_rotate", "g3d/block_rotate.brres");
-	model.setup(resFile.GetResMdl("block_rotate"), &allocator, 0, 1, 0);
+	resFile.data = getResource(FlipBlockFileList[0], "g3d/block_rotate.brres");
+	model.setup(resFile.GetResMdl(FlipBlockFileList[0]), &allocator, 0, 1, 0);
 	SetupTextures_MapObj(&model, 0);
 
 	allocator.unlink();

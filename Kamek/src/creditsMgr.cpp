@@ -195,7 +195,7 @@ extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
 int dCreditsMgr_c::onExecute() {
 	danceTimer++;
 	if (danceCommand == 0)
-		danceCommand = (danceInfo_s*)getResource("CreditsBG", "/Dance.bin");
+		danceCommand = (danceInfo_s*)getResource(CreditsFileList[0], "/Dance.bin");
 
 	char *autoscrInfo = ((char*)dBgGm_c::instance) + 0x900AC;
 
@@ -950,7 +950,7 @@ void dFlipbookRenderer_c::loadNewBG(int bgID, bool isBackface) {
 	sprintf(bgName, isBackface ? "/Back%d.tpl.LZ" : "/BG%d.tpl.LZ", bgID);
 	OSReport("Getting %s\n", bgName);
 
-	u8 *sourceBuf = getResource("CreditsBG", bgName);
+	u8 *sourceBuf = getResource(CreditsFileList[0], bgName);
 	u32 bufSize = CXGetUncompressedSize(sourceBuf);
 
 	if (tplBuffer[setID] && (tplBufferSize[setID] != bufSize)) {

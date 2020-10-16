@@ -112,8 +112,6 @@ class dScKoopatlas_c : public dScene_c {
 
 		dDvdLoader_c mapListLoader;
 
-		bool isFirstPlay;
-		bool isAfterKamekCutscene;
 		bool isAfter8Castle;
 		bool isEndingScene;
 		void startMusic();

@@ -68,8 +68,8 @@ int dDroppedBomb::onCreate() {
 	
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
-	nw4r::g3d::ResFile rf(getResource("koopa_clown_bomb", "g3d/koopa_clown_bomb.brres"));
-	bodyModel.setup(rf.GetResMdl("koopa_clown_bomb"), &allocator, 0x224, 1, 0);
+	nw4r::g3d::ResFile rf(getResource(BDarcNameList[0], "g3d/koopa_clown_bomb.brres"));
+	bodyModel.setup(rf.GetResMdl(BDarcNameList[0]), &allocator, 0x224, 1, 0);
 	SetupTextures_Enemy(&bodyModel, 0);
 
 	allocator.unlink();
@@ -174,9 +174,6 @@ int dDroppedBomb::onExecute() {
 }
 
 
-
-
-
 // =========================================================================================================
 // ================================================ CONTROLLER =============================================
 // =========================================================================================================
@@ -250,8 +247,3 @@ int dBombDrop::onExecute() {
 
 	return true;
 }
-
-
-
-
-

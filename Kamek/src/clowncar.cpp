@@ -79,7 +79,7 @@ void CCafterCreate(dEn_c *clown, u32 param) {
 
 	cAllocator->link(-1, GameHeaps[0], 0, 0x20);
 
-	resFile.data = getResource("koopaJr_clown_ply", "g3d/cannon.brres");
+	resFile.data = getResource(PCCarcNameList[0], "g3d/cannon.brres");
 	nw4r::g3d::ResMdl mdl = resFile.GetResMdl("Cannon");
 	cModel->setup(mdl, cAllocator, 0x224, 1, 0);
 	SetupTextures_MapObj(cModel, 0);
@@ -201,7 +201,7 @@ daClownShot *daClownShot::build() {
 
 int daClownShot::onCreate() {
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
-	this->resFile.data = getResource("koopaJr_clown_ply", "g3d/houdai_ball.brres");
+	this->resFile.data = getResource(PCCarcNameList[0], "g3d/houdai_ball.brres");
 	nw4r::g3d::ResMdl mdl = this->resFile.GetResMdl("houdai_ball");
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
 	allocator.unlink();

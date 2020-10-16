@@ -85,7 +85,7 @@ int daEnChestnut_c::onCreate() {
 	char rfName[64];
 	sprintf(rfName, "g3d/t%02d.brres", texNum);
 
-	resFile.data = getResource("chestnut", rfName);
+	resFile.data = getResource(ChestnutFileList[0], rfName);
 
 	nw4r::g3d::ResMdl resMdl = resFile.GetResMdl("kuribo_iga");
 	nw4r::g3d::ResAnmChr resAnm = resFile.GetResAnmChr("wait");

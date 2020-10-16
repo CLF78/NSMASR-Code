@@ -66,9 +66,7 @@ void dKPNode_s::setupNodeExtra() {
 
 	else if (isUnlocked) {
 		if (hasSecret) {
-			if (exitComplete && secretComplete)
-				colour = "g3d/blue.brres";
-			else if (exitComplete || secretComplete)
+			if (exitComplete || secretComplete)
 				colour = "g3d/blue.brres";
 			else
 				colour = "g3d/red.brres";

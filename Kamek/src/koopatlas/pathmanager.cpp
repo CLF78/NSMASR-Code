@@ -58,8 +58,6 @@ void dWMPathManager_c::setup() {
 	SpammyReport("setting up PathManager\n");
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
 
-	mustComplainToMapCreator = false;
-
 	SpammyReport("Unlocking paths\n");
 	isEnteringLevel = false;
 	levelStartWait = -1;
@@ -142,7 +140,6 @@ void dWMPathManager_c::setup() {
 
 		if (!found) {
 			currentNode = pathLayer->nodes[0];
-			mustComplainToMapCreator = true;
 		}
 
 		waitAtStart = 1;
@@ -168,10 +165,7 @@ void dWMPathManager_c::setup() {
 		int findW = -1, findL = -1;
 		bool storeIt = true;
 
-		if (wm->isAfterKamekCutscene) {
-			findW = 8;
-			findL = 1;
-		} else if (wm->isAfter8Castle) {
+		if (wm->isAfter8Castle) {
 			findW = 8;
 			findL = 5;
 		} else if (wm->isEndingScene) {
@@ -223,7 +217,7 @@ void dWMPathManager_c::setup() {
 				exits++;
 		}
 
-		completionMessageWorldNum = whatEntry->displayWorld;
+		completionMessageWorldNum = whatEntry->displayWorld+1;
 
 		// now do all the message checks
 		int flag = 0, totalFlag = 0;
@@ -277,7 +271,7 @@ void dWMPathManager_c::setup() {
 
 	ResetAllCompletionCandidates();
 
-	if (wm->isAfterKamekCutscene || wm->isAfter8Castle || wm->isEndingScene)
+	if (wm->isAfter8Castle || wm->isEndingScene)
 		copyWorldDefToSave(wm->mapData.findWorldDef(1));
 
 	finalisePathUnlocks();
@@ -535,7 +529,7 @@ void dWMPathManager_c::unlockPaths() {
 	newlyAvailableNodes = 0;
 
 	dScKoopatlas_c *wm = dScKoopatlas_c::instance;
-	bool forceFlag = (wm->isAfter8Castle || wm->isAfterKamekCutscene);
+	bool forceFlag = (wm->isAfter8Castle);
 
 	if (!wm->isEndingScene && (oldPathAvData || forceFlag)) {
 		for (int i = 0; i < pathLayer->pathCount; i++) {
@@ -1149,8 +1143,6 @@ void dWMPathManager_c::startMovementTo(dKPPath_s *path) {
 
 		nw4r::snd::SoundHandle something;
 		PlaySoundWithFunctionB4(SoundRelatedClass, &something, SE_OBJ_WARP_CANNON_SHOT, 1);
-
-		dWMMap_c::instance->spinLaunchStar();
 	} else {
 		forcedRotation = false;
 		player->setTargetRotY(direction);
@@ -1392,38 +1384,8 @@ void dWMPathManager_c::moveThroughPath(int pressedDir) {
 				OSReport("Found!\n");
 				copyWorldDefToSave(world);
 
-				bool wzHack = false;
-				if (dScKoopatlas_c::instance->warpZoneHacks) {
-					save->hudHintH += 1000;
-
-					if (world->worldID > 0) {
-						dLevelInfo_c *linfo = &dLevelInfo_c::s_info;
-						dLevelInfo_c::entry_s *lastLevel;
-						if (world->worldID == 0)
-							lastLevel = linfo->searchByDisplayNum(1, 27);
-						else if (world->worldID != 7)
-							lastLevel = linfo->searchByDisplayNum(world->worldID-1, lastLevelIDs[world->worldID-1]);
-						else
-							lastLevel = linfo->searchByDisplayNum(7, 3);
-
-						if (lastLevel) {
-							wzHack = !(save->GetLevelCondition(lastLevel->worldSlot,lastLevel->levelSlot) & COND_NORMAL);
-						}
-
-						// another stupid thing
-						if (world->worldID == 7 && wzHack)
-							if (save->GetLevelCondition(9,24) & COND_NORMAL)
-								wzHack = false;
-					}
-				}
-
-				if (wzHack) {
-					save->hudHintH = 2000;
-					dWMHud_c::instance->hideFooter();
-				} else {
-					if (visiblyChange && dWMHud_c::instance)
-						dWMHud_c::instance->showFooter();
-				}
+				if (visiblyChange && dWMHud_c::instance)
+					dWMHud_c::instance->showFooter();
 
 				dKPMusic::play(world->trackID);
 
@@ -1674,4 +1636,3 @@ void dWMPathManager_c::addNodeToCameraBounds(dKPNode_s *node) {
 	if (node->y > camMaxY)
 		camMaxY = node->y;
 }
-

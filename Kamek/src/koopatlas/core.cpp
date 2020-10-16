@@ -138,11 +138,8 @@ bool WMInit_LoadSIAnims(void *ptr) {
 	DVD_LoadFile(GetDVDClass(), "WorldMap", "SI_star", 0);
 	DVD_LoadFile(GetDVDClass(), "Maps", "SI_hammer", 0);
 
-	DVD_LoadFile(GetDVDClass(), "Object", "cobCourse", 0);
-	DVD_LoadFile(GetDVDClass(), "Object", "I_kinoko_bundle", 0);
-	DVD_LoadFile(GetDVDClass(), "Object", "lakitu", 0);
-	DVD_LoadFile(GetDVDClass(), "Object", "star_coin", 0);
 	DVD_LoadFile(GetDVDClass(), "Object", "StarRing", 0);
+	DVD_LoadFile(GetDVDClass(), "Object", "cobCourse", 0);
 	return true;
 }
 
@@ -290,37 +287,6 @@ bool WMInit_SetupWipe(void *ptr) {
 }
 
 
-
-
-
-/*void dScKoopatlas_c::startLevel(LevelInfo::Entry *entry) {
-  for (int i = 0; i < 4; i++) {
-  bool isThere = QueryPlayerAvailability(i);
-  int id = Player_ID[i];
-  Player_Active[i] = isThere ? 1 : 0;
-  if (!isThere) Player_Flags[i] = 0;
-  }
-
-  StartLevelInfo sl;
-  sl.unk1 = 0;
-  sl.unk2 = 0xFF;
-  sl.unk3 = 0;
-  sl.unk4 = 0;
-  sl.purpose = 0;
-
-  sl.world1 = entry->world;
-  sl.world2 = entry->world;
-  sl.level1 = entry->level;
-  sl.level2 = entry->level;
-
-// hopefully this will fix the Star Coin issues
-SetSomeConditionShit(entry->world, entry->level, 2);
-
-ActivateWipe(WIPE_MARIO);
-
-DoStartLevel(GetGameMgr(), &sl);
-}*/
-
 void dScKoopatlas_c::startMusic() {
 	dKPMusic::play(GetSaveFile()->GetBlock(-1)->currentMapMusic);
 }
@@ -396,14 +362,6 @@ int dScKoopatlas_c::onCreate() {
 	// Prepare this first
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
 	currentMapID = save->current_world;
-	isFirstPlay = (currentMapID == 0) && (settings & 0x80000000);
-
-	// Are we coming from Kamek cutscene? If so, then do.. some stuff!
-	isAfterKamekCutscene = (settings & 0x40000000);
-	if (isAfterKamekCutscene) {
-		currentMapID = 6; // KoopaPlanet
-		save->current_world = 6;
-	}
 
 	if (MaybeFinishingLevel[0] == 7 && MaybeFinishingLevel[1] == 24 && save->CheckLevelCondition(7, 24, COND_NORMAL)) {
 		currentMapID = 7; // KoopaPlanetUnd
@@ -445,11 +403,8 @@ int dScKoopatlas_c::onDelete() {
 	DVD_FreeFile(GetDVDClass2(), "SI_star");
 	DVD_FreeFile(GetDVDClass2(), "SI_hammer");
 
-	DVD_FreeFile(GetDVDClass2(), "cobCourse");
-	DVD_FreeFile(GetDVDClass2(), "I_kinoko_bundle");
-	DVD_FreeFile(GetDVDClass2(), "lakitu");
-	DVD_FreeFile(GetDVDClass2(), "star_coin");
 	DVD_FreeFile(GetDVDClass2(), "StarRing");
+	DVD_FreeFile(GetDVDClass2(), "cobCourse");
 
 	mapListLoader.unload();
 
@@ -1073,7 +1028,7 @@ static const wchar_t *completionMsgs[] = {
 	L"You have collected all the\nnecessary \x0B\x014F\xBEEF coins to enter\nthe Special World!",
 	L"You have collected all the \x0B\x014F\xBEEF Star\nCoins in the game!",
 	L"You've found every \x0B\x013B\xBEEF exit in the\ngame!",
-	L"You've completed everything in\nNEWER SUPER MARIO BROS. Wii!\n\nWe present you a new quest.\nTry pressing \x0B\x0122\xBEEF, \x0B\x0123\xBEEF and \x0B\x0125\xBEEF\n on the Star Coin menu."
+	L"You've completed everything in\nNewer Super Mario All-Stars!\n\nWe present you a new quest.\nTry pressing \x0B\x0122\xBEEF, \x0B\x0123\xBEEF and \x0B\x0125\xBEEF\n on the Star Coin menu."
 };
 
 void dScKoopatlas_c::beginState_CompletionMsg() {
@@ -1112,7 +1067,7 @@ void dScKoopatlas_c::executeState_CompletionMsg() {
 		if (type >= CMP_MSG_COINS && type <= CMP_MSG_WORLD) {
 			// title
 			int w = pathManager.completionMessageWorldNum;
-			int l = ((w == 5) || (w == 7)) ? 101 : 100;
+			int l = 100;
 			dLevelInfo_c::entry_s *titleEntry = dLevelInfo_c::s_info.searchByDisplayNum(w, l);
 			const char *title = dLevelInfo_c::s_info.getNameForLevel(titleEntry);
 
@@ -1181,10 +1136,10 @@ void NewerMapDrawFunc() {
 	DrawXlu();
 	UnlinkScene(1);
 	SetCurrentCameraID(0);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) {
 		RenderEffects(0, 0xB+i);
-	for (int i = 0; i < 4; i++)
 		RenderEffects(0, 7+i);
+	}
 	GXDrawDone();
 	// Leaving out some stuff here
 	DrawAllLayoutsAfterX(0x80);

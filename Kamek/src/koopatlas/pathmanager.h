@@ -69,8 +69,6 @@ class dWMPathManager_c {
 		dKPPath_s *currentPath;
 		bool reverseThroughPath; // direction we are going through the path
 
-		bool mustComplainToMapCreator;
-
 		int newlyAvailablePaths;
 		int newlyAvailableNodes;
 
