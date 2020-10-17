@@ -91,16 +91,16 @@ void UpdateFSStars() {
 
 			u32 conds = save->GetLevelCondition(entry->worldSlot, entry->levelSlot);
 
-			if (entry->displayWorld == 9) {
-				if ((conds & COND_COIN_ALL) != COND_COIN_ALL)
+			// if (entry->displayWorld == 9) {
+			//	if ((conds & COND_COIN_ALL) != COND_COIN_ALL)
 					coinsW9 = false;
-				if (entry->flags & 0x10)
-					if (!(conds & COND_NORMAL))
+			//	if (entry->flags & 0x10)
+			//		if (!(conds & COND_NORMAL))
+			//			exitsW9 = false;
+			//	if (entry->flags & 0x20)
+			//		if (!(conds & COND_SECRET))
 						exitsW9 = false;
-				if (entry->flags & 0x20)
-					if (!(conds & COND_SECRET))
-						exitsW9 = false;
-			} else {
+			//} else {
 				if ((conds & COND_COIN_ALL) != COND_COIN_ALL)
 					coinsNormal = false;
 				if (entry->flags & 0x10)
@@ -109,13 +109,12 @@ void UpdateFSStars() {
 				if (entry->flags & 0x20)
 					if (!(conds & COND_SECRET))
 						exitsNormal = false;
-			}
+			// }
 		}
 	}
 
 	bool beatGame = (save->GetLevelCondition(7, 23) & COND_NORMAL) != 0;
 
-//	save->bitfield &= ~0x3E;
 	save->bitfield &= ~0x3C;
 	save->bitfield |=
 //		(beatGame ? 2 : 0) |
