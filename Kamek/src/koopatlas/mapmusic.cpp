@@ -15,17 +15,13 @@ static int s_song = -1;
 static int s_nextSong = -1;
 
 static int s_countdownToSwitch = -1;
-static int s_countdownToFadeIn = -1;
 
 #define FADE_OUT_LEN 30
-#define FADE_IN_LEN 30
-#define BUFFER_CLEAR_DELAY 60
 
 u8 hijackMusicWithSongName(const char *songName, int themeID, bool hasFast, int channelCount, int trackCount, int *wantRealStreamID);
 
 void dKPMusic::play(int id) {
 	if (s_playing) {
-
 		// Switch track
 		OSReport("Trying to switch to song %d (Current one is %d)...\n", id, s_song);
 		if ((s_song == id && s_nextSong == -1) || s_nextSong == id) {
@@ -38,6 +34,8 @@ void dKPMusic::play(int id) {
 
 			if (s_handle.Exists())
 				s_handle.SetTrackVolume(1<<1, FADE_OUT_LEN, 0.0f);
+				s_handle.Stop(FADE_OUT_LEN);
+
 			s_countdownToSwitch = FADE_OUT_LEN;
 
 			OSReport("Playing song %d from the start.\n", id);
@@ -49,7 +47,6 @@ void dKPMusic::play(int id) {
 
 			PlaySoundWithFunctionB4(SoundRelatedClass, &s_handle, realStreamID, 1);
 
-			s_playing = true;
 			s_song = id;
 			s_nextSong = -1;
 		}
@@ -67,6 +64,7 @@ void dKPMusic::play(int id) {
 
 		s_playing = true;
 		s_song = id;
+		s_nextSong = -1;
 	}
 }
 
@@ -84,18 +82,7 @@ void dKPMusic::execute() {
 	if (s_countdownToSwitch >= 0) {
 		s_countdownToSwitch--;
 		if (s_countdownToSwitch == 0) {
-			nw4r::db::Exception_Printf_("Switching brstm files to song %d.\n", s_nextSong);
-			s_song = s_nextSong;
-			s_nextSong = -1;
-		}
-
-	} else if (s_countdownToFadeIn >= 0) {
-		s_countdownToFadeIn--;
-		if (s_countdownToFadeIn == 0) {
-			OSReport("Going to fade in the second track now!\n");
-			if (s_handle.Exists())
-				s_handle.SetTrackVolume(1<<1, FADE_IN_LEN, 1.0f);
-			
+			nw4r::db::Exception_Printf_("Switching brstm files...\n");
 		}
 	}
 }
@@ -110,7 +97,6 @@ void dKPMusic::stop() {
 	s_song = -1;
 	s_nextSong = -1;
 	s_countdownToSwitch = -1;
-	s_countdownToFadeIn = -1;
 
 	if (s_handle.Exists())
 		s_handle.Stop(30);
@@ -127,4 +113,3 @@ void dKPMusic::playStarMusic() {
 	PlaySoundWithFunctionB4(SoundRelatedClass, &s_starHandle, SE_BGM_CS_STAR, 1);
 	s_starPlaying = true;
 }
-
