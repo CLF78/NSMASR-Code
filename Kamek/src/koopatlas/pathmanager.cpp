@@ -1362,7 +1362,7 @@ void dWMPathManager_c::moveThroughPath(int pressedDir) {
 			// Quick check: do we *actually* need to stop on this node?
 			// If it's a junction with more than two exits, but only two are open,
 			// take the opposite open one
-			if (!dScKoopatlas_c::instance->warpZoneHacks && to->getExitCount() > 2 && to->getAvailableExitCount() == 2)
+			if (to->getExitCount() > 2 && to->getAvailableExitCount() == 2)
 				reallyStop = false;
 			else
 				reallyStop = true;

@@ -69,14 +69,6 @@ class dWMMap_c : public dBase_c {
 		m3d::anmTexSrt_c bgSrtAnm;
 		mMtx bgMatrix;
 
-		bool showLaunchStar;
-		float launchStarX, launchStarY;
-		m3d::mdl_c launchStarModel;
-		m3d::anmChr_c launchStarAnm;
-		mMtx launchStarMatrix;
-
-		void spinLaunchStar();
-
 		void renderPathLayer(dKPLayer_s *layer);
 
 		static dWMMap_c *build();

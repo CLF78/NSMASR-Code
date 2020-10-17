@@ -1,4 +1,4 @@
-/* KoopAtlas Map Engine
+/* Koopatlas Map Engine
  * Created by Treeki
  */
 

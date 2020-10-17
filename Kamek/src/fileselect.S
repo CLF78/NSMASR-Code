@@ -61,12 +61,6 @@ DFNiceWorldName:
 	# Savefile is in r31
 	# World Name field is in r20
 	mr r20, r4
-	lhz r4, 0x734(r31)
-	cmpwi r4, 1000
-	blt useNormalWName
-	lis r4, WarpZoneName@h
-	ori r4, r4, WarpZoneName@l
-	b chosenWName
 
 useNormalWName:
 	lis r4, ConvertedWorldName@h
@@ -206,9 +200,6 @@ DFTitle:
 ConvertedWorldName:
 .long 0, 0, 0, 0, 0, 0, 0, 0
 .long 0, 0, 0, 0, 0, 0, 0, 0
-
-WarpZoneName:
-.short 'W','a','r','p',' ','Z','o','n','e',0
 
 .align 4
 DefaultSavefileInfoData:

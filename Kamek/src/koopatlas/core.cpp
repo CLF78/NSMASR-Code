@@ -132,7 +132,6 @@ bool WMInit_LoadSIAnims(void *ptr) {
 	DVD_LoadFile(GetDVDClass(), "WorldMap", "SI_star", 0);
 	DVD_LoadFile(GetDVDClass(), "Maps", "SI_hammer", 0);
 
-	DVD_LoadFile(GetDVDClass(), "Object", "StarRing", 0);
 	DVD_LoadFile(GetDVDClass(), "Object", "cobCourse", 0);
 	return true;
 }
@@ -397,7 +396,6 @@ int dScKoopatlas_c::onDelete() {
 	DVD_FreeFile(GetDVDClass2(), "SI_star");
 	DVD_FreeFile(GetDVDClass2(), "SI_hammer");
 
-	DVD_FreeFile(GetDVDClass2(), "StarRing");
 	DVD_FreeFile(GetDVDClass2(), "cobCourse");
 
 	mapListLoader.unload();

@@ -68,34 +68,7 @@ int dWMMap_c::onCreate() {
 		effectRenderers[i].setupEffectRenderer(&allocator, -1, EffectPrios[i], EffectGroups[i]);
 	}
 
-	bool lsRotate = false;
-	switch (dScKoopatlas_c::instance->currentMapID) {
-		case 5: // Starry Sky
-			launchStarX = 5424.0f; launchStarY = -4416.0f; showLaunchStar = true; break;
-		// case 11: // Sky City
-		// 	launchStarX = 3216.0f; launchStarY = -3120.0f; showLaunchStar = true; break;
-		case 6: // Planet Koopa
-			lsRotate = true;
-			launchStarX = 2268.0f; launchStarY = -3420.0f; showLaunchStar = true; break;
-	}
-	if (showLaunchStar) {
-		nw4r::g3d::ResFile lsRes(getResource("StarRing", "g3d/StarRing.brres"));
-		nw4r::g3d::ResMdl lsMdl = lsRes.GetResMdl("StarRing");
-		launchStarModel.setup(lsMdl, &allocator, 0x32C, 1, 0);
-
-		nw4r::g3d::ResAnmChr lsAnm = lsRes.GetResAnmChr("StarRing_wait");
-		launchStarAnm.setup(lsMdl, lsAnm, &allocator, 0);
-
-		launchStarAnm.bind(&launchStarModel, lsAnm, false);
-		launchStarModel.bindAnim(&launchStarAnm);
-
-		launchStarMatrix.translation(launchStarX, launchStarY, 1000.0f);
-		S16Vec lsRot = {0x2000, lsRotate ? 0x6200 : -0x5C00, 0};
-		launchStarMatrix.applyRotationYXZ(&lsRot.x, &lsRot.y, &lsRot.z);
-	}
-
 	allocator.unlink();
-
 	return true;
 }
 
@@ -109,14 +82,6 @@ int dWMMap_c::onExecute() {
 
 	doEffects();
 
-	if (showLaunchStar) {
-		launchStarAnm.process();
-		launchStarModel._vf1C();
-		launchStarModel.setDrawMatrix(launchStarMatrix);
-		launchStarModel.setScale(0.035f, 0.035f, 0.035f);
-		launchStarModel.calcWorld(false);
-	}
-
 	return true;
 }
 
@@ -124,9 +89,6 @@ int dWMMap_c::onDraw() {
 
 	renderer.scheduleForDrawing();
 	bgModel.scheduleForDrawing();
-
-	if (showLaunchStar)
-		launchStarModel.scheduleForDrawing();
 
 	for (int i = 0; i < EFFECT_RENDERER_COUNT; i++) {
 		effectRenderers[i].scheduleForDrawing();
@@ -560,12 +522,3 @@ void dWMMap_c::doEffects() {
 		effects[1].spawn("Wm_cs_snow_a", 0, &efPos3, &efRot, 0);
 	}
 }
-
-
-void dWMMap_c::spinLaunchStar() {
-	nw4r::g3d::ResFile lsRes(getResource("StarRing", "g3d/StarRing.brres"));
-	nw4r::g3d::ResAnmChr lsAnm = lsRes.GetResAnmChr("StarRing_shot");
-	launchStarAnm.bind(&launchStarModel, lsAnm, false);
-	launchStarModel.bindAnim(&launchStarAnm);
-}
-
