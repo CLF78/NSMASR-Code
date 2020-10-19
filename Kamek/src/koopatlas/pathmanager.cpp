@@ -8,6 +8,9 @@
 #include <stage.h>
 
 extern "C" void PlaySoundWithFunctionB4(void *spc, nw4r::snd::SoundHandle *handle, int id, int unk);
+extern char CurrentWorld;
+extern char CurrentLevel;
+extern bool hasWarped;
 
 u8 MaybeFinishingLevel[2] = {0xFF,0xFF};
 u8 LastLevelPlayed[2] = {0xFF,0xFF};
@@ -172,7 +175,11 @@ void dWMPathManager_c::setup() {
 			findW = 80;
 			findL = 80;
 			storeIt = false;
+		} else if (hasWarped) {
+			findW = CurrentWorld+1;
+			findL = CurrentLevel+1;
 		}
+		hasWarped = false;
 		if (findW > -1) {
 			// look for the 8-1 node
 			for (int i = 0; i < pathLayer->nodeCount; i++) {

@@ -1862,7 +1862,9 @@ SECTIONS {
 	LoadBreffKoopa = 0x80920350;
 	returnFromBreffLoadPatch = 0x809201F0;
 	
-
+	returnFromWarpZoneHack = 0x800D01F0;
+	returnFromWarpZoneHack2 = 0x808307F8;
+	StarCoinStatus = 0x803744B0;
 
 	.text : {
 		FILL (0)

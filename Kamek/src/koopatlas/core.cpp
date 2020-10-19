@@ -5,6 +5,8 @@
 
 extern "C" void LoadMapScene();
 extern u8 MaybeFinishingLevel[2];
+extern char WarpMapID;
+extern bool hasWarped;
 
 dScKoopatlas_c *dScKoopatlas_c::instance = 0;
 
@@ -368,6 +370,14 @@ int dScKoopatlas_c::onCreate() {
 		save->current_world = 0;
 		save->current_path_node = 0;
 	}
+	
+	if (hasWarped && WarpMapID != -1) {
+		currentMapID = WarpMapID;
+		save->current_world = WarpMapID;
+		save->current_path_node = 0;
+	}
+	
+	WarpMapID = -1;
 
 	somethingAboutSound(_8042A788);
 

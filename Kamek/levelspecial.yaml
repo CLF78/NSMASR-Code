@@ -40,3 +40,9 @@ hooks:
     branch_type: b
     src_addr_pal: 0x8011857C
     target_func: 'BGScaleFix'
+
+  - name: WarpZoneHack
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x800D03B8
+    target_func: 'WarpZoneHack'

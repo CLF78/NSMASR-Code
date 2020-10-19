@@ -1,6 +1,7 @@
 #include <common.h>
 #include <game.h>
 #include <dCourse.h>
+#include <stage.h>
 
 struct LevelSpecial {
 	u32 id;			// 0x00
@@ -26,6 +27,15 @@ struct LevelSpecial {
 extern u16 TimeStopFlag;
 extern u32 AlwaysDrawFlag;
 extern u32 AlwaysDrawBranch;
+
+extern char WarpWorld;
+extern char WarpLevel;
+extern char WarpMapID;
+extern bool WarpIsEnabled;
+extern char CurrentWorld;
+extern char CurrentLevel;
+extern u32 StarCoinStatus[3];
+extern bool hasWarped;
 
 extern float MarioDescentRate;
 extern float MarioJumpMax;
@@ -96,8 +106,49 @@ bool ResetAfterLevel(bool didItWork) {
 	BGScaleEnabled = 0;
 	CameraLockEnabled = 0;
 	isLockPlayerRotation = false;
+	WarpWorld = 0;
+	WarpLevel = 0;
+	WarpIsEnabled = false;
 	return didItWork;
 }
+
+void DoWarpZoneHack(int world, int level) {
+	if (CurrentWorld < 10 && CurrentLevel < 42) {
+		// First we need to save the progress of the old level we warped from. Defaulting to secret exit right here,
+		// as we don't need to enable it in LevelInfo.
+		SaveBlock *save = GetSaveFile()->GetBlock(-1);
+		save->SetLevelCondition(CurrentWorld, CurrentLevel, COND_SECRET);
+		
+		// Save the star coins too, as those get lost on switch.
+		for (int i = 0; i < 3; i++) {
+			bool iscoin = (StarCoinStatus[i] != 4);
+			if (i == 0 && iscoin) {
+				save->SetLevelCondition(CurrentWorld, CurrentLevel, COND_COIN1);
+			} else if (iscoin) {
+				save->SetLevelCondition(CurrentWorld, CurrentLevel, i << 1);
+			}
+		}
+	}
+
+	// Start wipe
+	ActivateWipe(WIPE_MARIO);
+	hasWarped = true;
+	
+	// Setup the warp
+	RESTART_CRSIN_LevelStartStruct.purpose = 0;
+	RESTART_CRSIN_LevelStartStruct.world1 = world-1;
+	RESTART_CRSIN_LevelStartStruct.world2 = world-1;
+	RESTART_CRSIN_LevelStartStruct.level1 = level-1;
+	RESTART_CRSIN_LevelStartStruct.level2 = level-1;
+	RESTART_CRSIN_LevelStartStruct.areaMaybe = 0;
+	RESTART_CRSIN_LevelStartStruct.entrance = 0xFF;
+	RESTART_CRSIN_LevelStartStruct.unk4 = 0;
+	
+	// Go!
+	DoSceneChange(RESTART_CRSIN, 0, 0);
+	return;
+}
+
 
 void FuckinBubbles() {
 	dCourse_c *course = dCourseFull_c::instance->get(GetAreaNum());
@@ -159,9 +210,12 @@ void LevelSpecial_Update(LevelSpecial *self) {
 		offState = (newEvState == 1) ? 1 : 0;
 
 		switch (self->type) {
-			// case 1:											// Time Freeze
-			// 	TimeStopFlag = self->effect * 0x100;
-			// 	break;
+			case 1:											// Level Warper
+				WarpWorld = self->settings >> 20 & 0xF;
+				WarpLevel = self->settings >> 12 & 0xFF;
+				WarpMapID = self->settings >> 4 & 0xFF;
+				WarpIsEnabled = true;
+				break;
 				
 			case 2:											// Stop Timer
 				self->keepTime  = time;
@@ -241,9 +295,9 @@ void LevelSpecial_Update(LevelSpecial *self) {
 		offState = (newEvState == 1) ? 0 : 1;
 
 		switch (self->type) {
-			// case 1:											// Time Freeze
-			// 	TimeStopFlag = 0;
-			// 	break;
+			case 1:											// Level Warper
+				WarpIsEnabled = false;
+				break;
 				
 			case 2:											// Stop Timer
 				self->keepTime  = 0;
@@ -295,10 +349,5 @@ void LevelSpecial_Update(LevelSpecial *self) {
 		}
 	}
 
-
-
-
-	
-	
 	self->lastEvState = newEvState;
 }
