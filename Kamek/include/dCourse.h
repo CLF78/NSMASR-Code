@@ -93,7 +93,7 @@ class dCourse_c {
 			u8 pathID;
 			u8 __; // Could be player distance like in NSMBU?
 			u8 flags;
-			u16 pathExitDirection;
+			u8 pathExitDirection;
 		};
 
 		struct sprite_s {
