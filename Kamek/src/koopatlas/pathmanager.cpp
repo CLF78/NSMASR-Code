@@ -179,7 +179,7 @@ void dWMPathManager_c::setup() {
 			findW = CurrentWorld+1;
 			findL = CurrentLevel+1;
 		}
-		hasWarped = false;
+
 		if (findW > -1) {
 			// look for the 8-1 node
 			for (int i = 0; i < pathLayer->nodeCount; i++) {

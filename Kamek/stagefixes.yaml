@@ -15,6 +15,16 @@ hooks:
     addr_pal: 0x800BB84C
     data: '4800003C'
 
+  - name: AmbushTimerFix
+    type: patch
+    addr_pal: 0x80925C88
+    data: '4800000C'
+
+  - name: AmbushTimerFix2
+    type: patch
+    addr_pal: 0x80925CE0
+    data: '4800001C'
+
 #  - name: FailedLavaWaves
 #    type: patch
 #    addr_pal: 0x8011F57C

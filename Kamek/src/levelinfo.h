@@ -35,6 +35,7 @@ public:
 
 	entry_s *searchBySlot(int world, int level);
 	entry_s *searchByDisplayNum(int world, int level);
+	u8 getWorldNum(int world, int level);
 
 	u32 sectionCount() {
 		return data->sectionCount;

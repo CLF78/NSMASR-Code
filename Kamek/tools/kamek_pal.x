@@ -1562,7 +1562,7 @@ SECTIONS {
 	setFrameForEntry__Q23m3d8anmClrFfi = 0x80166430;
 	getUpdateRateForEntry__Q23m3d8anmClrFv = 0x80166440;
 	setUpdateRateForEntry__Q23m3d8anmClrFfi = 0x80166450;
-	isEntryAnimationDone__Q23m3d8anmClrFv = 0x80166460;
+	isEntryAnimationDone__Q23m3d8anmClrFi = 0x80166460;
 	queryEntrySomething__Q23m3d8anmClrFv = 0x80166470;
 	setEntryByte34__Q23m3d8anmClrFUci = 0x80166480;
 	getEntryField28__Q23m3d8anmClrFv = 0x801664A0;
@@ -1581,7 +1581,7 @@ SECTIONS {
 	setFrameForEntry__Q23m3d11anmTexPat_cFfi = 0x80167030;
 	getUpdateRateForEntry__Q23m3d11anmTexPat_cFv = 0x80167040;
 	setUpdateRateForEntry__Q23m3d11anmTexPat_cFfi = 0x80167050;
-	isEntryAnimationDone__Q23m3d11anmTexPat_cFv = 0x80167060;
+	isEntryAnimationDone__Q23m3d11anmTexPat_cFi = 0x80167060;
 	queryEntrySomething__Q23m3d11anmTexPat_cFv = 0x80167070;
 	setEntryByte34__Q23m3d11anmTexPat_cFUci = 0x80167080;
 	getEntryField28__Q23m3d11anmTexPat_cFv = 0x801670a0;
@@ -1865,6 +1865,9 @@ SECTIONS {
 	returnFromWarpZoneHack = 0x800D01F0;
 	returnFromWarpZoneHack2 = 0x808307F8;
 	StarCoinStatus = 0x803744B0;
+	
+	returnFromAirshipCloudsNotGood = 0x809DDE34;
+	returnFromAirshipCloudsIsGood = 0x809DDE28;
 
 	.text : {
 		FILL (0)

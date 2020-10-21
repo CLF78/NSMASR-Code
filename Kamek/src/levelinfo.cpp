@@ -72,6 +72,21 @@ dLevelInfo_c::entry_s *dLevelInfo_c::searchByDisplayNum(int world, int level) {
 }
 
 
+u8 dLevelInfo_c::getWorldNum(int world, int level) {
+	for (int i = 0; i < sectionCount(); i++) {
+		section_s *sect = getSectionByIndex(i);
+		
+		for (int j = 0; j < sect->levelCount; j++) {
+			entry_s *entry = &sect->levels[j];
+			if (entry->worldSlot == world && entry->levelSlot == level)
+				return entry->displayWorld;
+		}
+	}
+
+	return 0;
+}
+
+
 void UpdateFSStars() {
 	dLevelInfo_c *li = &dLevelInfo_c::s_info;
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);

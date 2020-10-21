@@ -1,6 +1,10 @@
 #include "koopatlas/hud.h"
 #include <newer.h>
 
+extern char CurrentWorld;
+extern char CurrentLevel;
+extern bool hasWarped;
+
 dWMHud_c *dWMHud_c::instance = 0;
 
 dWMHud_c *dWMHud_c::build() {
@@ -109,8 +113,6 @@ int dWMHud_c::onCreate() {
 		willShowHeader = false;
 		willShowFooter = false;
 
-		loadFooterInfo();
-
 		setupLives();
 	}
 
@@ -156,6 +158,7 @@ int dWMHud_c::onExecute() {
 		willShowFooter = false;
 		isFooterVisible = true;
 		loadFooterInfo();
+		hasWarped = false;
 		playShowAnim(SHOW_FOOTER);
 	}
 
@@ -349,12 +352,6 @@ void dWMHud_c::loadFooterInfo() {
 	}
 	convertedWorldName[31] = 0;
 
-	WorldName->SetString(convertedWorldName);
-	WorldNameS->SetString(convertedWorldName);
-
-	WorldName->colour1 = save->hudTextColours[0];
-	WorldName->colour2 = save->hudTextColours[1];
-
 	footerCol.colourise(save->hudHintH%1000, save->hudHintS, save->hudHintL);
 
 	// figure out if stars are needed
@@ -370,6 +367,22 @@ void dWMHud_c::loadFooterInfo() {
 	if (lastLevel) {
 		starVisibility[0] = (save->GetLevelCondition(lastLevel->worldSlot,lastLevel->levelSlot) & COND_NORMAL);
 	}
+
+	if (hasWarped) {
+		// Get world and level, find the worldname from it and write it to the textbox
+		u8 wnum = linfo->getWorldNum(CurrentWorld, CurrentLevel);
+		dLevelInfo_c::entry_s *worldEntry = linfo->searchByDisplayNum(wnum, 100);
+		const char* nomnom = linfo->getNameForLevel(worldEntry);
+		WriteAsciiToTextBox(WorldName, nomnom);
+		WriteAsciiToTextBox(WorldNameS, nomnom);
+
+	} else {
+		WorldName->SetString(convertedWorldName);
+		WorldNameS->SetString(convertedWorldName);
+	}
+
+	WorldName->colour1 = save->hudTextColours[0];
+	WorldName->colour2 = save->hudTextColours[1];
 
 	// now calculate the other two
 	starVisibility[1] = true;

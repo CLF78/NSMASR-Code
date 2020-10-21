@@ -2,9 +2,9 @@
 #include <game.h>
 #include <g3dhax.h>
 #include <sfx.h>
-#include <effects.h>
 
 extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
+extern const char* EffectNameList [];
 
 class EffectVideo : public dEn_c {
 	int onCreate();
