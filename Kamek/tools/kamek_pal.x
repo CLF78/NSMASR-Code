@@ -1868,6 +1868,16 @@ SECTIONS {
 	
 	returnFromAirshipCloudsNotGood = 0x809DDE34;
 	returnFromAirshipCloudsIsGood = 0x809DDE28;
+	
+	returnFromLavaCheck1False = 0x80075364;
+	returnFromLavaCheck1True = 0x80075304;
+	returnFromLavaCheck2False = 0x800920CC;
+	returnFromLavaCheck2True = 0x80092090;
+	returnFromLavaCheck3 = 0x8011F5C8;
+	returnFromLavaCheck4False = 0x800EBE4C;
+	returnFromLavaCheck4True = 0x800EBE10;
+	returnFromLavaCheck5False = 0x8000BA70;
+	returnFromLavaCheck5True = 0x8000C5C0;
 
 	.text : {
 		FILL (0)

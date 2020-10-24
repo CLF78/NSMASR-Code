@@ -1,0 +1,43 @@
+source_files: [../src/lavawaves.S]
+hooks:
+  - name: ResetLavaWaves
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x807B4D2C
+    target_func: 'ResetLavaWaves'
+
+  - name: LavaWavesBitCheck
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x807B4DA0
+    target_func: 'LavaWavesBitCheck'
+
+  - name: AreLavaWavesEnabled1
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x800752C8
+    target_func: 'AreLavaWavesEnabled1'
+
+  - name: AreLavaWavesEnabled2
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x80092078
+    target_func: 'AreLavaWavesEnabled2'
+
+  - name: AreLavaWavesEnabled3
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x8011F5AC
+    target_func: 'AreLavaWavesEnabled3'
+
+  - name: AreLavaWavesEnabled4
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x800EBDA0
+    target_func: 'AreLavaWavesEnabled4'
+
+  - name: AreLavaWavesEnabled5
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x8000D020
+    target_func: 'AreLavaWavesEnabled5'
