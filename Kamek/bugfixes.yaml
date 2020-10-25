@@ -22,6 +22,11 @@ hooks:
     addr_pal: 0x800E1818
     data: '38A00005'
 
+  - name: DisableLifeSaving2
+    type: patch
+    addr_pal: 0x800CE1A4
+    data: '38600005'
+
   - name: EN_BIGPILEFix
     type: patch
     addr_pal: 0x8001F93C
