@@ -1,6 +1,8 @@
 #include <game.h>
 #include <dCourse.h>
 
+extern "C" void HurtMarioBecauseOfBeingSquashed(void *mario, dStageActor_c *squasher, int type);
+
 class daEnMagicPlatform_c : public dEn_c {
 	public:
 		static daEnMagicPlatform_c *build();
@@ -63,7 +65,6 @@ daEnMagicPlatform_c *daEnMagicPlatform_c::build() {
 	return c;
 }
 
-extern "C" void HurtMarioBecauseOfBeingSquashed(void *mario, dStageActor_c *squasher, int type);
 
 static void PhysCB1(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	if (two->stageActorType != 1)
@@ -93,6 +94,7 @@ static void PhysCB2(daEnMagicPlatform_c *one, dStageActor_c *two) {
 		HurtMarioBecauseOfBeingSquashed(two, one, 10);
 }
 
+
 static void PhysCB3(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeNotBool) {
 	if (two->stageActorType != 1)
 		return;
@@ -114,13 +116,16 @@ static void PhysCB3(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeN
 	}
 }
 
+
 static bool PhysCB4(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	return (one->pos_delta.y > 0.0f);
 }
 
+
 static bool PhysCB5(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	return (one->pos_delta.y < 0.0f);
 }
+
 
 static bool PhysCB6(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeNotBool) {
 	if (unkMaybeNotBool) {
@@ -130,8 +135,10 @@ static bool PhysCB6(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeN
 		if (one->pos_delta.x < 0.0f)
 			return true;
 	}
+
 	return false;
 }
+
 
 int daEnMagicPlatform_c::onCreate() {
 	rectID = settings & 0xFF;
@@ -146,12 +153,13 @@ int daEnMagicPlatform_c::onCreate() {
 
 	doesMoveInfinitely = (settings & 0x10000000);
 
-	if (settings & 0xE0000000) {
+	if (collisionType == NoneWithZ500)
+		pos.z = 500.0f;
+	
+	else if (settings & 0xE0000000) {
 		int putItBehind = settings >> 29;
 		pos.z = -3600.0f - (putItBehind * 16);
 	}
-	if (collisionType == NoneWithZ500)
-		pos.z = 500.0f;
 
 	setupMovement();
 
@@ -163,9 +171,7 @@ int daEnMagicPlatform_c::onCreate() {
 
 	switch (collisionType) {
 		case Solid:
-			physics.setup(this,
-					0.0f, 0.0f, fWidth, -fHeight,
-					(void*)&PhysCB1, (void*)&PhysCB2, (void*)&PhysCB3, 1, 0, 0);
+			physics.setup(this, 0.0f, 0.0f, fWidth, -fHeight, (void*)&PhysCB1, (void*)&PhysCB2, (void*)&PhysCB3, 1, 0, 0);
 
 			physics.callback1 = (void*)&PhysCB4;
 			physics.callback2 = (void*)&PhysCB5;
@@ -173,6 +179,7 @@ int daEnMagicPlatform_c::onCreate() {
 
 			physics.addToList();
 			break;
+
 		case SolidOnTop:
 			sotCollider.init(this, 0.0f, 0.0f, 0, fWidth, 0, 0, 1);
 
@@ -183,6 +190,7 @@ int daEnMagicPlatform_c::onCreate() {
 			sotCollider.addToList();
 
 			break;
+
 		case ThinLineLeft: case ThinLineRight:
 		case ThinLineTop: case ThinLineBottom:
 			physics.setup(this,
@@ -203,6 +211,7 @@ int daEnMagicPlatform_c::onCreate() {
 	return 1;
 }
 
+
 int daEnMagicPlatform_c::onDelete() {
 	deleteTiles();
 
@@ -214,6 +223,7 @@ int daEnMagicPlatform_c::onDelete() {
 
 	return 1;
 }
+
 
 int daEnMagicPlatform_c::onExecute() {
 	handleMovement();
@@ -275,24 +285,20 @@ void daEnMagicPlatform_c::setupMovement() {
 	currentMoveDelay = 0;
 }
 
+
 void daEnMagicPlatform_c::handleMovement() {
 	if (spriteFlagNum > 0) {
 		// Do event checks
 		bool flagOn = ((dFlagMgr_c::instance->flags & spriteFlagMask) != 0);
-
-		if (isMoving) {
-			if (!flagOn) {
-				// Flag was turned off while moving, so go back
-				moveDelta = -moveBaseDelta;
-			} else {
-				moveDelta = moveBaseDelta;
-			}
-		} else {
-			if (flagOn) {
-				// Flag was turned on, so start moving
-				moveDelta = moveBaseDelta;
-				isMoving = true;
-			}
+		
+		// Flag was turned on, so start moving
+		if (flagOn) {
+			moveDelta = moveBaseDelta;
+			isMoving = true;
+		
+		// Flag was turned off while moving, so go back
+		} else if (isMoving) {
+			moveDelta = -moveBaseDelta;
 		}
 	}
 
@@ -329,9 +335,7 @@ void daEnMagicPlatform_c::handleMovement() {
 	if (reachedEnd) {
 		if (spriteFlagNum > 0) {
 			// If event, just do nothing.. depending on what side we are on
-			if ((moveDelta > 0.0f && moveBaseDelta > 0.0f) || (moveDelta < 0.0f && moveBaseDelta < 0.0f)) {
-				// We reached the end, so keep isMoving on for when we need to reverse
-			} else {
+			if (!(moveDelta > 0.0f && moveBaseDelta > 0.0f) || (moveDelta < 0.0f && moveBaseDelta < 0.0f)) {
 				// We're back at the start, so turn it off
 				isMoving = false;
 			}
@@ -398,8 +402,8 @@ void daEnMagicPlatform_c::createTiles() {
 
 		worldY += 16;
 	}
-
 }
+
 
 void daEnMagicPlatform_c::deleteTiles() {
 	if (renderers != 0) {
@@ -410,9 +414,9 @@ void daEnMagicPlatform_c::deleteTiles() {
 	}
 }
 
+
 void daEnMagicPlatform_c::updateTilePositions() {
 	float baseX = pos.x;
-
 	float y = -pos.y;
 
 	int rendererID = 0;
@@ -432,7 +436,6 @@ void daEnMagicPlatform_c::updateTilePositions() {
 		y += 16.0f;
 	}
 }
-
 
 
 void daEnMagicPlatform_c::checkVisibility() {

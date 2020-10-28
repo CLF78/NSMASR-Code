@@ -341,7 +341,7 @@ class KamekBuilder:
 
         # Setup the compiler
         if use_mw:
-            cc_command = ['%smwcceppc.exe' % mw_path, '-I.', '-I-', '-I.', '-nostdinc', '-Cpp_exceptions', 'off', '-Os', '-proc', 'gekko', '-fp', 'hard', '-enum', 'int', '-sdata', '0', '-sdata2', '0', '-g', '-RTTI', 'off', '-use_lmw_stmw', 'on']
+            cc_command = ['%smwcceppc.exe' % mw_path, '-I.', '-I-', '-I.', '-nostdinc', '-Cpp_exceptions', 'off', '-O4', '-proc', 'gekko', '-fp', 'hard', '-enum', 'int', '-sdata', '0', '-sdata2', '0', '-g', '-RTTI', 'off', '-use_lmw_stmw', 'on']
             as_command = ['%smwasmeppc.exe' % mw_path, '-I.', '-I-', '-I.', '-nostdinc', '-proc', 'gekko', '-d', '__MWERKS__']
 
             if 'defines' in self._config:

@@ -1,6 +1,6 @@
 #include <asm_setup.S>
 
-.extern ContinueBgActorSpawn
+.extern ContinueBgActorSpawn, ContinueBgActorSpawn2
 
 .global BgActorSetInfoFix
 .global BgActorSpawnFix
@@ -16,12 +16,7 @@ BgActorSpawnFix:
 	b ContinueBgActorSpawn
 
 JustRet:	
-	lwz r31, 0x3C(r1)
-	lwz r30, 0x38(r1)
-	lwz r0, 0x44(r1)
-	mtlr r0
-	addi r1, r1, 0x40
-	blr
+	b ContinueBgActorSpawn2
 
 BgActorSetInfoFix:
 	li r4, 0

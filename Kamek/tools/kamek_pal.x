@@ -1623,6 +1623,7 @@ SECTIONS {
 	dBgActorManager = 0x8042A0B8;
 
 	ContinueBgActorSpawn = 0x8007EA9C;
+	ContinueBgActorSpawn2 = 0x8007EB58;
 
 	SomeModelAnimationClass_Setup = 0x80165210;
 
