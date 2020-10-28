@@ -2,6 +2,11 @@
 #include <game.h>
 #include <g3dhax.h>
 
+const char* RYOMFileList [] = {
+	"models",
+	NULL	
+};
+
 
 //////////////////////////////////////////////////////////
 //
@@ -40,7 +45,7 @@ class dMakeYourOwn : public dStageActor_c {
 	bool customZ;
 
 	void setupAnim(const char* name, float rate);
-	void setupModel(const char* arcName, const char* brresName, const char* mdlName);
+	void setupModel(int arcIndex, const char* brresName, const char* mdlName);
 };
 
 // This sets up how much space we have in memory
@@ -63,8 +68,8 @@ void dMakeYourOwn::setupAnim(const char* name, float rate) {
 	}
 }
 
-void dMakeYourOwn::setupModel(const char* arcName, const char* brresName, const char* mdlName) {
-	this->resFile.data = getResource(arcName, brresName);
+void dMakeYourOwn::setupModel(int arcIndex, const char* brresName, const char* mdlName) {
+	this->resFile.data = getResource(RYOMFileList[arcIndex], brresName);
 	this->mdl = this->resFile.GetResMdl(mdlName);
 
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
@@ -104,7 +109,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 0:		// Mario NF
 
-			setupModel("arrow", "g3d/0.brres", "0");
+			setupModel(0, "g3d/0.brres", "0");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = -3000.0;
 
@@ -113,7 +118,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 1:		// Peach NF
 
-			setupModel("arrow", "g3d/1.brres", "1");
+			setupModel(0, "g3d/1.brres", "1");
 			SetupTextures_Enemy(&bodyModel, 0);
 			this->pos.z = -3000.0;
 
@@ -122,7 +127,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 2:		// Luigi NF
 
-			setupModel("arrow", "g3d/2.brres", "2");
+			setupModel(0, "g3d/2.brres", "2");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 3000.0;
 
@@ -131,7 +136,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 3:	 // Yellow Toad NF
 
-			setupModel("arrow", "g3d/3.brres", "3");
+			setupModel(0, "g3d/3.brres", "3");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 3000.0;
 
@@ -140,7 +145,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 4:		// Blue Toad NF
 
-			setupModel("arrow", "g3d/4.brres", "4");
+			setupModel(0, "g3d/4.brres", "4");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 3000.0;
 
@@ -149,7 +154,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 5:		// Cloud
 
-			setupModel("arrow", "g3d/5.brres", "5");
+			setupModel(0, "g3d/5.brres", "5");
 			SetupTextures_Item(&bodyModel, 0);
 			this->pos.z = -3300.0;
 
@@ -158,7 +163,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 6:		// Presents
 
-			setupModel("OpeningScene", "g3d/6.brres", "6");
+			setupModel(0, "g3d/6.brres", "6");
 			SetupTextures_MapObj(&bodyModel, 0);
 			this->pos.z = 0.0;
 
@@ -167,25 +172,25 @@ int dMakeYourOwn::onCreate() {
 
 		case 7:		// Luigi OP
 
-			setupModel("OpeningScene", "g3d/7.brres", "7");
+			setupModel(0, "g3d/7.brres", "7");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 0.0;
 
 			setupAnim("anim07", 1.0);
 			break;
 
-		case 8:		// Blue Toad OP+Castle
+		case 8:		// Blue Toad OP
 
-			setupModel("OpeningScene", "g3d/8.brres", "8");
+			setupModel(0, "g3d/4.brres", "4");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 0.0;
 
 			setupAnim("anim08", 1.0);
 			break;
 
-		case 9:		// Yellow Toad OP+Castle
+		case 9:		// Yellow Toad OP
 
-			setupModel("OpeningScene", "g3d/9.brres", "9");
+			setupModel(0, "g3d/3.brres", "3");
 			SetupTextures_Player(&bodyModel, 0);
 			this->pos.z = 0.0;
 
@@ -194,7 +199,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 10:		// Cloud Night
 
-			setupModel("arrow", "g3d/10.brres", "10");
+			setupModel(0, "g3d/10.brres", "10");
 			SetupTextures_Item(&bodyModel, 0);
 			this->pos.z = -3300.0;
 
@@ -203,7 +208,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 11:		// Snow Tree
 
-			setupModel("arrow", "g3d/11.brres", "11");
+			setupModel(0, "g3d/11.brres", "11");
 			SetupTextures_Map(&bodyModel, 0);
 			this->pos.z = 0.0;
 
@@ -211,7 +216,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 17:		// White Cloud
 
-			setupModel("arrow", "g3d/17.brres", "17");
+			setupModel(0, "g3d/17.brres", "17");
 			SetupTextures_Item(&bodyModel, 0);
 			this->pos.z = -3300.0;
 
@@ -220,7 +225,7 @@ int dMakeYourOwn::onCreate() {
 
 		case 18:		// Standalone Cage
 
-			setupModel("cage_boss_koopa", "g3d/18.brres", "18");
+			setupModel(0, "g3d/18.brres", "18");
 			SetupTextures_MapObj(&bodyModel, 0);
 			this->pos.z = 0.0;
 

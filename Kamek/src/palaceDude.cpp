@@ -3,8 +3,6 @@
 #include "msgbox.h"
 #include "boss.h"
 
-const char *PalaceDudeFileList[] = {"OpeningScene", 0};
-
 class dPalaceDude_c : public dStageActor_c {
 	public:
 		static dPalaceDude_c *build();

@@ -6,3 +6,8 @@ hooks:
     branch_type: b
     src_addr_pal: 0x8015BC70
     target_func: 'Prolog'
+
+  - name: ExceptionRecovery
+    type: patch
+    addr_pal: 0x80000300
+    data: '7C7043A6 7C7A02A6 38630004 7C7A03A6 7C7042A6 4C000064'

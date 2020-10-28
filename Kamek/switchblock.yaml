@@ -41,9 +41,3 @@ hooks:
     # Orig 02EB 0000 00000000 00000000  00000000 00000000 00000100 00000100  0000 0000 0000 0000 0800 0000'
     data: '02A7 0000 00000010 00000010  00000000 00000000 00000200 00000200  0000 0000 0200 0200 0000 0000'
     # 0x8030A340 + sprite num * 0x28 == offset
-
-  - name: PalaceDudeSpriteFileInfo
-    type: add_func_pointer
-    src_addr_pal: 0x8031AF90
-    target_func: 'PalaceDudeFileList'
-    # 0x8031AB4C + sprite num * 0x4 == offset
