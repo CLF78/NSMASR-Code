@@ -1559,10 +1559,11 @@ SECTIONS {
 	bind__Q23m3d8anmClr_cFPQ23m3d5mdl_cQ34nw4r3g3d9ResAnmClrib = 0x80166110;
 
 	getFrameForEntry__Q23m3d8anmClrFv = 0x80166420;
+	setFrameForEntry__Q23m3d8anmClr_cFfi = 0x80166430;
 	setFrameForEntry__Q23m3d8anmClrFfi = 0x80166430;
 	getUpdateRateForEntry__Q23m3d8anmClrFv = 0x80166440;
-	setUpdateRateForEntry__Q23m3d8anmClrFfi = 0x80166450;
-	isEntryAnimationDone__Q23m3d8anmClrFi = 0x80166460;
+	setUpdateRateForEntry__Q23m3d8anmClr_cFfi = 0x80166450;
+	isEntryAnimationDone__Q23m3d8anmClr_cFi = 0x80166460;
 	queryEntrySomething__Q23m3d8anmClrFv = 0x80166470;
 	setEntryByte34__Q23m3d8anmClrFUci = 0x80166480;
 	getEntryField28__Q23m3d8anmClrFv = 0x801664A0;
@@ -1574,7 +1575,7 @@ SECTIONS {
 	detach__Q23m3d11anmTexPat_cFv = 0x80166c20;
 	setup__Q23m3d11anmTexPat_cFQ34nw4r3g3d6ResMdlQ34nw4r3g3d12ResAnmTexPatP12mAllocator_cPUii = 0x80166970;
 	bindEntry__Q23m3d11anmTexPat_cFv = 0x80166d10;
-	bindEntry__Q23m3d11anmTexPat_cFPQ23m3d5mdl_cPQ34nw4r3g3d12ResAnmTexPatii = 0x80166d10;
+	bindEntry__Q23m3d11anmTexPat_cFPQ23m3d5mdl_cPQ34nw4r3g3d12ResAnmTexPatib = 0x80166d10;
 	process__Q23m3d11anmTexPat_cFv = 0x80166f10;
 	processOneEntry__Q23m3d11anmTexPat_cFv = 0x80166fc0;
 	getFrameForEntry__Q23m3d11anmTexPat_cFi = 0x80167020;
@@ -1592,7 +1593,7 @@ SECTIONS {
 	__vt__Q23m3d11anmTexSrt_c = 0x803298c0;
 	__dt__Q23m3d11anmTexSrt_cFv = 0x801677e0;
 	detach__Q23m3d11anmTexSrt_cFv = 0x80167850;
-	bindEntry__Q23m3d11anmTexSrt_cFPQ23m3d5mdl_cQ34nw4r3g3d12ResAnmTexSrtii = 0x80167940;
+	bindEntry__Q23m3d11anmTexSrt_cFPQ23m3d5mdl_cQ34nw4r3g3d12ResAnmTexSrtib = 0x80167940;
 	sub80167a80__Q23m3d11anmTexSrt_cFv = 0x80167a80;
 	process__Q23m3d11anmTexSrt_cFv = 0x80167b40;
 	processOneEntry__Q23m3d11anmTexSrt_cFi = 0x80167bf0;

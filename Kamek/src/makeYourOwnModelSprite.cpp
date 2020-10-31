@@ -2,6 +2,11 @@
 #include <game.h>
 #include <g3dhax.h>
 
+#define ANMCHR 1
+#define ANMSRT 2
+#define ANMPAT 4
+#define ANMCLR 8
+
 const char* RYOMFileList [] = {
 	"models",
 	NULL	
@@ -34,12 +39,15 @@ class dMakeYourOwn : public dStageActor_c {
 	m3d::mdl_c bodyModel;
 	nw4r::g3d::ResFile resFile;
 	m3d::anmChr_c chrAnimation;
+	m3d::anmTexSrt_c srtAnimation;
+	m3d::anmTexPat_c patAnimation;
+	m3d::anmClr_c clrAnimation;
 
 	nw4r::g3d::ResMdl mdl;
 
 	// Some variables to use
 	int model;
-	bool isAnimating;
+	u8 animtype;
 	float size;
 	float zOrder;
 	bool customZ;
@@ -57,7 +65,7 @@ dMakeYourOwn *dMakeYourOwn::build() {
 
 // Saves space when we do it like this
 void dMakeYourOwn::setupAnim(const char* name, float rate) {
-	if (isAnimating) {
+	if (animtype & ANMCHR) {
 		nw4r::g3d::ResAnmChr anmChr;
 
 		anmChr = this->resFile.GetResAnmChr(name);
@@ -65,6 +73,39 @@ void dMakeYourOwn::setupAnim(const char* name, float rate) {
 		this->chrAnimation.bind(&this->bodyModel, anmChr, 1);
 		this->bodyModel.bindAnim(&this->chrAnimation, 0.0);
 		this->chrAnimation.setUpdateRate(rate);
+	}
+
+	if (animtype & ANMSRT) {
+		nw4r::g3d::ResAnmTexSrt anmSrt;
+
+		anmSrt = this->resFile.GetResAnmTexSrt(name);
+		this->srtAnimation.setup(this->mdl, anmSrt, &this->allocator, 0, 1);
+		this->srtAnimation.bindEntry(&this->bodyModel, anmSrt, 0, 0);
+		this->bodyModel.bindAnim(&this->srtAnimation, 1.0);
+		this->srtAnimation.setFrameForEntry(1.0, 0);
+		this->srtAnimation.setUpdateRateForEntry(1.0, 0);
+	}
+
+	if (animtype & ANMPAT) {
+		nw4r::g3d::ResAnmTexPat anmPat;
+
+		anmPat = this->resFile.GetResAnmTexPat(name);
+		this->patAnimation.setup(this->mdl, anmPat, &this->allocator, 0, 1);
+		this->patAnimation.bindEntry(&this->bodyModel, &anmPat, 0, 0);
+		this->bodyModel.bindAnim(&this->patAnimation, 1.0);
+		this->patAnimation.setFrameForEntry(1.0, 0);
+		this->patAnimation.setUpdateRateForEntry(1.0, 0);
+	}
+
+	if (animtype & ANMCLR) {
+		nw4r::g3d::ResAnmClr anmClr;
+
+		anmClr = this->resFile.GetResAnmClr(name);
+		this->clrAnimation.setup(this->mdl, anmClr, &this->allocator, 0, 1);
+		this->clrAnimation.bind(&this->bodyModel, anmClr, 0, 0);
+		this->bodyModel.bindAnim(&this->clrAnimation, 1.0);
+		this->clrAnimation.setFrameForEntry(1.0, 0);
+		this->clrAnimation.setUpdateRateForEntry(1.0, 0);
 	}
 }
 
@@ -82,7 +123,7 @@ int dMakeYourOwn::onCreate() {
 	// Settings for your sprite!
 
 	this->model = this->settings & 0xFF; 						// Sets nubble 12 to choose the model you want
-	this->isAnimating = this->settings & 0x100;					// Sets nybble 11 to a checkbox for whether or not the model has an anmChr to use
+	this->animtype = this->settings >> 8 & 0xF;					// Sets nybble 10 to a series of checkbox for which anim should be used
 	this->size = (float)((this->settings >> 24) & 0xFF) / 4.0; 	// Sets nybbles 5-6 to size. Size equals value / 4.
 
 
@@ -255,12 +296,30 @@ int dMakeYourOwn::onDelete() {
 }
 
 int dMakeYourOwn::onExecute() {
-	if (isAnimating) {
-		bodyModel._vf1C();	// Advances the animation one update
+	// Process and reset the animation(s) when done
 
-		if(this->chrAnimation.isAnimationDone()) {
-			this->chrAnimation.setCurrentFrame(0.0);	// Resets the animation when it's done
-		}
+	if (this->animtype & ANMCHR) {
+		this->chrAnimation.process();
+		if(this->chrAnimation.isAnimationDone())
+			this->chrAnimation.setCurrentFrame(0.0);
+	}
+	
+	if (this->animtype & ANMSRT) {
+		this->srtAnimation.process();
+		if(this->srtAnimation.isEntryAnimationDone(0))
+			this->srtAnimation.setFrameForEntry(1.0, 0);
+	}
+
+	if (this->animtype & ANMPAT) {
+		this->patAnimation.process();
+		if(this->patAnimation.isEntryAnimationDone(0))
+			this->patAnimation.setFrameForEntry(1.0, 0);
+	}
+
+	if (this->animtype & ANMCLR) {
+		this->clrAnimation.process();
+		if(this->clrAnimation.isEntryAnimationDone(0))
+			this->clrAnimation.setFrameForEntry(1.0, 0);
 	}
 
 	return true;

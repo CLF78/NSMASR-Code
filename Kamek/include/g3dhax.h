@@ -389,7 +389,7 @@ namespace m3d {
 					mAllocator_c *allocator, u32 *sizeOutPtr, int count);
 
 			void bindEntry(/*b*/mdl_c *model, nw4r::g3d::ResAnmTexPat *resource,
-					int entryNumber, int _param4);
+					int entryNumber, bool playsOnce);
 
 			float getFrameForEntry(int number);
 			void setFrameForEntry(float value, int number);
@@ -426,7 +426,7 @@ namespace m3d {
 					mAllocator_c *allocator, u32 *sizeOutPtr, int count);
 
 			void bindEntry(/*b*/mdl_c *model, nw4r::g3d::ResAnmTexSrt resource,
-					int entryNumber, int _param4);
+					int entryNumber, bool playsOnce);
 
 			float getFrameForEntry(int number);
 			void setFrameForEntry(float value, int number);
