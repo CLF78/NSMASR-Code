@@ -1,13 +1,9 @@
 #include <common.h>
 #include <game.h>
 #include <g3dhax.h>
-#include <sfx.h>
 #include <stage.h>
 #include "boss.h"
 
-extern "C" void *BowserExitDemoState(void *, unsigned int);
-extern "C" void *ForceMarioExitDemoMode(void *, unsigned int);
-extern "C" void *BowserFireballCollision(dEn_c *, ActivePhysics *, ActivePhysics *);
 extern "C" void *BowserDamageAnmClr(dEn_c *);
 extern "C" void *BowserDamageStepTwo(dEn_c *);
 extern "C" void *BowserDamageNormal(dEn_c *);
@@ -21,45 +17,33 @@ extern bool HackyBombDropVariable;
 
 void BowserDoomSpriteCollision(dEn_c *bowser, ActivePhysics *apThis, ActivePhysics *apOther) {
 	// If you collide with something or other, call the fireball collision
-
 	if (apOther->owner->name == 674) {
+		if ((lastBomb == apOther->owner->id) || (!HackyBombDropVariable))
+			return;
 
-		if (lastBomb == apOther->owner->id) return;
-		if (!HackyBombDropVariable) return;
 		HackyBombDropVariable = false;
-
 		OSReport("HP: %d", BridgeBowserHP);
+		
+		*(int*)(((u32)bowser) + 0x540) = 0x28;
+		BowserDamageAnmClr(bowser);
 
 		if (BridgeBowserHP <= 0) {
 			BridgeBowserHP = 0;
 
-			*(int*)(((u32)bowser) + 0x540) = 0x28;
-
-			BowserDamageAnmClr(bowser);
-
 			BowserDamageStepTwo(bowser);
 			BowserDamageKill(bowser);
-
-			// WeirdLevelEndClass->sub_8005CB60(*otherActor->returnPtrToField38D());
-
-			// this->vf300(otherActor);
 			BowserDamageEnd(bowser);
 
-			// daBossKoopaDemo_c *BowserDemo = (daBossKoopaDemo_c*)FindActorByType(BOSS_KOOPA_DEMO, 0);
 			daBossKoopa_c *BowserClass = (daBossKoopa_c*)bowser;
 			OSReport("Koopa Controller: %x", BowserClass);
-			BowserClass->doStateChange(&daBossKoopa_c::StateID_Fall);	
+			BowserClass->doStateChange(&daBossKoopa_c::StateID_Fall);
 			dFlagMgr_c::instance->set(3, 0, true, false, false);
 
 			BridgeBowserHP = 2;
-
 		}
+
 		else {
-			*(int*)(((u32)bowser) + 0x540) = 0x28;
-
-			BowserDamageAnmClr(bowser);
 			BowserDamageNormal(bowser);
-
 			BridgeBowserHP -= 1;
 		}
 

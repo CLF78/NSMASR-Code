@@ -1,6 +1,7 @@
 #include <common.h>
 #include <game.h>
 #include <g3dhax.h>
+#include <sfx.h>
 #include "boss.h"
 
 #define ACTIVATE	1
@@ -29,7 +30,7 @@ class daMrSun_c : public dEn_c {
 	float xSpiralOffset;
 	float ySpiralOffset;
 
-	Vec	swoopTarget;
+	Vec swoopTarget;
 	float swoopA;
 	float swoopB;
 	float swoopC;
@@ -88,7 +89,7 @@ void daMrSun_c::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 }
 
 bool daMrSun_c::collisionCatD_Drill(ActivePhysics *apThis, ActivePhysics *apOther) {
-	DamagePlayer(this, apThis, apOther);
+	this->playerCollision(apThis, apOther);
 	return true;
 }
 
@@ -126,21 +127,18 @@ bool daMrSun_c::collisionCat3_StarPower(ActivePhysics *apThis, ActivePhysics *ap
 
 // Bunch of special cases
 bool daMrSun_c::collisionCat2_IceBall_15_YoshiIce(ActivePhysics *apThis, ActivePhysics *apOther) {
-	if (!this->isSun && apOther->owner->name == 0x76) // It's a moon and the offending actor is BROS_ICEBALL
-		return true;
-	return false;
+	return (!this->isSun && apOther->owner->name == 0x76);  // It's a moon and the offending actor is BROS_ICEBALL
 }
 
 bool daMrSun_c::collisionCat1_Fireball_E_Explosion(ActivePhysics *apThis, ActivePhysics *apOther) {
 	return true;
 }
 
-
 void daMrSun_c::dieFall_Execute() {
 	if (this->killFlag)
 		return;
 
-	this->timer += 1;
+	this->timer++;
 	this->dying += 0.15;
 
 	this->pos.x += 0.15;
@@ -149,15 +147,14 @@ void daMrSun_c::dieFall_Execute() {
 	this->dEn_c::dieFall_Execute();
 
 	if (this->timer > 450) {
-
-		dStageActor_c *Player;
-
 		if ((this->settings >> 28) > 0) {
 			this->kill();
 			this->pos.y += 800.0;
 			this->killFlag = true;
 			return;
 		}
+
+		dStageActor_c *Player;
 
 		for (int i = 0; i < 4; i++) {
 			Player = GetSpecificPlayerActor(i);
@@ -177,7 +174,6 @@ void daMrSun_c::dieFall_Execute() {
 		doStateChange(&StateID_Follow);
 	}
 }
-
 
 int daMrSun_c::onCreate() {
 	// Model setup
@@ -211,8 +207,8 @@ int daMrSun_c::onCreate() {
 	ActivePhysics::Info HitMeBaby;
 	HitMeBaby.xDistToCenter = 0.0;
 	HitMeBaby.yDistToCenter = 0.0;
-	HitMeBaby.category1 = 0x3;
-	HitMeBaby.category2 = 0x0;
+	HitMeBaby.category1 = 3;
+	HitMeBaby.category2 = 0;
 	HitMeBaby.bitfield1 = 0x6F;
 
 	if (isSun) { // It's a sun
@@ -241,14 +237,14 @@ int daMrSun_c::onCreate() {
 	this->dying = -5.0;
 	this->killFlag = false;
 
-	if (!isSun)
-		this->pos.z = 6000.0f; // moon
-	else
+	if (isSun)
 		this->pos.z = 5750.0f; // sun
+	else
+		this->pos.z = 6000.0f; // moon
 
 	// Setup event trigger
 	char eventNum = (this->settings >> 16) & 0xFF;
-	this->eventFlag = 1 << (eventNum - 1);
+	this->eventFlag = (u64)1 << (eventNum - 1);
 
 	// State change
 	doStateChange(&StateID_Follow);
@@ -263,13 +259,11 @@ int daMrSun_c::onExecute() {
 	acState.execute();
 	updateModelMatrices();
 
-	if (dFlagMgr_c::instance->flags & this->eventFlag) {
-		if (!this->killFlag && acState.getCurrentState()->isNotEqual(&StateID_DieFall)) {
-			this->kill();
-			this->pos.y += 800.0;
-			this->killFlag = true;
-			doStateChange(&StateID_DieFall);
-		}
+	if ((dFlagMgr_c::instance->flags & this->eventFlag) && !this->killFlag && acState.getCurrentState()->isNotEqual(&StateID_DieFall)) {
+		this->kill();
+		this->pos.y += 800.0;
+		this->killFlag = true;
+		doStateChange(&StateID_DieFall);
 	}
 
 	return true;
@@ -332,10 +326,12 @@ void daMrSun_c::executeState_Follow() {
 	this->direction = dSprite_c__getXDirectionOfFurthestPlayerRelativeToVEC3(this, this->pos);
 
 	float speedDelta;
-	if (isSun) {speedDelta = 0.1; } // It's a sun
-	else { speedDelta = 0.15; } // It's a moon
+	if (isSun)
+		speedDelta = 0.1; // It's a sun
+	else
+		speedDelta = 0.15; // It's a moon
 
-	if (!this->direction) {
+	if (this->direction == 0) {
 		this->speed.x += speedDelta;
 
 		if (this->speed.x < 0)
@@ -343,9 +339,7 @@ void daMrSun_c::executeState_Follow() {
 
 		if (this->speed.x < 6.0)
 			this->speed.x += speedDelta;
-	}
-
-	else {
+	} else {
 		this->speed.x -= speedDelta;
 
 		if (this->speed.x > 0)
@@ -362,7 +356,7 @@ void daMrSun_c::executeState_Follow() {
 
 	this->UpdateObjectPosBasedOnSpeedValuesReal();
 
-	this->timer += 1;
+	this->timer++;
 }
 
 void daMrSun_c::endState_Follow() {
@@ -374,7 +368,6 @@ void daMrSun_c::endState_Follow() {
 /////////////////
 
 void daMrSun_c::beginState_Swoop() {
-
 	// Not enough space to swoop, spit instead.
 	if (this->swoopTarget.y < (this->pos.y - 50))
 		doStateChange(&StateID_Spit);
@@ -405,12 +398,11 @@ void daMrSun_c::beginState_Swoop() {
 
 	this->swoopSpeed = x3 * 2 / 75;
 
-	PlaySound(this, 284);
+	PlaySound(this, SE_PLY_PRPL_FLY);
 }
 
 void daMrSun_c::executeState_Swoop() {
 	// Everything is calculated up top, just need to modify it.
-
 	this->pos.x += this->swoopSpeed;
 
 	this->pos.y = (this->swoopA * (this->pos.x - this->swoopTarget.x) * (this->pos.x - this->swoopTarget.x) + this->swoopB * (this->pos.x - this->swoopTarget.x) + this->swoopC) + this->swoopTarget.y;
@@ -432,7 +424,7 @@ void daMrSun_c::beginState_Spiral() {
 	this->xSpiralOffset = this->pos.x;
 	this->ySpiralOffset = this->pos.y;
 
-	PlaySound(this, 284);
+	PlaySound(this, SE_PLY_PRPL_FLY);
 }
 
 void daMrSun_c::executeState_Spiral() {
@@ -443,8 +435,10 @@ void daMrSun_c::executeState_Spiral() {
 	Loops = 6.0;
 	Magnitude = 11.0;
 
-	if (isSun) { Period = 0.1; } // It's a sun
-	else { Period = 0.125; } // It's a moon
+	if (isSun)
+		Period = 0.1; // It's a sun
+	else
+		Period = 0.125; // It's a moon
 
 	this->pos.x = this->xSpiralOffset + Magnitude*((this->SpiralLoop * cos(this->SpiralLoop)));
 	this->pos.y = this->ySpiralOffset + Magnitude*((this->SpiralLoop * sin(this->SpiralLoop)));
@@ -468,12 +462,12 @@ void daMrSun_c::beginState_Spit() {
 
 void daMrSun_c::executeState_Spit() {
 	if (this->timer == 10) {
-		PlaySound(this, 431);
+		PlaySound(this, SE_EMY_PAKKUN_FIRE);
 
 		this->direction = dSprite_c__getXDirectionOfFurthestPlayerRelativeToVEC3(this, this->pos);
 
 		float neg = -1.0;
-		if (this->direction)
+		if (this->direction == 0)
 			neg = -neg;
 
 		if (isSun) { // It's a sun
@@ -491,9 +485,8 @@ void daMrSun_c::executeState_Spit() {
 			spawner->speed.x = 3.5 * neg;
 			spawner->speed.y = -6.0;
 			spawner->pos.z = 5550.0;
-		} 
 
-		else { // It's a moon
+		} else { // It's a moon
 			dStageActor_c *spawner = CreateActor(118, 0, this->pos, 0, 0);
 			spawner->speed.x = 6.0 * neg;
 			spawner->speed.y = -2.5;
@@ -513,15 +506,14 @@ void daMrSun_c::executeState_Spit() {
 			*((u32 *) (((char *) spawner) + 0x3DC)) = this->id;
 		}
 	}
-
-	this->timer += 1;
-
-	if (this->timer > 30)
+	
+	else if (this->timer > 30)
 		doStateChange(&StateID_Follow);
+
+	this->timer++;
 }
 
 void daMrSun_c::endState_Spit() {
-	return;
 }
 
 ////////////////
@@ -534,7 +526,7 @@ void daMrSun_c::beginState_Spin() {
 }
 
 void daMrSun_c::executeState_Spin() {
-	PlaySound(this, 282);
+	PlaySound(this, SE_PLY_PRPL_LETDOWN_SPIN);
 
 	this->direction = dSprite_c__getXDirectionOfFurthestPlayerRelativeToVEC3(this, this->pos);
 
@@ -542,26 +534,25 @@ void daMrSun_c::executeState_Spin() {
 		this->speed.x += 0.2;
 
 		if (this->speed.x < 0)
-			this->speed.x += 0.1;
+			this->speed.x += 0.2 / 2;
 
 		if (this->speed.x < 80.0)
-			this->speed.x += 0.4;
-	}
+			this->speed.x += 0.2 * 2;
 
-	else {
+	} else {
 		this->speed.x -= 0.2;
 
 		if (this->speed.x > 0)
-			this->speed.x -= 0.1;
+			this->speed.x -= 0.2 / 2;
 		
 		if (this->speed.x > 80.0)
-			this->speed.x -= 0.4;
+			this->speed.x -= 0.2 * 2;
 	}
 
 	this->HandleXSpeed();
 	this->UpdateObjectPosBasedOnSpeedValuesReal();
 
-	this->timer += 1;
+	this->timer++;
 
 	short rotBonus;
 	if (this->timer < 60)
@@ -573,8 +564,10 @@ void daMrSun_c::executeState_Spin() {
 	this->rot.y += (18.4 * rotBonus);
 
 	float spitspeed;
-	if (isSun) { spitspeed = 3.0; } // It's a sun
-	else { spitspeed = 4.0;  } // It's a moon
+	if (isSun)
+		spitspeed = 3.0; // It's a sun
+	else
+		spitspeed = 4.0; // It's a moon
 
 	int randomBall;
 	randomBall = GenerateRandomNumber(8);
@@ -585,7 +578,7 @@ void daMrSun_c::executeState_Spin() {
 		float xlaunch;
 		float ylaunch;
 
-		if (direction == 0) {
+		if (direction == 0) {      // E
 			xlaunch = spitspeed;
 			ylaunch = 0.0; }
 		else if (direction == 1) { // SE
@@ -610,7 +603,7 @@ void daMrSun_c::executeState_Spin() {
 			xlaunch = spitspeed;
 			ylaunch = -spitspeed; }
 
-		PlaySound(this, 431);
+		PlaySound(this, SE_EMY_PAKKUN_FIRE);
 
 		if (isSun) { // It's a sun
 			dStageActor_c *spawner = CreateActor(106, 0, this->pos, 0, 0);
@@ -665,20 +658,27 @@ void daMrSun_c::executeState_Wait() {
 	int Choice;
 	int TimerMax;
 
-	if (isSun) { TimerMax = 60; } // It's a sun
-	else { TimerMax = 30; } // It's a moon
+	if (isSun)
+		TimerMax = 60; // It's a sun
+	else
+		TimerMax = 30; // It's a moon
 
 	if (this->timer > TimerMax) {
 		Choice = GenerateRandomNumber(9);
 
-		if (Choice == 0) { doStateChange(&StateID_Spit); }
-		else if (Choice == 1) { doStateChange(&StateID_Spit); }
-		else if (Choice == 2) { doStateChange(&StateID_Spin); }
-		else if (Choice == 3) { doStateChange(&StateID_Spiral); }
-		else { doStateChange(&StateID_Swoop); }
+		if (Choice == 0)
+			doStateChange(&StateID_Spit);
+		else if (Choice == 1)
+			doStateChange(&StateID_Spit);
+		else if (Choice == 2)
+			doStateChange(&StateID_Spin);
+		else if (Choice == 3)
+			doStateChange(&StateID_Spiral);
+		else
+			doStateChange(&StateID_Swoop);
 	}
 
-	this->timer += 1;
+	this->timer++;
 }
 
 void daMrSun_c::endState_Wait() {

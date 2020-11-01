@@ -1,7 +1,10 @@
 #include <game.h>
 #include <sfx.h>
 
-const char *ChestnutFileList[] = {"chestnut", 0};
+const char *ChestnutFileList[] = {
+	"chestnut",
+	NULL
+};
 
 class daEnChestnut_c : public dEn_c {
 	public:
@@ -13,9 +16,7 @@ class daEnChestnut_c : public dEn_c {
 		m3d::anmChr_c animation;
 
 		void playAnimation(const char *name, bool loop = false);
-		void playLoopedAnimation(const char *name) {
-			playAnimation(name, true);
-		}
+		void playLoopedAnimation(const char *name) { playAnimation(name, true); }
 
 		int objNumber;
 		int starCoinNumber;
@@ -61,6 +62,19 @@ daEnChestnut_c *daEnChestnut_c::build() {
 	return new(buf) daEnChestnut_c;
 }
 
+bool daEnChestnut_c::collisionCat1_Fireball_E_Explosion(ActivePhysics *apThis, ActivePhysics *apOther) {
+	SpawnEffect("Wm_en_igafirehit", 0, &pos, &rot, &scale);
+
+	if (acState.getCurrentState() != &StateID_Explode)
+		doStateChange(&StateID_Explode);
+
+	return true;
+}
+
+bool daEnChestnut_c::collisionCat5_Mario(ActivePhysics *apThis, ActivePhysics *apOther) {
+	this->_vf220(apOther->owner);
+	return true;
+}
 
 int daEnChestnut_c::onCreate() {
 	// Get settings
@@ -71,7 +85,7 @@ int daEnChestnut_c::onCreate() {
 	breaksBlocks = ((settings & 0x2000) != 0);
 	objNumber = (settings & 0xF0000) >> 16;
 
-	if ((settings & 0x4000) != 0) {
+	if (settings & 0x4000) {
 		shakeWindow = 96.0f;
 		fallWindow = 64.0f;
 	} else {
@@ -100,7 +114,7 @@ int daEnChestnut_c::onCreate() {
 	// Scale us
 	scale.x = scale.y = scale.z = (1.0f + (float(rawScale) * 0.5f));
 
-	// Physics and crap
+	// Physics and stuff
 	ActivePhysics::Info ccInfo;
 	ccInfo.xDistToCenter = 0.0f;
 	ccInfo.xDistToEdge = 12.0f * scale.x;
@@ -118,7 +132,7 @@ int daEnChestnut_c::onCreate() {
 	aPhysics.initWithStruct(this, &ccInfo);
 	aPhysics.addToList();
 
-	// WE'RE READY
+	// We're ready
 	doStateChange(&StateID_Idle);
 	return true;
 }
@@ -152,25 +166,13 @@ int daEnChestnut_c::onDraw() {
 	return true;
 }
 
-float daEnChestnut_c::nearestPlayerDistance() {
-	float bestSoFar = 10000.0f;
-
-	for (int i = 0; i < 4; i++) {
-		if (dAcPy_c *player = dAcPy_c::findByID(i)) {
-			if (strcmp(player->states2.getCurrentState()->getName(), "dAcPy_c::StateID_Balloon")) {
-				float thisDist = abs(player->pos.x - pos.x);
-				if (thisDist < bestSoFar)
-					bestSoFar = thisDist;
-			}
-		}
-	}
-	return bestSoFar;
-}
+////////////////
+// Idle State //
+////////////////
 
 void daEnChestnut_c::beginState_Idle() {
 	playLoopedAnimation("wait");
 }
-void daEnChestnut_c::endState_Idle() { }
 
 void daEnChestnut_c::executeState_Idle() {
 	if (ignorePlayers)
@@ -184,6 +186,12 @@ void daEnChestnut_c::executeState_Idle() {
 		doStateChange(&StateID_Shake);
 }
 
+void daEnChestnut_c::endState_Idle() {
+}
+
+/////////////////
+// Shake State //
+/////////////////
 
 void daEnChestnut_c::beginState_Shake() {
 	playLoopedAnimation("shake");
@@ -192,7 +200,6 @@ void daEnChestnut_c::beginState_Shake() {
 	nw4r::snd::SoundHandle handle;
 	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_PLY_CLIMB_KUSARI, 1);
 }
-void daEnChestnut_c::endState_Shake() { }
 
 void daEnChestnut_c::executeState_Shake() {
 	float dist = nearestPlayerDistance();
@@ -203,11 +210,17 @@ void daEnChestnut_c::executeState_Shake() {
 		doStateChange(&StateID_Fall);
 }
 
+void daEnChestnut_c::endState_Shake() {
+}
+
+////////////////
+// Fall State //
+////////////////
 
 void daEnChestnut_c::beginState_Fall() {
 	animation.setUpdateRate(0.0f); // stop animation
 
-	int size = 12*scale.x;
+	int size = 12 * scale.x;
 
 	belowSensor.flags = SENSOR_LINE;
 	if (breaksBlocks)
@@ -226,18 +239,22 @@ void daEnChestnut_c::beginState_Fall() {
 	nw4r::snd::SoundHandle handle;
 	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_DEMO_OP_PRESENT_THROW_2308f, 1);
 }
-void daEnChestnut_c::endState_Fall() { }
 
 void daEnChestnut_c::executeState_Fall() {
 	HandleYSpeed();
 	doSpriteMovement();
 	UpdateObjectPosBasedOnSpeedValuesReal();
 
-	if (collMgr.calculateBelowCollision() & (~0x400000)) {
+	if (collMgr.calculateBelowCollision() & (~0x400000))
 		doStateChange(&StateID_Explode);
-	}
 }
 
+void daEnChestnut_c::endState_Fall() {
+}
+
+///////////////////
+// Explode State //
+///////////////////
 
 void daEnChestnut_c::beginState_Explode() {
 	OSReport("Entering explode\n");
@@ -249,24 +266,29 @@ void daEnChestnut_c::beginState_Explode() {
 
 	timeSpentExploding = 0;
 }
-void daEnChestnut_c::endState_Explode() { }
 
 void daEnChestnut_c::executeState_Explode() {
 	timeSpentExploding++;
+
 	if (timeSpentExploding == 10) {
-		S16Vec efRot = {0,0,0};
-		SpawnEffect("Wm_en_burst_ss", 0, &pos, &efRot, &scale);
+		SpawnEffect("Wm_en_burst_ss", 0, &pos, &(S16Vec){0,0,0}, &scale);
 		spawnObject();
 	}
-	if (animation.isAnimationDone()) {
+
+	if (animation.isAnimationDone())
 		Delete(1);
-	}
 }
 
+void daEnChestnut_c::endState_Explode() {
+}
+
+/////////////////////
+// Other Functions //
+/////////////////////
 
 bool daEnChestnut_c::CreateIceActors() {
 	animation.setUpdateRate(0.0f);
-	
+
 	IceActorSpawnInfo info;
 	info.flags = 0;
 	info.pos = pos;
@@ -277,7 +299,6 @@ bool daEnChestnut_c::CreateIceActors() {
 
 	return frzMgr.Create_ICEACTORs(&info, 1);
 }
-
 
 u32 daEnChestnut_c::canBePowed() {
 	return true;
@@ -291,20 +312,6 @@ void daEnChestnut_c::powBlockActivated(bool isNotMPGP) {
 	if (state == &StateID_Idle || state == &StateID_Shake)
 		doStateChange(&StateID_Fall);
 }
-
-
-bool daEnChestnut_c::collisionCat1_Fireball_E_Explosion(ActivePhysics *apThis, ActivePhysics *apOther) {
-	SpawnEffect("Wm_en_igafirehit", 0, &pos, &rot, &scale);
-	if (acState.getCurrentState() != &StateID_Explode)
-		doStateChange(&StateID_Explode);
-	return true;
-}
-
-bool daEnChestnut_c::collisionCat5_Mario(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->_vf220(apOther->owner);
-	return true;
-}
-
 
 void daEnChestnut_c::spawnObject() {
 	VEC3 acPos = pos;
@@ -328,15 +335,28 @@ void daEnChestnut_c::spawnObject() {
 	aPhysics.removeFromList();
 
 	OSReport("Spawning %d, %d, %08x\n", objNumber, things[objNumber*2], acSettings);
-	dStageActor_c *ac =
-		dStageActor_c::create((Actors)things[objNumber*2], acSettings, &acPos, 0, currentLayerID);
+	dStageActor_c *ac = dStageActor_c::create((Actors)things[objNumber*2], acSettings, &acPos, 0, currentLayerID);
 
-	S16Vec efRot = {0,0,0};
-	SpawnEffect("Wm_ob_itemsndlandsmk", 0, &pos, &efRot, &scale);
+	SpawnEffect("Wm_ob_itemsndlandsmk", 0, &pos, &(S16Vec){0,0,0}, &scale);
 
 	if (objNumber == 0) {
 		dEn_c *en = (dEn_c*)ac;
 		en->direction = 1;
 		en->rot.y = -8192;
 	}
+}
+
+float daEnChestnut_c::nearestPlayerDistance() {
+	float bestSoFar = 10000.0f;
+
+	for (int i = 0; i < 4; i++) {
+		if (dAcPy_c *player = dAcPy_c::findByID(i)) {
+			if (strcmp(player->states2.getCurrentState()->getName(), "dAcPy_c::StateID_Balloon")) {
+				float thisDist = abs(player->pos.x - pos.x);
+				if (thisDist < bestSoFar)
+					bestSoFar = thisDist;
+			}
+		}
+	}
+	return bestSoFar;
 }

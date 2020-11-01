@@ -4146,6 +4146,11 @@ inline dTheEnd_c *GetTheEnd() {
 extern void *_8042A788;
 extern "C" void sub_8019C390(void *, int);
 extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
+extern const char* EffectNameList [];
+
+bool SpawnEffectByNum(int num, int num2, Vec* vec1, S16Vec* vec2, Vec* vec3) {
+	return SpawnEffect(EffectNameList[num], num2, vec1, vec2, vec3);
+}
 
 class StageC4 {
 	public:

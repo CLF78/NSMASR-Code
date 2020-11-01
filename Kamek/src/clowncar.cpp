@@ -4,7 +4,6 @@
 #include <sfx.h>
 #include "boss.h"
 
-// #define cField(TYPE, OFFSET) (*(TYPE*)(((u32)clown) + (OFFSET)))
 #define cPlayerOccupying (*(dStageActor_c**)(((u32)(clown)) + 0x738 ))
 #define cAllocator ((mHeapAllocator_c*)(((u32)(clown)) + 0xFD0 ))
 #define cModel ((m3d::mdl_c*)( ((u32)(clown)) + 0xFEC ))
@@ -15,25 +14,33 @@ extern "C" void PClownCarAfterCreate(dEn_c *clown, u32);
 extern "C" int PClownCarDraw(dEn_c *clown);
 extern "C" void PClownCarMove(dEn_c *clown);
 
+extern "C" void KazanRock_Explode(void *kazanRock);
+extern "C" void KazanRock_OriginalCollisionCallback(ActivePhysics *apThis, ActivePhysics *apOther);
+
+extern "C" m3d::mdl_c *__ct__Q23m3d5mdl_cFv(m3d::mdl_c *mdl);
+extern "C" mHeapAllocator_c *__ct__16mHeapAllocator_cFv(mHeapAllocator_c *al);
+extern "C" dEn_c *__ct__20daJrClownForPlayer_cFv(dEn_c *clown);
+
+extern "C" void __dt__Q23m3d5mdl_cFv(m3d::mdl_c *mdl, u32 willDelete);
+extern "C" void __dt__16mHeapAllocator_cFv(mHeapAllocator_c *al, u32 willDelete);
+extern "C" void __dt__20daJrClownForPlayer_cFv(dEn_c *clown, u32 willDelete);
+extern "C" u32 sAllocatorFunc__FrmHeap;
+
+extern dStateBase_c JrClownEndDemoState;
+extern dStateBase_c JrClownDemoWaitState;
+extern dStateBase_c ClownDemoWaitState;
+
 const char* PCCarcNameList [] = {
 	"koopaJr_clown_ply",
 	NULL
 };
 
-
 int CConDraw(dEn_c *clown) {
-	// setup cannon model
+	// Setup cannon model
 	clown->matrix.translation(clown->pos.x, clown->pos.y + 8.0, clown->pos.z-100.0);
 	short newrotz = -0x2000;
 	short newroty = ((clown->rot.y * 0x4000) / 0x800) - 0x4000;
-	short newrotx;
-	if (clown->rot.x < 0x8000) {
-		newrotx = -clown->rot.x;
-	}
-	else {
-		newrotx = clown->rot.x;
-	}
-	// OSReport("Angle?: %x, %x", clown->rot.y, newroty);
+
 	clown->matrix.applyRotationYXZ(&clown->rot.x, &newroty, &newrotz);
 
 	cModel->setDrawMatrix(clown->matrix);
@@ -42,15 +49,9 @@ int CConDraw(dEn_c *clown) {
 
 	cModel->scheduleForDrawing();
 
-
+	// Run normal clown function
 	return PClownCarDraw(clown);
-	// run normal clown function
 }
-
-
-extern dStateBase_c JrClownEndDemoState;
-extern dStateBase_c JrClownDemoWaitState;
-extern dStateBase_c ClownDemoWaitState;
 
 int CConExecute(dEn_c *clown) {
 	float saveX = clown->pos.x;
@@ -65,16 +66,16 @@ int CConExecute(dEn_c *clown) {
 		clown->speed.x = 0.0f;
 		clown->speed.y = 0.0f;
 	}
+
 	return ret;
 }
-
 
 void CCafterCreate(dEn_c *clown, u32 param) {
 	clown->scale.x *= 1.25;
 	clown->scale.y *= 1.25;
 	clown->scale.z *= 1.25;
 
-	// setup the model
+	// Setup the model
 	nw4r::g3d::ResFile resFile;
 
 	cAllocator->link(-1, GameHeaps[0], 0, 0x20);
@@ -89,23 +90,15 @@ void CCafterCreate(dEn_c *clown, u32 param) {
 	// Original AfterCreate
 	PClownCarAfterCreate(clown, param);
 
-	int playerCount = 0;
-	for (int i = 0; i < 4; i++)
-		if (Player_Active[i])
-			playerCount++;
-
-	if ((clown->settings & 0xF) != 0) {
-		int playerID = (clown->settings & 0xF) - 1;
-		if (playerID >= playerCount)
-			clown->Delete(1);
-	}
+	int player = clown->settings & 0xF;
+	if (player && Player_Active[player])
+		clown->Delete(1);
 }
 
-
 void CConExecuteMove(dEn_c *clown) {
-	u8 player = cPlayerOccupying->which_player;
 	Vec tempPos;
 	u32 buttonPushed = Remocon_GetPressed(GetRemoconMng()->controllers[cPlayerOccupying->which_player]);
+
 	if (buttonPushed & 0x0100) {
 		if (cTimer > 90) {
 			if (clown->direction == 0) { // Going right
@@ -122,6 +115,7 @@ void CConExecuteMove(dEn_c *clown) {
 			SpawnEffect("Wm_en_killervanish", 0, &tempPos, &(S16Vec){0,0,0}, &(Vec){0.1, 0.1, 0.1});
 			nw4r::snd::SoundHandle handle;
 			PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_OBJ_HOUDAI_S_SHOT, 1);
+
 		cTimer = 0;
 		}
 	}
@@ -131,19 +125,15 @@ void CConExecuteMove(dEn_c *clown) {
 	ClassWithCameraInfo *cwci = ClassWithCameraInfo::instance;
 	float leftBound = cwci->screenLeft + 12.0f;
 	float rightBound = (cwci->screenLeft + cwci->screenWidth) - 12.0f;
+
 	if (clown->pos.x < leftBound)
 		clown->pos.x = leftBound;
 	if (clown->pos.x > rightBound)
 		clown->pos.x = rightBound;
 
-	// run normal move
+	// Run normal move
 	PClownCarMove(clown);
 }
-
-
-extern "C" m3d::mdl_c *__ct__Q23m3d5mdl_cFv(m3d::mdl_c *mdl);
-extern "C" mHeapAllocator_c *__ct__16mHeapAllocator_cFv(mHeapAllocator_c *al);
-extern "C" dEn_c *__ct__20daJrClownForPlayer_cFv(dEn_c *clown);
 
 dEn_c *newClownCtor(dEn_c *clown) {
 	__ct__20daJrClownForPlayer_cFv(clown);
@@ -152,30 +142,23 @@ dEn_c *newClownCtor(dEn_c *clown) {
 	return clown;
 }
 
-
-extern "C" void __dt__Q23m3d5mdl_cFv(m3d::mdl_c *mdl, u32 willDelete);
-extern "C" void __dt__16mHeapAllocator_cFv(mHeapAllocator_c *al, u32 willDelete);
-extern "C" void __dt__20daJrClownForPlayer_cFv(dEn_c *clown, u32 willDelete);
-extern "C" u32 sAllocatorFunc__FrmHeap;
-
 void newClownDtor(dEn_c *clown, u32 willDelete) {
 	void **al = (void **)(((u32)clown) + 0x524);
+
 	if (*al != &sAllocatorFunc__FrmHeap) {
 		OSReport("oh no! bad allocator %p\n", *al);
 		*al = &sAllocatorFunc__FrmHeap;
 	}
+
 	__dt__Q23m3d5mdl_cFv(cModel, 0xFFFFFFFF);
 	__dt__16mHeapAllocator_cFv(cAllocator, 0xFFFFFFFF);
 	__dt__20daJrClownForPlayer_cFv(clown, willDelete);
 }
 
-extern "C" void JrClownForPlayer_playAccelSound() {
-	nw4r::snd::SoundHandle handle;
-	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_PLY_CROWN_ACC, 1);
-}
+////////////////
+// Projectile //
+////////////////
 
-
-// Below is the projectile used by the clown car
 class daClownShot : public dEn_c {
 	int onCreate();
 	int onExecute();
@@ -191,32 +174,34 @@ class daClownShot : public dEn_c {
 	void playerCollision(ActivePhysics *apThis, ActivePhysics *apOther);
 };
 
-void daClownShot::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) { }
+void daClownShot::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
+}
 
 daClownShot *daClownShot::build() {
 	void *buffer = AllocFromGameHeap1(sizeof(daClownShot));
 	return new(buffer) daClownShot;
 }
 
-
 int daClownShot::onCreate() {
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
+
 	this->resFile.data = getResource(PCCarcNameList[0], "g3d/houdai_ball.brres");
 	nw4r::g3d::ResMdl mdl = this->resFile.GetResMdl("houdai_ball");
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
+
 	allocator.unlink();
 
 	ActivePhysics::Info GreatBalls;
-	
+
 	GreatBalls.xDistToCenter = 0.0;
 	GreatBalls.yDistToCenter = 0.0;
 	GreatBalls.xDistToEdge = 8.0;
 	GreatBalls.yDistToEdge = 7.0;
-	
-	GreatBalls.category1 = 0x3;
-	GreatBalls.category2 = 0x0;
+
+	GreatBalls.category1 = 3;
+	GreatBalls.category2 = 0;
 	GreatBalls.bitfield1 = 0x6F;
-	GreatBalls.bitfield2 = 0xffbafffe;
+	GreatBalls.bitfield2 = 0xFFBAFFFE;
 	GreatBalls.unkShort1C = 0;
 	GreatBalls.callback = &dEn_c::collisionCallback;
 
@@ -239,8 +224,7 @@ int daClownShot::onCreate() {
 
 	this->speed.y = 4.0;
 	this->y_speed_inc = -0.1875;
-	
-	this->onExecute();
+
 	return true;
 }
 
@@ -266,6 +250,7 @@ int daClownShot::onExecute() {
 	collMgr.calculateBelowCollisionWithSmokeEffect();
 	collMgr.calculateAboveCollision(0);
 	collMgr.calculateAdjacentCollision();
+
 	if (collMgr.outputMaybe) {
 		SpawnEffect("Wm_en_burst_m", 0, &pos, &(S16Vec){0,0,0}, &(Vec){1.0, 1.0, 1.0});
 		nw4r::snd::SoundHandle handle;
@@ -277,15 +262,18 @@ int daClownShot::onExecute() {
 	effect.spawn("Wm_en_killersmoke", 0, &(Vec){pos.x, pos.y, pos.z}, &(S16Vec){0,0,0}, &(Vec){0.7, 0.7, 0.7});
 
 	float rect[] = {0.0, 0.0, 8.0, 8.0};
-	int ret = this->outOfZone(this->pos, (float*)&rect, this->currentZoneID);
-	if(ret) {
+	if(this->outOfZone(this->pos, (float*)&rect, this->currentZoneID))
 		this->Delete(1);
-	}
+
 	return true;
 }
 
-
 // This is for making clown shots able to kill stuff
+extern "C" void JrClownForPlayer_playAccelSound() {
+	nw4r::snd::SoundHandle handle;
+	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_PLY_CROWN_ACC, 1);
+}
+
 extern "C" bool Amp_NewPreSpriteCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 	dEn_c *amp = (dEn_c*)apThis->owner;
 
@@ -296,17 +284,14 @@ extern "C" bool Amp_NewPreSpriteCollision(ActivePhysics *apThis, ActivePhysics *
 		amp->killByDieFall(apOther->owner);
 		return true;
 	}
+
 	return false;
 }
-
-extern "C" void KazanRock_Explode(void *kazanRock);
-extern "C" void KazanRock_OriginalCollisionCallback(ActivePhysics *apThis, ActivePhysics *apOther);
 
 extern "C" void KazanRock_CollisionCallback(ActivePhysics *apThis, ActivePhysics *apOther) {
 	if (apOther->owner->name == WM_PAKKUN) {
 		apThis->someFlagByte |= 2;
-		KazanRock_Explode(apThis->owner);
-	} else {
+		KazanRock_Explode(apThis->owner); }
+	else
 		KazanRock_OriginalCollisionCallback(apThis, apOther);
-	}
 }

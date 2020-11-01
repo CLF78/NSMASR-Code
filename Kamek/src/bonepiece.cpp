@@ -24,7 +24,7 @@ daBonePiece_c *daBonePiece_c::build() {
 }
 
 int daBonePiece_c::onCreate() {
-	// load the model
+	// Load the model
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
 	resFile.data = getResource("lift_torokko", "g3d/t00.brres");
@@ -38,7 +38,7 @@ int daBonePiece_c::onCreate() {
 
 	allocator.unlink();
 
-	// if rotation is off, do nothing else
+	// If rotation is off, do nothing else
 	if ((settings >> 28) & 1) {
 		// OK, figure out the rotation
 		u8 sourceRotation = (settings >> 24) & 0xF;
@@ -59,9 +59,8 @@ int daBonePiece_c::onCreate() {
 		rot.z = -rotation;
 	}
 
-	if ((settings >> 20) & 1) {
+	if ((settings >> 20) & 1)
 		rot.y = 0x8000;
-	}
 
 	collider.init(this, 0.0f, 0.0f, 0, 16.0f, -16.0f, rot.z, 1); // X Offset, Y Offset, Top Y Offset, Right Size, Left Size, Rotation, _45
 	collider._47 = 0xA;

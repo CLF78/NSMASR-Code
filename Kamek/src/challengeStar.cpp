@@ -3,7 +3,6 @@
 #include <g3dhax.h>
 #include <sfx.h>
 
-extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
 extern int GlobalStarsCollected;
 
 class dChallengeStar : public dEn_c {
@@ -18,7 +17,6 @@ class dChallengeStar : public dEn_c {
 	mEf::es2 effect;
 
 	u64 eventFlag;
-	s32 timer;
 	bool collected;
 
 	static dChallengeStar *build();
@@ -35,19 +33,19 @@ class dChallengeStar : public dEn_c {
 
 };
 
-void dChallengeStar::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) { 
+void dChallengeStar::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 	if (collected) {
 		this->Delete(1);
-		return; }
+		return;
+	}
 
 	PlaySoundAsync(this, SE_OBJ_BROOM_KEY_SHOW);
 	SpawnEffect("Wm_ob_greencoinkira_a", 0, &this->pos, &(S16Vec){0,0,0}, &(Vec){0.8, 0.8, 0.8});
-	
+
 	GlobalStarsCollected--;
-	if (GlobalStarsCollected == 0) {
+	if (GlobalStarsCollected == 0)
 		dFlagMgr_c::instance->flags |= this->eventFlag;
-	}
-	
+
 	collected = true;
 	this->Delete(1);
 }
@@ -62,23 +60,19 @@ bool dChallengeStar::collisionCat3_StarPower(ActivePhysics *apThis, ActivePhysic
 }
 
 bool dChallengeStar::collisionCat9_RollingObject(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->playerCollision(apThis, apOther);
-	return true;
+	return this->collisionCat3_StarPower(apThis, apOther);
 }
 
 bool dChallengeStar::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->playerCollision(apThis, apOther);
-	return true;
+	return this->collisionCat3_StarPower(apThis, apOther);
 }
 
 bool dChallengeStar::collisionCat7_GroundPoundYoshi(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->playerCollision(apThis, apOther);
-	return true;
+	return this->collisionCat3_StarPower(apThis, apOther);
 }
 
 bool dChallengeStar::collisionCatA_PenguinMario(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->playerCollision(apThis, apOther);
-	return true;
+	return this->collisionCat3_StarPower(apThis, apOther);
 }
 
 dChallengeStar *dChallengeStar::build() {
@@ -86,10 +80,14 @@ dChallengeStar *dChallengeStar::build() {
 	return new(buffer) dChallengeStar;
 }
 
-int dChallengeStar::onCreate() {	
+int dChallengeStar::onCreate() {
 	collected = false;
+
 	char die = this->settings & 0xF;
-	if (GetSpecificPlayerActor(die) == 0) { this->Delete(1); return 2; }
+	if (GetSpecificPlayerActor(die) == 0) {
+		this->Delete(1);
+		return 2;
+	}
 
 	GlobalStarsCollected++;
 
@@ -100,7 +98,7 @@ int dChallengeStar::onCreate() {
 	SetupTextures_Map(&bodyModel, 0);
 
 	allocator.unlink();
-	
+
 	ActivePhysics::Info HitMeBaby;
 	HitMeBaby.xDistToCenter = 0.0;
 	HitMeBaby.yDistToCenter = 3.0;
@@ -116,7 +114,7 @@ int dChallengeStar::onCreate() {
 	this->aPhysics.initWithStruct(this, &HitMeBaby);
 	this->aPhysics.addToList();
 
-	char eventNum	= (this->settings >> 24)	& 0xFF;
+	char eventNum = (this->settings >> 24) & 0xFF;
 	this->eventFlag = (u64)1 << (eventNum - 1);
 
 	this->scale.x = 0.70;
@@ -126,8 +124,7 @@ int dChallengeStar::onCreate() {
 	this->pos.x += 8.0;
 	this->pos.y -= 14.0;
 	this->pos.z = 3300.0;
-	
-	this->onExecute();
+
 	return true;
 }
 
@@ -152,6 +149,7 @@ void dChallengeStar::updateModelMatrices() {
 int dChallengeStar::onExecute() {
 	updateModelMatrices();
 
+	// Not using SpawnEFfect here since it would probably consume the entirety of memory
 	effect.spawn("Wm_ob_keyget02_kira", 0, &this->pos, &(S16Vec){0,0,0}, &(Vec){0.8, 0.8, 0.8});
 	this->rot.y += 0x200;
 	return true;

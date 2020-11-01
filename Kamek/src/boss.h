@@ -7,9 +7,6 @@
 #include <stage.h>
 #include <sfx.h>
 
-
-extern "C" bool SpawnEffect(const char*, int, Vec*, S16Vec*, Vec*);
-
 extern "C" u32 GenerateRandomNumber(int max);
 extern "C" char usedForDeterminingStatePress_or_playerCollision(dEn_c* t, ActivePhysics *apThis, ActivePhysics *apOther, int unk1);
 
@@ -43,4 +40,3 @@ void PlayerVictoryCries(daBoss* actor);
 void BossGoalForAllPlayers();
 
 #endif
-

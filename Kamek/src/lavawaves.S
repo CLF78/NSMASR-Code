@@ -43,9 +43,9 @@ Back1:
 
 # Check 2
 AreLavaWavesEnabled2:
-	lis r0, LavaWavesEnabled@ha
-	lbz r0, LavaWavesEnabled@l(r0)
-	cmpwi r0, 1
+	lis r4, LavaWavesEnabled@ha
+	lbz r4, LavaWavesEnabled@l(r4)
+	cmpwi r4, 1
 	beq Back2
 	b returnFromLavaCheck2False
 

@@ -22,7 +22,6 @@ class dMeteor : public dEn_c {
 	nw4r::g3d::ResFile resFile;
 	mEf::es2 effect;
 
-	int timer;
 	int spinSpeed;
 	char spinDir;
 	char isElectric;
@@ -47,7 +46,7 @@ void dMeteor::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 }
 
 bool dMeteor::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) {
-	DamagePlayer(this, apThis, apOther);
+	this->playerCollision(apThis, apOther);
 	return true;
 }
 
@@ -76,7 +75,6 @@ void MeteorPhysicsCallback(dMeteor *self, dEn_c *other) {
 
 
 int dMeteor::onCreate() {
-
 	// Setup Model
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
@@ -109,8 +107,8 @@ int dMeteor::onCreate() {
 		elec.xDistToEdge = 13.0 * sca;
 		elec.yDistToEdge = 13.0 * sca;
 
-		elec.category1 = 0x3;
-		elec.category2 = 0x0;
+		elec.category1 = 3;
+		elec.category2 = 0;
 		elec.bitfield1 = 0x4F;
 		elec.bitfield2 = 0x200;
 		elec.unkShort1C = 0;
@@ -133,8 +131,6 @@ int dMeteor::onCreate() {
 	MakeItRound.addToList();
 
 	this->pos.z = (settings & 0x1000000) ? -2000.0f : 3458.0f;
-
-	this->onExecute();
 	return true;
 }
 
@@ -143,9 +139,10 @@ int dMeteor::onDelete() {
 }
 
 int dMeteor::onExecute() {
-
-	if (spinDir == 0) 	{ rot.z -= spinSpeed; }
-	else 				{ rot.z += spinSpeed; }
+	if (spinDir == 0)
+		rot.z -= spinSpeed;
+	else
+		rot.z += spinSpeed;
 
 	MakeItRound.update();
 	updateModelMatrices();
@@ -181,5 +178,3 @@ void dMeteor::kill() {
 
 	this->Delete(1);
 }
-
-

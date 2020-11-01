@@ -25,11 +25,9 @@ class APDebugDrawer : public m3d::proc_c {
 		void setMeUp();
 
 		void drawMe();
-
 		void drawOpa();
 		void drawXlu();
 };
-
 
 static APDebugDrawer defaultInstance;
 static bool enableDebugMode = false;
@@ -39,7 +37,6 @@ int APDebugDraw() {
 		defaultInstance.drawMe();
 	return 1;
 }
-
 
 APDebugDrawer::APDebugDrawer() {
 	amISetUp = false;
@@ -62,6 +59,7 @@ void APDebugDrawer::drawMe() {
 void APDebugDrawer::drawOpa() {
 	drawXlu();
 }
+
 void APDebugDrawer::drawXlu() {
 	GXClearVtxDesc();
 
@@ -89,11 +87,6 @@ void APDebugDrawer::drawXlu() {
 	GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
 	GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
 
-//	GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_RASC, GX_CC_ZERO);
-//	GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-//	GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
-//	GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-
 	GXSetZCompLoc(GX_FALSE);
 	GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_SET);
 	GXSetZMode(GX_TRUE, GX_ALWAYS, GX_FALSE);
@@ -116,8 +109,8 @@ void APDebugDrawer::drawXlu() {
 	GXLoadPosMtxImm(matrix, 0);
 	GXSetCurrentMtx(0);
 
+	// ActivePhysics
 	ActivePhysics *ap = ActivePhysics::globalListHead;
-
 	while (ap) {
 		u32 uptr = (u32)ap;
 		u8 r = (uptr>>16)&0xFF;
@@ -188,8 +181,8 @@ void APDebugDrawer::drawXlu() {
 		ap = ap->listPrev;
 	}
 
+	// Physics
 	Physics *p = Physics::globalListHead;
-
 	while (p) {
 		u32 uptr = (u32)p;
 		u8 r = (uptr>>16)&0xFF;
@@ -243,7 +236,6 @@ void APDebugDrawer::drawXlu() {
 		p = p->next;
 	}
 
-
 	// Basic Colliders
 	BasicCollider *bc = BasicCollider::globalListHead;
 	while (bc) {
@@ -267,8 +259,7 @@ void APDebugDrawer::drawXlu() {
 		bc = bc->next;
 	}
 
-
-	// Now, the hardest one... CollisionMgr_c!
+	// And finally, CollisionMgr_c!
 	fBase_c *fb = 0;
 	while ((fb = fBase_c::searchByBaseType(2, fb))) {
 		u8 *testMe = ((u8*)fb) + 0x1EC;
@@ -283,9 +274,7 @@ void APDebugDrawer::drawXlu() {
 
 		dStageActor_c *ac = (dStageActor_c*)fb;
 
-		sensorBase_s *sensors[4] = {
-			ac->collMgr.pBelowInfo, ac->collMgr.pAboveInfo,
-			ac->collMgr.pAdjacentInfo, ac->collMgr.pAdjacentInfo};
+		sensorBase_s *sensors[4] = {ac->collMgr.pBelowInfo, ac->collMgr.pAboveInfo, ac->collMgr.pAdjacentInfo, ac->collMgr.pAdjacentInfo};
 
 		for (int i = 0; i < 4; i++) {
 			sensorBase_s *s = sensors[i];
@@ -297,36 +286,22 @@ void APDebugDrawer::drawXlu() {
 			switch (s->flags & SENSOR_TYPE_MASK) {
 				case SENSOR_POINT:
 					GXBegin(GX_POINTS, GX_VTXFMT0, 1);
-					GXPosition3f32(
-							ac->pos.x + (mult * (s->asPoint()->x / 4096.0f)),
-							ac->pos.y + (s->asPoint()->y / 4096.0f),
-							8005.0f);
+					GXPosition3f32(ac->pos.x + (mult * (s->asPoint()->x / 4096.0f)), ac->pos.y + (s->asPoint()->y / 4096.0f), 8005.0f);
 					GXColor4u8(r,g,b,a);
 					GXEnd();
 					break;
+
 				case SENSOR_LINE:
 					GXBegin(GX_LINES, GX_VTXFMT0, 2);
 					if (i < 2) {
-						GXPosition3f32(
-								ac->pos.x + (s->asLine()->lineA / 4096.0f),
-								ac->pos.y + (s->asLine()->distanceFromCenter / 4096.0f),
-								8005.0f);
+						GXPosition3f32(ac->pos.x + (s->asLine()->lineA / 4096.0f), ac->pos.y + (s->asLine()->distanceFromCenter / 4096.0f), 8005.0f);
 						GXColor4u8(r,g,b,a);
-						GXPosition3f32(
-								ac->pos.x + (s->asLine()->lineB / 4096.0f),
-								ac->pos.y + (s->asLine()->distanceFromCenter / 4096.0f),
-								8005.0f);
+						GXPosition3f32(ac->pos.x + (s->asLine()->lineB / 4096.0f), ac->pos.y + (s->asLine()->distanceFromCenter / 4096.0f), 8005.0f);
 						GXColor4u8(r,g,b,a);
 					} else {
-						GXPosition3f32(
-								ac->pos.x + (mult * (s->asLine()->distanceFromCenter / 4096.0f)),
-								ac->pos.y + (s->asLine()->lineA / 4096.0f),
-								8005.0f);
+						GXPosition3f32(ac->pos.x + (mult * (s->asLine()->distanceFromCenter / 4096.0f)), ac->pos.y + (s->asLine()->lineA / 4096.0f), 8005.0f);
 						GXColor4u8(r,g,b,a);
-						GXPosition3f32(
-								ac->pos.x + (mult * (s->asLine()->distanceFromCenter / 4096.0f)),
-								ac->pos.y + (s->asLine()->lineB / 4096.0f),
-								8005.0f);
+						GXPosition3f32(ac->pos.x + (mult * (s->asLine()->distanceFromCenter / 4096.0f)), ac->pos.y + (s->asLine()->lineB / 4096.0f), 8005.0f);
 						GXColor4u8(r,g,b,a);
 					}
 					GXEnd();
