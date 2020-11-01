@@ -1,6 +1,5 @@
 ---
 # Replaces EN_WALLINSECT
-
 source_files: [../src/mrsun.cpp]
 hooks:
   - name: BuildMrSun

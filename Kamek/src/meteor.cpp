@@ -4,6 +4,11 @@
 #include <sfx.h>
 #include "boss.h"
 
+const char* MEarcNameList [] = {
+	"kazan_rock",
+	NULL
+};
+
 class dMeteor : public dEn_c {
 	int onCreate();
 	int onDelete();
@@ -37,17 +42,13 @@ dMeteor *dMeteor::build() {
 	return new(buffer) dMeteor;
 }
 
-const char* MEarcNameList [] = {
-	"kazan_rock",
-	NULL	
-};
-
-// extern "C" dStageActor_c *GetSpecificPlayerActor(int num);
-// extern "C" void *modifyPlayerPropertiesWithRollingObject(dStageActor_c *Player, float _52C);
-
-
-void dMeteor::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) { 
+void dMeteor::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 	DamagePlayer(this, apThis, apOther);
+}
+
+bool dMeteor::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) {
+	DamagePlayer(this, apThis, apOther);
+	return true;
 }
 
 void MeteorPhysicsCallback(dMeteor *self, dEn_c *other) {
@@ -71,11 +72,6 @@ void MeteorPhysicsCallback(dMeteor *self, dEn_c *other) {
 
 		self->kill();
 	}
-}
-
-bool dMeteor::collisionCat7_GroundPound(ActivePhysics *apThis, ActivePhysics *apOther) { 
-	DamagePlayer(this, apThis, apOther);
-	return true;
 }
 
 
@@ -121,7 +117,7 @@ int dMeteor::onCreate() {
 		elec.callback = &dEn_c::collisionCallback;
 
 		this->aPhysics.initWithStruct(this, &elec);
-		this->aPhysics.addToList();	
+		this->aPhysics.addToList();
 	}
 
 	MakeItRound.baseSetup(this, &MeteorPhysicsCallback, &MeteorPhysicsCallback, &MeteorPhysicsCallback, 1, 0);
@@ -137,7 +133,7 @@ int dMeteor::onCreate() {
 	MakeItRound.addToList();
 
 	this->pos.z = (settings & 0x1000000) ? -2000.0f : 3458.0f;
-		
+
 	this->onExecute();
 	return true;
 }
@@ -159,16 +155,10 @@ int dMeteor::onExecute() {
 		PlaySound(this, SE_EMY_BIRIKYU_SPARK);
 	}
 
-	// for (i=0; i<4; i++) {
-	// 	dStageActor_c *player = GetSpecificPlayerActor(i);
-	// 	modifyPlayerPropertiesWithRollingObject(player, );
-	// }
-
 	return true;
 }
 
 int dMeteor::onDraw() {
-
 	bodyModel.scheduleForDrawing();
 	bodyModel._vf1C();
 	return true;

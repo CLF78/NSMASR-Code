@@ -1,6 +1,5 @@
 ---
 # Replaces EN_TARZANROPE
-
 source_files: [../src/meteor.cpp]
 hooks:
   - name: BuildMeteor
