@@ -26,7 +26,6 @@ struct DVDHandle {
 	int unk13;		// 38
 };
 
-
 int DVDConvertPathToEntrynum(const char *path);
 bool DVDFastOpen(int entrynum, DVDHandle *handle);
 int DVDReadPrio(DVDHandle *handle, void *buffer, int length, int offset, int unk);
@@ -42,9 +41,7 @@ bool FreeFile(FileHandle *handle);
 
 void inline *GetArchiveHeap() {
 	return ArchiveHeap;
-
 }
-
 
 // C++ interface
 class File {
@@ -67,8 +64,5 @@ private:
 	bool m_loaded;
 };
 
-
 // Todo: input stream maybe?
-
 #endif
-

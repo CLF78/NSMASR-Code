@@ -15,3 +15,15 @@ void DamagePlayer(dEn_c *actor, ActivePhysics *apThis, ActivePhysics *apOther) {
 	else
 		actor->counter_504[apOther->owner->which_player] = 0;
 }
+
+void WriteAsciiToTextBox(nw4r::lyt::TextBox *tb, const char *source) {
+	int i = 0;
+	wchar_t buffer[1024];
+	while (i < 1023 && source[i]) {
+		buffer[i] = source[i];
+		i++;
+	}
+	buffer[i] = 0;
+
+	tb->SetString(buffer);
+}

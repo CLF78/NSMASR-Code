@@ -91,7 +91,7 @@ void CCafterCreate(dEn_c *clown, u32 param) {
 	PClownCarAfterCreate(clown, param);
 
 	int player = clown->settings & 0xF;
-	if (player && Player_Active[player])
+	if (player && Player_Active[player-1])
 		clown->Delete(1);
 }
 

@@ -1,31 +1,28 @@
 #include "fileload.h"
 
 void *LoadFile(FileHandle *handle, const char *name) {
-
 	int entryNum = DVDConvertPathToEntrynum(name);
 
 	DVDHandle dvdhandle;
-	if (!DVDFastOpen(entryNum, &dvdhandle)) {
+	if (!DVDFastOpen(entryNum, &dvdhandle))
 		return 0;
-	}
 
 	handle->length = dvdhandle.length;
 	handle->filePtr = EGG__Heap__alloc((handle->length+0x1F) & ~0x1F, 0x20, GetArchiveHeap());
 
-	int ret = DVDReadPrio(&dvdhandle, handle->filePtr, (handle->length+0x1F) & ~0x1F, 0, 2);
+	DVDReadPrio(&dvdhandle, handle->filePtr, (handle->length+0x1F) & ~0x1F, 0, 2);
 
 	DVDClose(&dvdhandle);
-
 
 	return handle->filePtr;
 }
 
 bool FreeFile(FileHandle *handle) {
-	if (!handle) return false;
+	if (!handle)
+		return false;
 
-	if (handle->filePtr) {
+	if (handle->filePtr)
 		EGG__Heap__free(handle->filePtr, GetArchiveHeap());
-	}
 
 	handle->filePtr = 0;
 	handle->length = 0;
@@ -46,7 +43,7 @@ bool File::open(const char *filename) {
 		close();
 
 	void *ret = LoadFile(&m_handle, filename);
-	if (ret != 0)
+	if (ret)
 		m_loaded = true;
 
 	return (ret != 0);

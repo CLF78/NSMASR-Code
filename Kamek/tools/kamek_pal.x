@@ -1862,6 +1862,7 @@ SECTIONS {
 	ObjKusaBrres = 0x80972704;
 	
 	LoadBreffKoopa = 0x80920350;
+	LoadBreffKoopaJr = 0x80920344;
 	returnFromBreffLoadPatch = 0x809201F0;
 	
 	returnFromWarpZoneHack = 0x800D01F0;

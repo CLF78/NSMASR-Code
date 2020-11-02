@@ -3,6 +3,11 @@
 #include <g3dhax.h>
 #include <sfx.h>
 
+const char* ElectricLineFileList[] = {
+	"boss_koopaJr_toge",
+	NULL
+};
+
 class daElectricLine : public dEn_c {
 	int onCreate();
 	int onDelete();
@@ -15,7 +20,7 @@ class daElectricLine : public dEn_c {
 	dEn_c *Needles;
 	u32 delay;
 	u32 timer;
-	char loops;
+	bool loops;
 
 	static daElectricLine *build();
 
@@ -34,18 +39,15 @@ CREATE_STATE(daElectricLine, Activate);
 CREATE_STATE(daElectricLine, Deactivate);
 CREATE_STATE(daElectricLine, Die);
 
-
 int daElectricLine::onCreate() {
-
 	Vec temppos = this->pos;
 	temppos.x += 24.0;
+	
+	char settings = this->settings & 1;
 
-	// Settings for rotation: 0 = facing right, 1 = facing left, 2 = facing up, 3 = facing down
-	char settings = 0;
-	if (this->settings & 0x1) {
-		settings = 1;
+	// Setting for rotation: 0 = facing right, 1 = facing left
+	if (settings)
 		temppos.x -= 32.0;
-	}
 
 	Needles = (daNeedles*)create(NEEDLE_FOR_KOOPA_JR_B, settings, &temppos, &this->rot, 0);
 	Needles->doStateChange(&daNeedles::StateID_DemoWait);
@@ -56,8 +58,6 @@ int daElectricLine::onCreate() {
 
 	// State Changers
 	doStateChange(&StateID_Activate);
-
-	this->onExecute();
 	return true;
 }
 
@@ -66,7 +66,7 @@ int daElectricLine::onDelete() {
 }
 
 int daElectricLine::onExecute() {
-	acState.execute();	
+	acState.execute();
 	return true;
 }
 
@@ -74,40 +74,56 @@ int daElectricLine::onDraw() {
 	return true;
 }
 
+////////////////////
+// Activate State //
+////////////////////
 
-void daElectricLine::beginState_Activate() { 
+void daElectricLine::beginState_Activate() {
 	this->timer = this->delay;
 	Needles->doStateChange(&daNeedles::StateID_Idle);
 }
-void daElectricLine::executeState_Activate() { 
+
+void daElectricLine::executeState_Activate() {
 	if (this->loops) {
 		this->timer--;
-		if (this->timer == 0) {
-			this->loops += 1;
+		if (this->timer == 0)
 			doStateChange(&StateID_Deactivate);
-		}
 	}
 }
-void daElectricLine::endState_Activate() { }
 
+void daElectricLine::endState_Activate() {
+}
 
-void daElectricLine::beginState_Deactivate() { 
-	this->timer = this->delay; 
+//////////////////////
+// Deactivate State //
+//////////////////////
+
+void daElectricLine::beginState_Deactivate() {
+	this->timer = this->delay;
 	Needles->removeMyActivePhysics();
 	Needles->doStateChange(&daNeedles::StateID_DemoWait);
 }
-void daElectricLine::executeState_Deactivate() { 
 
+void daElectricLine::executeState_Deactivate() {
 	this->timer--;
-	if (this->timer == 0) {
+	if (this->timer == 0)
 		doStateChange(&StateID_Activate);
-	}
 }
-void daElectricLine::endState_Deactivate() { 
+
+void daElectricLine::endState_Deactivate() {
 	Needles->addMyActivePhysics();
 }
 
+///////////////
+// Die State //
+///////////////
 
-void daElectricLine::beginState_Die() { Needles->doStateChange(&daNeedles::StateID_Die); }
-void daElectricLine::executeState_Die() { }
-void daElectricLine::endState_Die() { }
+void daElectricLine::beginState_Die() {
+	Needles->doStateChange(&daNeedles::StateID_Die);
+}
+
+void daElectricLine::executeState_Die() {
+}
+
+void daElectricLine::endState_Die() {
+}

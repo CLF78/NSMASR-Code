@@ -1,6 +1,6 @@
 #include <asm_setup.S>
 
-.extern LoadBreffKoopa
+.extern LoadBreffKoopa, LoadBreffKoopaJr
 .extern returnFromBreffLoadPatch
 
 .global BreffLoadPatch
@@ -16,8 +16,15 @@ BreffLoadPatch:
 	cmpwi r0, 449
 	beq Koopa
 	
+	# Electric Line will load Bowser Jr's effect files
+	cmpwi r0, 250
+	beq KoopaJr
+	
 	# Otherwise keep doing the game's original checks
 	b returnFromBreffLoadPatch
 
 Koopa:
 	b LoadBreffKoopa
+
+KoopaJr:
+	b LoadBreffKoopaJr
