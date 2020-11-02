@@ -1,5 +1,10 @@
 #include <game.h>
 
+const char* BonePieceNameList [] = {
+	"lift_torokko",
+	NULL	
+};
+
 class daBonePiece_c : public dStageActor_c {
 	public:
 		static daBonePiece_c *build();
@@ -27,7 +32,7 @@ int daBonePiece_c::onCreate() {
 	// Load the model
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
-	resFile.data = getResource("lift_torokko", "g3d/t00.brres");
+	resFile.data = getResource(BonePieceNameList[0], "g3d/t00.brres");
 
 	static char thing[] = "lift_torokko?";
 	thing[0xC] = 'A' + (settings & 3);
@@ -61,9 +66,21 @@ int daBonePiece_c::onCreate() {
 
 	if ((settings >> 20) & 1)
 		rot.y = 0x8000;
+	
+	float xOffs, yOffs;
 
-	collider.init(this, 0.0f, 0.0f, 0, 16.0f, -16.0f, rot.z, 1); // X Offset, Y Offset, Top Y Offset, Right Size, Left Size, Rotation, _45
-	collider._47 = 0xA;
+	if (-0x2000 <= rot.z && rot.z <= 0x2000)
+		xOffs = 8.0f * sin(rot.z) * cos(rot.z);
+	else
+		xOffs = 5.0f * sin(rot.z);
+
+	if (rot.z < 0)
+		yOffs = -xOffs;
+	else
+		yOffs = xOffs;
+
+	collider.init(this, xOffs, yOffs, 0, 16.0f, -16.0f, rot.z, 1); // X Offset, Y Offset, Top Y Offset, Right Size, Left Size, Rotation, _45
+	collider._47 = 0;
 	collider.flags = 0x80180 | 0xC00;
 	collider.addToList();
 
