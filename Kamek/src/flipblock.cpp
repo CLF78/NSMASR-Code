@@ -1,41 +1,48 @@
 #include <common.h>
 #include <game.h>
 
-const char *FlipBlockFileList[] = {"block_rotate", 0};
-
-class daEnFlipBlock_c : public daEnBlockMain_c {
-public:
-	Physics::Info physicsInfo;
-
-	int onCreate();
-	int onDelete();
-	int onExecute();
-	int onDraw();
-
-	void calledWhenUpMoveExecutes();
-	void calledWhenDownMoveExecutes();
-
-	void blockWasHit(bool isDown);
-
-	bool playerOverlaps();
-
-	mHeapAllocator_c allocator;
-	nw4r::g3d::ResFile resFile;
-	m3d::mdl_c model;
-
-	int flipsRemaining;
-
-	USING_STATES(daEnFlipBlock_c);
-	DECLARE_STATE(Wait);
-	DECLARE_STATE(Flipping);
-
-	static daEnFlipBlock_c *build();
+const char *FlipBlockFileList[] = {
+	"block_rotate",
+	NULL
 };
 
+class daEnFlipBlock_c : public daEnBlockMain_c {
+	public:
+		Physics::Info physicsInfo;
+
+		int onCreate();
+		int onDelete();
+		int onExecute();
+		int onDraw();
+
+		void calledWhenUpMoveExecutes();
+		void calledWhenDownMoveExecutes();
+
+		void blockWasHit();
+
+		bool playerOverlaps();
+
+		mHeapAllocator_c allocator;
+		nw4r::g3d::ResFile resFile;
+		m3d::mdl_c model;
+
+		int flipsRemaining;
+
+		USING_STATES(daEnFlipBlock_c);
+		DECLARE_STATE(Wait);
+		DECLARE_STATE(Flipping);
+
+		static daEnFlipBlock_c *build();
+};
+
+daEnFlipBlock_c *daEnFlipBlock_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(daEnFlipBlock_c));
+	daEnFlipBlock_c *c = new(buffer) daEnFlipBlock_c;
+	return c;
+}
 
 CREATE_STATE(daEnFlipBlock_c, Wait);
 CREATE_STATE(daEnFlipBlock_c, Flipping);
-
 
 int daEnFlipBlock_c::onCreate() {
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
@@ -69,27 +76,23 @@ int daEnFlipBlock_c::onCreate() {
 	return true;
 }
 
-
 int daEnFlipBlock_c::onDelete() {
 	physics.removeFromList();
 
 	return true;
 }
 
-
 int daEnFlipBlock_c::onExecute() {
 	acState.execute();
 	physics.update();
 	blockUpdate();
 
-	// now check zone bounds based on state
-	if (acState.getCurrentState()->isEqual(&StateID_Wait)) {
+	// Now check zone bounds based on state
+	if (acState.getCurrentState()->isEqual(&StateID_Wait))
 		checkZoneBoundaries(0);
-	}
 
 	return true;
 }
-
 
 int daEnFlipBlock_c::onDraw() {
 	matrix.translation(pos.x, pos.y, pos.z);
@@ -103,38 +106,11 @@ int daEnFlipBlock_c::onDraw() {
 	return true;
 }
 
-
-daEnFlipBlock_c *daEnFlipBlock_c::build() {
-
-	void *buffer = AllocFromGameHeap1(sizeof(daEnFlipBlock_c));
-	daEnFlipBlock_c *c = new(buffer) daEnFlipBlock_c;
-	return c;
-}
-
-
-void daEnFlipBlock_c::blockWasHit(bool isDown) {
-	pos.y = initialY;
-	doStateChange(&StateID_Flipping);
-}
-
-
-
-void daEnFlipBlock_c::calledWhenUpMoveExecutes() {
-	if (initialY >= pos.y)
-		blockWasHit(false);
-}
-
-void daEnFlipBlock_c::calledWhenDownMoveExecutes() {
-	if (initialY <= pos.y)
-		blockWasHit(true);
-}
-
-
+////////////////
+// Wait State //
+////////////////
 
 void daEnFlipBlock_c::beginState_Wait() {
-}
-
-void daEnFlipBlock_c::endState_Wait() {
 }
 
 void daEnFlipBlock_c::executeState_Wait() {
@@ -143,7 +119,7 @@ void daEnFlipBlock_c::executeState_Wait() {
 	if (result == 0)
 		return;
 
-	if (result == 1) {
+	else if (result == 1) {
 		doStateChange(&daEnBlockMain_c::StateID_UpMove);
 		anotherFlag = 2;
 		isGroundPound = false;
@@ -154,6 +130,12 @@ void daEnFlipBlock_c::executeState_Wait() {
 	}
 }
 
+void daEnFlipBlock_c::endState_Wait() {
+}
+
+////////////////////
+// Flipping State //
+////////////////////
 
 void daEnFlipBlock_c::beginState_Flipping() {
 	flipsRemaining = 7;
@@ -168,10 +150,8 @@ void daEnFlipBlock_c::executeState_Flipping() {
 
 	if (rot.x == 0) {
 		flipsRemaining--;
-		if (flipsRemaining <= 0) {
-			if (!playerOverlaps())
-				doStateChange(&StateID_Wait);
-		}
+		if (flipsRemaining <= 0 && !playerOverlaps())
+			doStateChange(&StateID_Wait);
 	}
 }
 
@@ -180,6 +160,24 @@ void daEnFlipBlock_c::endState_Flipping() {
 	physics.addToList();
 }
 
+/////////////////////
+// Other Functions //
+/////////////////////
+
+void daEnFlipBlock_c::blockWasHit() {
+	pos.y = initialY;
+	doStateChange(&StateID_Flipping);
+}
+
+void daEnFlipBlock_c::calledWhenUpMoveExecutes() {
+	if (initialY >= pos.y)
+		blockWasHit();
+}
+
+void daEnFlipBlock_c::calledWhenDownMoveExecutes() {
+	if (initialY <= pos.y)
+		blockWasHit();
+}
 
 bool daEnFlipBlock_c::playerOverlaps() {
 	dStageActor_c *player = 0;
@@ -206,4 +204,3 @@ bool daEnFlipBlock_c::playerOverlaps() {
 
 	return false;
 }
-

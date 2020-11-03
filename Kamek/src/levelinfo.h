@@ -52,6 +52,4 @@ public:
 	static dLevelInfo_c s_info;
 };
 
-
 #endif
-

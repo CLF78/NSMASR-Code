@@ -5,12 +5,19 @@
 
 extern void *SoundRelatedClass;
 
+static float manipFourPlayerPos(int id, float pos) {
+	return pos - ((3 - id) * 20.0f);
+}
+
+static daEnBossKoopaDemoPeach_c *getPeach() {
+	return (daEnBossKoopaDemoPeach_c*)dEn_c::search(EN_BOSS_KOOPA_DEMO_PEACH);
+}
+
 class dEndingMgr_c : public daBossDemo_c {
 	int onCreate();
 	int onDelete();
 
 	void init();
-	Vec2 _vf70();
 
 	USING_STATES(dEndingMgr_c);
 	DECLARE_STATE_VIRTUAL(DemoSt);
@@ -31,12 +38,18 @@ dEndingMgr_c *dEndingMgr_c::build() {
 	return new(buf) dEndingMgr_c;
 }
 
+CREATE_STATE(dEndingMgr_c, DemoSt);
+CREATE_STATE(dEndingMgr_c, GoRight);
+CREATE_STATE(dEndingMgr_c, LookUp);
+CREATE_STATE(dEndingMgr_c, JumpOntoSwitch);
+CREATE_STATE(dEndingMgr_c, ThanksPeach);
 
 int dEndingMgr_c::onCreate() {
 	if (StageE4::instance->currentBossDemo) {
 		fBase_c::Delete();
 		return false;
 	}
+
 	StageE4::instance->currentBossDemo = this;
 
 	init();
@@ -48,8 +61,8 @@ int dEndingMgr_c::onCreate() {
 }
 
 int dEndingMgr_c::onDelete() {
-	nw4r::snd::SoundHandle *fanfare = (nw4r::snd::SoundHandle*)
-		(((u32)SoundRelatedClass) + 0x900);
+	nw4r::snd::SoundHandle *fanfare = (nw4r::snd::SoundHandle*)(((u32)SoundRelatedClass) + 0x900);
+
 	if (fanfare->Exists())
 		fanfare->Stop(60);
 
@@ -58,21 +71,20 @@ int dEndingMgr_c::onDelete() {
 	return true;
 }
 
-
 void dEndingMgr_c::init() {
 	dStageActorMgr_c::instance->_BCA = true;
 	WLClass::instance->demoControlAllPlayers();
 	BalloonRelatedClass::instance->_20 = 1;
 }
 
-
-CREATE_STATE(dEndingMgr_c, DemoSt);
+////////////////
+// Demo State //
+////////////////
 
 void dEndingMgr_c::beginState_DemoSt() {
 	_360 = 1;
 }
-void dEndingMgr_c::endState_DemoSt() {
-}
+
 void dEndingMgr_c::executeState_DemoSt() {
 	for (int i = 0; i < 4; i++) {
 		dAcPy_c *player;
@@ -84,18 +96,19 @@ void dEndingMgr_c::executeState_DemoSt() {
 	acState.setState(&StateID_GoRight);
 }
 
-static float manipFourPlayerPos(int id, float pos) {
-	int fromRight = 3 - id;
-	return pos - (fromRight * 20.0f);
+void dEndingMgr_c::endState_DemoSt() {
 }
 
-CREATE_STATE(dEndingMgr_c, GoRight);
+////////////////////
+// Go Right State //
+////////////////////
+
 void dEndingMgr_c::beginState_GoRight() {
 	timer = 0;
 
 	// Sort the players into a list
-	// We shall first find the rightmost player, then the second
-	// rightmost, then ...
+	// We shall first find the rightmost player, then the second rightmost, then...
+
 	float maxBound = 50000.0f;
 	for (int targetOffs = 3; targetOffs >= 0; targetOffs--) {
 		float maxX = 0.0f;
@@ -118,23 +131,20 @@ void dEndingMgr_c::beginState_GoRight() {
 	}
 
 	// And now move them
+	float speed = 2.0f;
 	for (int i = 0; i < 4; i++) {
 		if (dAcPy_c *player = players[i]) {
 			float target = manipFourPlayerPos(i, 1060.0f);
-			float speed = 2.0f;
 			player->moveInDirection(&target, &speed);
 		}
 	}
 }
 
-void dEndingMgr_c::endState_GoRight() { }
-
 void dEndingMgr_c::executeState_GoRight() {
 	for (int i = 0; i < 4; i++) {
 		if (dAcPy_c *player = players[i]) {
-			if (player->pos.x > manipFourPlayerPos(i, 920.0f)) {
+			if (player->pos.x > manipFourPlayerPos(i, 920.0f))
 				player->demoMoveSpeed *= 0.994f;
-			}
 		}
 	}
 
@@ -146,101 +156,105 @@ void dEndingMgr_c::executeState_GoRight() {
 		}
 	}
 
-	// WE CAN LEAVE YAY
+	// We can leave
 	timer++;
 	if (timer >= 20)
 		acState.setState(&StateID_LookUp);
 }
 
-CREATE_STATE(dEndingMgr_c, LookUp);
+void dEndingMgr_c::endState_GoRight() {
+}
+
+///////////////////
+// Look Up State //
+///////////////////
+
 void dEndingMgr_c::beginState_LookUp() {
 	_120 |= 8;
 	lookAtMode = 2; // Higher maximum distance
-
 	timer = 0;
-}
-
-void dEndingMgr_c::endState_LookUp() {
 }
 
 void dEndingMgr_c::executeState_LookUp() {
 	timer++;
 
-	if (timer >= 60)
+	if (timer == 60)
 		_120 &= ~8;
 
-	if (timer >= 90)
+	else if (timer >= 90)
 		acState.setState(&StateID_JumpOntoSwitch);
 }
 
+void dEndingMgr_c::endState_LookUp() {
+}
 
-CREATE_STATE(dEndingMgr_c, JumpOntoSwitch);
+//////////////////////////
+// Jump on Switch State //
+//////////////////////////
+
 void dEndingMgr_c::beginState_JumpOntoSwitch() {
+	float speed = 2.0f;
 	for (int i = 0; i < 4; i++) {
 		if (dAcPy_c *player = players[i]) {
 			float target = manipFourPlayerPos(i, 1144.0f);
-			float speed = 2.0f;
 			player->moveInDirection(&target, &speed);
 		}
 	}
 
 	timer = 0;
 }
-void dEndingMgr_c::endState_JumpOntoSwitch() {
-}
+
 void dEndingMgr_c::executeState_JumpOntoSwitch() {
 	dAcPy_c *player = players[3];
 
-	if (timer > 60) {
+	if (timer > 60)
 		acState.setState(&StateID_ThanksPeach);
-	} else if (player->isReadyForDemoControlAction()) {
+	else if (player->isReadyForDemoControlAction())
 		player->input.setTransientForcedButtons(WPAD_DOWN);
-	} else if (timer > 30) {
+	else if (timer > 30)
 		player->input.unsetPermanentForcedButtons(WPAD_TWO);
-	} else if (timer > 15) {
+	else if (timer > 15)
 		player->input.setPermanentForcedButtons(WPAD_TWO);
-	}
 
 	timer++;
 }
 
-static daEnBossKoopaDemoPeach_c *getPeach() {
-	return (daEnBossKoopaDemoPeach_c*)dEn_c::search(EN_BOSS_KOOPA_DEMO_PEACH);
+void dEndingMgr_c::endState_JumpOntoSwitch() {
 }
 
-CREATE_STATE(dEndingMgr_c, ThanksPeach);
+////////////////////////
+// Thanks Peach State //
+////////////////////////
+
 void dEndingMgr_c::beginState_ThanksPeach() {
 	timer = -1;
 	getPeach()->doStateChange(&daEnBossKoopaDemoPeach_c::StateID_Turn);
 }
-void dEndingMgr_c::endState_ThanksPeach() {
-}
+
 void dEndingMgr_c::executeState_ThanksPeach() {
 	daEnBossKoopaDemoPeach_c *peach = getPeach();
 	dStateBase_c *peachSt = peach->acState.getCurrentState();
 
 	if (peach->stage == 1 && peachSt == &peach->StateID_Turn) {
 		timer++;
-		if (timer == 1) {
+		if (timer == 1)
 			// This plays the Peach harp fanfare
 			sub_8019C390(_8042A788, 6);
-		}
-		if (timer > 20) {
+
+		else if (timer > 20) {
 			peach->doStateChange(&peach->StateID_Open);
 			peach->_120 |= 8;
 			timer = -1;
 		}
 	}
 
-	if (peach->stage == 1 && peachSt == &peach->StateID_Open) {
+	else if (peach->stage == 1 && peachSt == &peach->StateID_Open)
 		peach->doStateChange(&peach->StateID_Rescue);
-	}
 
-	if (peach->stage == 3 && peachSt == &peach->StateID_Rescue) {
+	else if (peach->stage == 3 && peachSt == &peach->StateID_Rescue)
 		peach->doStateChange(&peach->StateID_Thank);
-	}
 
-	if (peachSt == &peach->StateID_Thank) {
+	else if (peachSt == &peach->StateID_Thank) {
 		// 1. Freeze Peach by changing to Stage 8 as soon as she's almost done
 		// 2. Do our thing
 		// 3. Go back!
@@ -273,10 +287,9 @@ void dEndingMgr_c::executeState_ThanksPeach() {
 						SE_VOC_KO_SAVE_PRINCESS,
 						SE_VOC_KO2_SAVE_PRINCESS
 					};
-					dPlayerModelHandler_c *pmh = (dPlayerModelHandler_c*)(((u32)player) + 0x2A60);
-					int voc = vocs[pmh->mdlClass->player_id_2];
+
 					nw4r::snd::SoundHandle handle;
-					PlaySoundWithFunctionB4(SoundRelatedClass, &handle, voc, 1);
+					PlaySoundWithFunctionB4(SoundRelatedClass, &handle, vocs[player->settings & 0xF], 1);
 
 					int powerup = *((u32*)( 0x1090 + ((u8*)player) ));
 					handle.SetPitch(powerup == 3 ? 1.5f : 1.0f);
@@ -292,7 +305,7 @@ void dEndingMgr_c::executeState_ThanksPeach() {
 				RESTART_CRSIN_LevelStartStruct.level2 = 40;
 				RESTART_CRSIN_LevelStartStruct.areaMaybe = 0;
 				RESTART_CRSIN_LevelStartStruct.entrance = 0xFF;
-				RESTART_CRSIN_LevelStartStruct.unk4 = 0; // load replay
+				RESTART_CRSIN_LevelStartStruct.unk4 = 0; // Does not load replay
 				DontShowPreGame = true;
 				ExitStage(RESTART_CRSIN, 0, BEAT_LEVEL, MARIO_WIPE);
 			}
@@ -300,10 +313,5 @@ void dEndingMgr_c::executeState_ThanksPeach() {
 	}
 }
 
-
-
-
-Vec2 dEndingMgr_c::_vf70() {
-	return (const Vec2){1195.0f,-394.0f};
+void dEndingMgr_c::endState_ThanksPeach() {
 }
-

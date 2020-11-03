@@ -1,8 +1,6 @@
 #include <common.h>
 #include <game.h>
 
-// Patches MIST_INTERMITTENT (sprite 239)
-
 class daEnEventBlock_c : public daEnBlockMain_c {
 public:
 	enum Mode {
@@ -26,7 +24,7 @@ public:
 	void calledWhenUpMoveExecutes();
 	void calledWhenDownMoveExecutes();
 
-	void blockWasHit(bool isDown);
+	void blockWasHit();
 
 	USING_STATES(daEnEventBlock_c);
 	DECLARE_STATE(Wait);
@@ -34,9 +32,14 @@ public:
 	static daEnEventBlock_c *build();
 };
 
+daEnEventBlock_c *daEnEventBlock_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(daEnEventBlock_c));
+	daEnEventBlock_c *c = new(buffer) daEnEventBlock_c;
+
+	return c;
+}
 
 CREATE_STATE(daEnEventBlock_c, Wait);
-
 
 int daEnEventBlock_c::onCreate() {
 	blockInit(pos.y);
@@ -71,20 +74,16 @@ int daEnEventBlock_c::onCreate() {
 	equaliseEvents();
 
 	doStateChange(&daEnEventBlock_c::StateID_Wait);
-
 	return true;
 }
-
 
 int daEnEventBlock_c::onDelete() {
 	TileRenderer::List *list = dBgGm_c::instance->getTileRendererList(0);
 	list->remove(&tile);
 
 	physics.removeFromList();
-
 	return true;
 }
-
 
 int daEnEventBlock_c::onExecute() {
 	acState.execute();
@@ -100,24 +99,43 @@ int daEnEventBlock_c::onExecute() {
 
 	tile.tileNumber = (isActive ? 0x96 : 0x97);
 
-	// now check zone bounds based on state
-	if (acState.getCurrentState()->isEqual(&StateID_Wait)) {
+	// Now check zone bounds based on state
+	if (acState.getCurrentState()->isEqual(&StateID_Wait))
 		checkZoneBoundaries(0);
-	}
 
 	return true;
 }
 
+////////////////
+// Wait State //
+////////////////
 
-daEnEventBlock_c *daEnEventBlock_c::build() {
-
-	void *buffer = AllocFromGameHeap1(sizeof(daEnEventBlock_c));
-	daEnEventBlock_c *c = new(buffer) daEnEventBlock_c;
-
-
-	return c;
+void daEnEventBlock_c::beginState_Wait() {
 }
 
+void daEnEventBlock_c::executeState_Wait() {
+	int result = blockResult();
+
+	if (result == 0)
+		return;
+
+	else if (result == 1) {
+		doStateChange(&daEnBlockMain_c::StateID_UpMove);
+		anotherFlag = 2;
+		isGroundPound = false;
+	} else {
+		doStateChange(&daEnBlockMain_c::StateID_DownMove);
+		anotherFlag = 1;
+		isGroundPound = true;
+	}
+}
+
+void daEnEventBlock_c::endState_Wait() {
+}
+
+/////////////////////
+// Other Functions //
+/////////////////////
 
 void daEnEventBlock_c::equaliseEvents() {
 	if (mode != SWAP_EVENTS)
@@ -126,19 +144,17 @@ void daEnEventBlock_c::equaliseEvents() {
 	bool f1 = dFlagMgr_c::instance->active(event1);
 	bool f2 = dFlagMgr_c::instance->active(event2);
 
-	if (!f1 && !f2) {
+	if (!f1 && !f2)
 		dFlagMgr_c::instance->set(event1, 0, true, false, false);
-	}
 
-	if (f1 && f2) {
+	else if (f1 && f2)	
 		dFlagMgr_c::instance->set(event2, 0, false, false, false);
-	}
 }
 
-
-void daEnEventBlock_c::blockWasHit(bool isDown) {
+void daEnEventBlock_c::blockWasHit() {
 	pos.y = initialY;
 
+	// This if block apparently sucks, but CodeWarrior optimizes it better than i do, so i'll keep it like this.
 	if (mode == TOGGLE_EVENT) {
 		if (dFlagMgr_c::instance->active(event2))
 			dFlagMgr_c::instance->set(event2, 0, false, false, false);
@@ -157,45 +173,16 @@ void daEnEventBlock_c::blockWasHit(bool isDown) {
 
 	physics.setup(this, &physicsInfo, 3, currentLayerID);
 	physics.addToList();
-	
+
 	doStateChange(&StateID_Wait);
 }
 
-
-
 void daEnEventBlock_c::calledWhenUpMoveExecutes() {
 	if (initialY >= pos.y)
-		blockWasHit(false);
+		blockWasHit();
 }
 
 void daEnEventBlock_c::calledWhenDownMoveExecutes() {
 	if (initialY <= pos.y)
-		blockWasHit(true);
+		blockWasHit();
 }
-
-
-
-void daEnEventBlock_c::beginState_Wait() {
-}
-
-void daEnEventBlock_c::endState_Wait() {
-}
-
-void daEnEventBlock_c::executeState_Wait() {
-	int result = blockResult();
-
-	if (result == 0)
-		return;
-
-	if (result == 1) {
-		doStateChange(&daEnBlockMain_c::StateID_UpMove);
-		anotherFlag = 2;
-		isGroundPound = false;
-	} else {
-		doStateChange(&daEnBlockMain_c::StateID_DownMove);
-		anotherFlag = 1;
-		isGroundPound = true;
-	}
-}
-
-
