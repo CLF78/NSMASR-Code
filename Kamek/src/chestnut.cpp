@@ -6,6 +6,19 @@ const char *ChestnutFileList[] = {
 	NULL
 };
 
+struct ChestnutSprite {
+	Actors actornum;
+	u32 settings;
+};
+
+static const ChestnutSprite things[] = {
+	{EN_KURIBO, 0},
+	{EN_TOGEZO, 0},
+	{EN_COIN_JUMP, 0},
+	{EN_ITEM, 0x05000009},
+	{EN_STAR_COIN, 0x10000000}
+};
+
 class daEnChestnut_c : public dEn_c {
 	public:
 		static daEnChestnut_c *build();
@@ -294,8 +307,7 @@ bool daEnChestnut_c::CreateIceActors() {
 	info.pos = pos;
 	info.pos.y -= (6.0f * info.scale.y);
 	info.scale.x = info.scale.y = info.scale.z = scale.x * 1.35f;
-	for (int i = 0; i < 8; i++)
-		info.what[0] = 0.0f;
+	info.what[0] = 0.0f;
 
 	return frzMgr.Create_ICEACTORs(&info, 1);
 }
@@ -315,18 +327,10 @@ void daEnChestnut_c::powBlockActivated(bool isNotMPGP) {
 
 void daEnChestnut_c::spawnObject() {
 	VEC3 acPos = pos;
+	Actors actornum = things[objNumber].actornum;
+	u32 acSettings = things[objNumber].settings;
 
-	static const u32 things[] = {
-		EN_KURIBO, 0,
-		EN_TOGEZO, 0,
-		EN_COIN_JUMP, 0,
-		EN_ITEM, 0x05000009,
-		EN_STAR_COIN, 0x10000000,
-	};
-
-	u32 acSettings = things[objNumber*2+1];
-
-	if (objNumber == 4) {
+	if (actornum == EN_STAR_COIN) {
 		acSettings |= (starCoinNumber << 8);
 		acPos.x -= 12.0f;
 		acPos.y += 32.0f;
@@ -334,8 +338,8 @@ void daEnChestnut_c::spawnObject() {
 
 	aPhysics.removeFromList();
 
-	OSReport("Spawning %d, %d, %08x\n", objNumber, things[objNumber*2], acSettings);
-	dStageActor_c *ac = dStageActor_c::create((Actors)things[objNumber*2], acSettings, &acPos, 0, currentLayerID);
+	OSReport("Spawning %d, %d, with settings %08x\n", objNumber, actornum, acSettings);
+	dStageActor_c *ac = dStageActor_c::create(actornum, acSettings, &acPos, 0, currentLayerID);
 
 	SpawnEffect("Wm_ob_itemsndlandsmk", 0, &pos, &(S16Vec){0,0,0}, &scale);
 
