@@ -2,7 +2,9 @@
 
 .extern DoWarpZoneHack__Fii
 .extern returnFromWarpZoneHack, returnFromWarpZoneHack2
+.extern returnFromAlwaysDrawHack, SizerOn
 
+.global AlwaysDrawHack
 .global BGScale
 .global BGScaleFix
 .global BGScaleFront, BGScaleBack, BGScaleEnabled
@@ -55,6 +57,17 @@ ret:
 	mr r3, r27
 	b returnFromWarpZoneHack
 
+AlwaysDrawHack:
+	lis r12, SizerOn@ha
+	lbz r12, SizerOn@l(r12)
+	cmpwi r12, 0
+	bne skip
+	stwu r1, -0x10(r1)
+	b returnFromAlwaysDrawHack
+
+skip:
+	li r3, 1
+	blr
 
 .data
 .align 4

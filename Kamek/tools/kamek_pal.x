@@ -230,8 +230,8 @@ SECTIONS {
 	MarioJumpMax = 0x8042BB28;
 	MiniMarioJumpArc = 0x802F5964;
 	MarioSize = 0x8042BB54;
-	AlwaysDrawFlag = 0x80064540;
-	AlwaysDrawBranch = 0x80064544;
+	returnFromAlwaysDrawHack = 0x80064544;
+
 	GenerateRandomNumber = 0x800B2EE0;
 	OneofManySoundPlayers = 0x800CE9B0;
 	BombSleepState = 0x80B12A88;

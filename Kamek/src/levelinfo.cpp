@@ -125,7 +125,7 @@ void UpdateFSStars() {
 		}
 	}
 
-	bool beatGame = (save->GetLevelCondition(7, 23) & COND_NORMAL) != 0;
+	bool beatGame = (save->GetLevelCondition(7, 23) & COND_NORMAL);
 
 	save->bitfield &= ~0x3C;
 	save->bitfield |=
