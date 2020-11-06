@@ -47,7 +47,7 @@ extern BG_GM_hax *BG_GM_ptr;
 extern u16 *GetPointerToTile(BG_GM_hax *self, u16 x, u16 y, u16 layer, short *blockID_p, bool unused);
 extern fBase_c *FindActorByID(u32 id);
 
-class dLineGod : public dStageActor_c {
+class dLineGod_c : public dStageActor_c {
 	int onCreate();
 	int onExecute();
 	int onDelete();
@@ -63,15 +63,15 @@ class dLineGod : public dStageActor_c {
 	bool appendToList(BgActor *ac);
 	void buildList();
 
-	static dLineGod *build();
+	static dLineGod_c *build();
 };
 
-dLineGod *dLineGod::build() {
-	void *buffer = AllocFromGameHeap1(sizeof(dLineGod));
-	return new(buffer) dLineGod;
+dLineGod_c *dLineGod_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(dLineGod_c));
+	return new(buffer) dLineGod_c;
 }
 
-int dLineGod::onCreate() {
+int dLineGod_c::onCreate() {
 	this->eventNum = ((this->settings >> 24) & 0xFF) - 1;
 
 	this->func = (this->settings) & 1;
@@ -84,7 +84,7 @@ int dLineGod::onCreate() {
 	return true;
 }
 
-int dLineGod::onExecute() {
+int dLineGod_c::onExecute() {
 	u8 newEvState = (dFlagMgr_c::instance->active(this->eventNum));
 
 	if (newEvState == this->lastEvState)
@@ -120,15 +120,15 @@ int dLineGod::onExecute() {
 	return true;
 }
 
-int dLineGod::onDelete() {
+int dLineGod_c::onDelete() {
 	return true;
 }
 
-int dLineGod::onDraw() {
+int dLineGod_c::onDraw() {
 	return true;
 }
 
-void dLineGod::buildList() {
+void dLineGod_c::buildList() {
 	for (int clearIdx = 0; clearIdx < 8; clearIdx++)
 		this->ac[clearIdx] = 0;
 
@@ -160,7 +160,7 @@ void dLineGod::buildList() {
 	}
 }
 
-bool dLineGod::appendToList(BgActor *ac) {
+bool dLineGod_c::appendToList(BgActor *ac) {
 	for (int i = 0; i < 8; i++) {
 		if (this->ac[i] == 0) {
 			this->ac[i] = ac;

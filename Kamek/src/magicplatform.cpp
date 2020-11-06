@@ -57,15 +57,6 @@ class daEnMagicPlatform_c : public dEn_c {
 		int width, height;
 };
 
-/*****************************************************************************/
-// Glue Code
-daEnMagicPlatform_c *daEnMagicPlatform_c::build() {
-	void *buffer = AllocFromGameHeap1(sizeof(daEnMagicPlatform_c));
-	daEnMagicPlatform_c *c = new(buffer) daEnMagicPlatform_c;
-	return c;
-}
-
-
 static void PhysCB1(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	if (two->stageActorType != 1)
 		return;
@@ -94,7 +85,6 @@ static void PhysCB2(daEnMagicPlatform_c *one, dStageActor_c *two) {
 		HurtMarioBecauseOfBeingSquashed(two, one, 10);
 }
 
-
 static void PhysCB3(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeNotBool) {
 	if (two->stageActorType != 1)
 		return;
@@ -116,29 +106,28 @@ static void PhysCB3(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeN
 	}
 }
 
-
 static bool PhysCB4(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	return (one->pos_delta.y > 0.0f);
 }
-
 
 static bool PhysCB5(daEnMagicPlatform_c *one, dStageActor_c *two) {
 	return (one->pos_delta.y < 0.0f);
 }
 
-
 static bool PhysCB6(daEnMagicPlatform_c *one, dStageActor_c *two, bool unkMaybeNotBool) {
 	if (unkMaybeNotBool) {
 		if (one->pos_delta.x > 0.0f)
 			return true;
-	} else {
-		if (one->pos_delta.x < 0.0f)
-			return true;
-	}
+	} else if (one->pos_delta.x < 0.0f)
+		return true;
 
 	return false;
 }
 
+daEnMagicPlatform_c *daEnMagicPlatform_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(daEnMagicPlatform_c));
+	return new(buffer) daEnMagicPlatform_c;
+}
 
 int daEnMagicPlatform_c::onCreate() {
 	rectID = settings & 0xFF;
@@ -155,7 +144,7 @@ int daEnMagicPlatform_c::onCreate() {
 
 	if (collisionType == NoneWithZ500)
 		pos.z = 500.0f;
-	
+
 	else if (settings & 0xE0000000) {
 		int putItBehind = settings >> 29;
 		pos.z = -3600.0f - (putItBehind * 16);
@@ -211,7 +200,6 @@ int daEnMagicPlatform_c::onCreate() {
 	return 1;
 }
 
-
 int daEnMagicPlatform_c::onDelete() {
 	deleteTiles();
 
@@ -223,7 +211,6 @@ int daEnMagicPlatform_c::onDelete() {
 
 	return 1;
 }
-
 
 int daEnMagicPlatform_c::onExecute() {
 	handleMovement();
@@ -242,8 +229,6 @@ int daEnMagicPlatform_c::onExecute() {
 	return 1;
 }
 
-/*****************************************************************************/
-// Movement
 void daEnMagicPlatform_c::setupMovement() {
 	float fMoveLength = 16.0f * moveLength;
 	float fMoveSpeed = 0.2f * moveSpeed;
@@ -278,28 +263,25 @@ void daEnMagicPlatform_c::setupMovement() {
 	if (spriteFlagNum == 0) {
 		isMoving = (moveSpeed > 0);
 		moveDelta = moveBaseDelta;
-	} else {
+	} else
 		isMoving = false;
-	}
 
 	currentMoveDelay = 0;
 }
-
 
 void daEnMagicPlatform_c::handleMovement() {
 	if (spriteFlagNum > 0) {
 		// Do event checks
 		bool flagOn = ((dFlagMgr_c::instance->flags & spriteFlagMask) != 0);
-		
+
 		// Flag was turned on, so start moving
 		if (flagOn) {
 			moveDelta = moveBaseDelta;
 			isMoving = true;
-		
+
 		// Flag was turned off while moving, so go back
-		} else if (isMoving) {
+		} else if (isMoving)
 			moveDelta = -moveBaseDelta;
-		}
 	}
 
 	if (!isMoving)
@@ -347,9 +329,6 @@ void daEnMagicPlatform_c::handleMovement() {
 	}
 }
 
-/*****************************************************************************/
-// Tile Renderers
-
 void daEnMagicPlatform_c::findSourceArea() {
 	mRect rect;
 	dCourseFull_c::instance->get(GetAreaNum())->getRectByID(rectID, &rect);
@@ -375,7 +354,6 @@ void daEnMagicPlatform_c::findSourceArea() {
 	//OSReport("Area: %f, %f ; %f x %f\n", rect.x, rect.y, rect.width, rect.height);
 	//OSReport("Source: %d, %d ; Size: %d x %d\n", srcX, srcY, width, height);
 }
-
 
 void daEnMagicPlatform_c::createTiles() {
 	rendererCount = width * height;
@@ -404,7 +382,6 @@ void daEnMagicPlatform_c::createTiles() {
 	}
 }
 
-
 void daEnMagicPlatform_c::deleteTiles() {
 	if (renderers != 0) {
 		setVisible(false);
@@ -413,7 +390,6 @@ void daEnMagicPlatform_c::deleteTiles() {
 		renderers = 0;
 	}
 }
-
 
 void daEnMagicPlatform_c::updateTilePositions() {
 	float baseX = pos.x;
@@ -436,7 +412,6 @@ void daEnMagicPlatform_c::updateTilePositions() {
 		y += 16.0f;
 	}
 }
-
 
 void daEnMagicPlatform_c::checkVisibility() {
 	float effectiveLeft = pos.x, effectiveRight = pos.x + (width * 16.0f);
@@ -472,4 +447,3 @@ void daEnMagicPlatform_c::setVisible(bool shown) {
 		}
 	}
 }
-

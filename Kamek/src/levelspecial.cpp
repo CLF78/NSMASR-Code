@@ -4,7 +4,7 @@
 
 extern "C" void dAcPy_vf294(void *Mario, dStateBase_c *state, u32 unk);
 
-class dLevelSpecial : public dStageActor_c {
+class dLevelSpecial_c : public dStageActor_c {
 	int onCreate();
 	int onExecute();
 	int onDelete();
@@ -17,15 +17,15 @@ class dLevelSpecial : public dStageActor_c {
 	u8 effect;
 	u8 lastEvState;
 
-	static dLevelSpecial *build();
+	static dLevelSpecial_c *build();
 };
 
-dLevelSpecial *dLevelSpecial::build() {
-	void *buffer = AllocFromGameHeap1(sizeof(dLevelSpecial));
-	return new(buffer) dLevelSpecial;
+dLevelSpecial_c *dLevelSpecial_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(dLevelSpecial_c));
+	return new(buffer) dLevelSpecial_c;
 }
 
-int dLevelSpecial::onCreate() {
+int dLevelSpecial_c::onCreate() {
 	this->event = ((this->settings >> 24) & 0xFF) - 1;
 
 	this->keepTime = 0;
@@ -38,7 +38,7 @@ int dLevelSpecial::onCreate() {
 	return true;
 }
 
-int dLevelSpecial::onExecute() {
+int dLevelSpecial_c::onExecute() {
 	if (this->keepTime)
 		TimeKeeper::instance->setTime(this->keepTime);
 
@@ -159,11 +159,11 @@ int dLevelSpecial::onExecute() {
 	return true;
 }
 
-int dLevelSpecial::onDelete() {
+int dLevelSpecial_c::onDelete() {
 	return true;
 }
 
-int dLevelSpecial::onDraw() {
+int dLevelSpecial_c::onDraw() {
 	return true;
 }
 
