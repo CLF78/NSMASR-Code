@@ -1,7 +1,6 @@
 #include "levelspecial.h"
 #define ACTIVATE	1
 #define DEACTIVATE	0
-#define time *(u32*)((GameTimer) + 0x4)
 
 extern "C" void dAcPy_vf294(void *Mario, dStateBase_c *state, u32 unk);
 
@@ -41,7 +40,7 @@ int dLevelSpecial::onCreate() {
 
 int dLevelSpecial::onExecute() {
 	if (this->keepTime)
-		time = this->keepTime;
+		TimeKeeper::instance->setTime(this->keepTime);
 
 	bool newEvState = (dFlagMgr_c::instance->active(this->event));
 
@@ -58,7 +57,7 @@ int dLevelSpecial::onExecute() {
 				break;
 
 			case 2:											// Stop Time
-				this->keepTime = time;
+				this->keepTime = (TimeKeeper::instance->timePlusFFFTimes40000 >> 0xC);
 				break;
 
 			case 3:											// Mario Gravity
@@ -76,7 +75,7 @@ int dLevelSpecial::onExecute() {
 				break;
 
 			case 4:											// Set Time
-				time = (this->setTime << 0xC) - 1; // Possibly - 0xFFF?
+				TimeKeeper::instance->setTime(this->setTime);
 				break;
 
 			case 5:											// Global Enemy Size
@@ -88,7 +87,7 @@ int dLevelSpecial::onExecute() {
 				break;
 
 			case 6:											// Individual Enemy Size
-				SizerOn = 1 + (this->effect == 0);
+				SizerOn = (this->effect == 0) ? 2 : 1;
 				break;
 
 			case 7:											// Z Order Hack

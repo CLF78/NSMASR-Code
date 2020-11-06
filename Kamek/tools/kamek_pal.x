@@ -1882,6 +1882,9 @@ SECTIONS {
 	returnFromLavaCheck5False = 0x8000BA70;
 	returnFromLavaCheck5True = 0x8000C5C0;
 
+	instance__10TimeKeeper = 0x8042A350;
+	setTime__10TimeKeeperFUi = 0x800E3A00;
+
 	.text : {
 		FILL (0)
 

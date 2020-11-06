@@ -1,6 +1,7 @@
 #include <common.h>
 #include <game.h>
 #include <dCourse.h>
+#include <timekeeper.h>
 
 // Level Warper
 extern bool WarpIsEnabled;
@@ -11,9 +12,6 @@ extern char WarpLevel;
 extern char WarpMapID;
 extern char WarpWorld;
 extern u32 StarCoinStatus[3];
-
-// Time Stop/Set
-extern u32 GameTimer;
 
 // Gravity Modifier
 extern float MarioDescentRate;
