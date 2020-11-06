@@ -2,16 +2,11 @@
 # Replaces RIVER_MGR
 source_files: [../src/linegod.cpp, ../src/linegod.S]
 hooks:
-  - name: LineGodCreate
+  - name: LineGodBuild
     type: add_func_pointer
-    src_addr_pal: 0x80979570
-    target_func: 'LineGod_Create(LineGod *)'
-    
-  - name: LineGodExecute
-    type: add_func_pointer
-    src_addr_pal: 0x80979588
-    target_func: 'LineGod_Execute(LineGod *)'
-    
+    src_addr_pal: 0x80979558
+    target_func: 'dLineGod::build(void)'
+
   - name: LineGodSpawnFix
     type: branch_insn
     branch_type: b
@@ -23,8 +18,3 @@ hooks:
     branch_type: b
     src_addr_pal: 0x8007EA70
     target_func: 'BgActorSetInfoFix'
-    
-  - name: LineGodMemFix
-    type: patch
-    addr_pal: 0x80898798
-    data: '38600400'

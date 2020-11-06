@@ -3,8 +3,8 @@
 class TimeKeeper {
 	public:
 		void *vtable; // 0x8031B358
-		u32 timePlusFFFTimes40000; // not sure why this is here...
-		u16 time;
+		u32 timePlusFFFTimes40000;
+		u16 startingTime;
 		u8 _A;
 		u8 isTimeLessThan100;
 		u8 _C;
