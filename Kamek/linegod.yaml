@@ -5,7 +5,7 @@ hooks:
   - name: LineGodBuild
     type: add_func_pointer
     src_addr_pal: 0x80979558
-    target_func: 'dLineGod::build(void)'
+    target_func: 'dLineGod_c::build(void)'
 
   - name: LineGodSpawnFix
     type: branch_insn

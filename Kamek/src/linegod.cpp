@@ -44,7 +44,6 @@ struct BG_GM_hax {
 extern dBgActorManager_c *dBgActorManager;
 extern BgActorDef *BgActorDefs;
 extern BG_GM_hax *BG_GM_ptr;
-extern u16 *GetPointerToTile(BG_GM_hax *self, u16 x, u16 y, u16 layer, short *blockID_p, bool unused);
 extern fBase_c *FindActorByID(u32 id);
 
 class dLineGod_c : public dStageActor_c {
@@ -108,7 +107,7 @@ int dLineGod_c::onExecute() {
 				ac->actor_id = 0;
 			}
 
-			u16 *tile = GetPointerToTile(BG_GM_ptr, (ac->x + x_bias) * 16, (ac->y + y_bias) * 16, 0, 0, 0);
+			u16 *tile = dBgGm_c::instance->getPointerToTile((ac->x + x_bias) * 16, (ac->y + y_bias) * 16, 0, 0, 0);
 			if (offState == 1)
 				*tile = 0;
 			else

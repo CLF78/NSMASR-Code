@@ -12,7 +12,6 @@ const char* RYOMFileList [] = {
 	NULL	
 };
 
-
 //////////////////////////////////////////////////////////
 //
 //	How it works:
@@ -21,8 +20,6 @@ const char* RYOMFileList [] = {
 //		2) Change the stuff inside " " to be what you want.
 //		3) Copy paste an entire 'case' section of code, and change the number to change the setting it uses
 //
-
-
 
 // This is the class allocator, you don't need to touch this
 class dMakeYourOwn : public dStageActor_c {
@@ -34,10 +31,10 @@ class dMakeYourOwn : public dStageActor_c {
 
 	static dMakeYourOwn *build();
 
-	// And a model and an anmChr
+	// Add a model and the eventual animations
 	mHeapAllocator_c allocator;
-	m3d::mdl_c bodyModel;
 	nw4r::g3d::ResFile resFile;
+	m3d::mdl_c bodyModel;
 	m3d::anmChr_c chrAnimation;
 	m3d::anmTexSrt_c srtAnimation;
 	m3d::anmTexPat_c patAnimation;
@@ -62,8 +59,7 @@ dMakeYourOwn *dMakeYourOwn::build() {
 	return new(buffer) dMakeYourOwn;
 }
 
-
-// Saves space when we do it like this
+// Sets up each animation if enabled
 void dMakeYourOwn::setupAnim(const char* name, float rate) {
 	if (animtype & ANMCHR) {
 		nw4r::g3d::ResAnmChr anmChr;
@@ -83,7 +79,7 @@ void dMakeYourOwn::setupAnim(const char* name, float rate) {
 		this->srtAnimation.bindEntry(&this->bodyModel, anmSrt, 0, 0);
 		this->bodyModel.bindAnim(&this->srtAnimation, 1.0);
 		this->srtAnimation.setFrameForEntry(1.0, 0);
-		this->srtAnimation.setUpdateRateForEntry(1.0, 0);
+		this->srtAnimation.setUpdateRateForEntry(rate, 0);
 	}
 
 	if (animtype & ANMPAT) {
@@ -94,7 +90,7 @@ void dMakeYourOwn::setupAnim(const char* name, float rate) {
 		this->patAnimation.bindEntry(&this->bodyModel, &anmPat, 0, 0);
 		this->bodyModel.bindAnim(&this->patAnimation, 1.0);
 		this->patAnimation.setFrameForEntry(1.0, 0);
-		this->patAnimation.setUpdateRateForEntry(1.0, 0);
+		this->patAnimation.setUpdateRateForEntry(rate, 0);
 	}
 
 	if (animtype & ANMCLR) {
@@ -105,7 +101,7 @@ void dMakeYourOwn::setupAnim(const char* name, float rate) {
 		this->clrAnimation.bind(&this->bodyModel, anmClr, 0, 0);
 		this->bodyModel.bindAnim(&this->clrAnimation, 1.0);
 		this->clrAnimation.setFrameForEntry(1.0, 0);
-		this->clrAnimation.setUpdateRateForEntry(1.0, 0);
+		this->clrAnimation.setUpdateRateForEntry(rate, 0);
 	}
 }
 
@@ -116,38 +112,23 @@ void dMakeYourOwn::setupModel(int arcIndex, const char* brresName, const char* m
 	bodyModel.setup(mdl, &allocator, 0x224, 1, 0);
 }
 
-
 // This gets run when the sprite spawns!
 int dMakeYourOwn::onCreate() {
-
 	// Settings for your sprite!
-
 	this->model = this->settings & 0xFF; 						// Sets nubble 12 to choose the model you want
 	this->animtype = this->settings >> 8 & 0xF;					// Sets nybble 10 to a series of checkbox for which anim should be used
 	this->size = (float)((this->settings >> 24) & 0xFF) / 4.0; 	// Sets nybbles 5-6 to size. Size equals value / 4.
 
-
-	float zLevels[16] = {-6500.0, -5000.0, -4500.0, -2000.0,
-						 -1000.0, 300.0, 800.0, 1600.0,
-						  2000.0, 3600.0, 4000.0, 4500.0,
-						  6000.0, 6500.0, 7000.0, 7500.0 };
+	float zLevels[16] = {-6500.0, -5000.0, -4500.0, -2000.0, -1000.0, 300.0, 800.0, 1600.0, 2000.0, 3600.0, 4000.0, 4500.0, 6000.0, 6500.0, 7000.0, 7500.0 };
 
 	this->zOrder = zLevels[(this->settings >> 16) & 0xF];
-
 	this->customZ = (((this->settings >> 16) & 0xF) != 0);
 
 	// Setup the models inside an allocator
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
-
-	// Makes the code shorter and clearer to put these up here
-
 	// A switch case, add extra models in here
 	switch (this->model) {
-
-		// TITLESCREEN STUFF
-		// DEFAULT
-
 		case 0:		// Mario NF
 
 			setupModel(0, "g3d/0.brres", "0");
@@ -276,21 +257,15 @@ int dMakeYourOwn::onCreate() {
 
 	allocator.unlink();
 
-	if (size == 0.0) {	// If the person has the size nybble at zero, make it normal sized
+	if (size == 0.0)	// If the person has the size nybble at zero, make it normal sized
 		this->scale = (Vec){1.0,1.0,1.0};
-	}
-	else {				// Else, use our size
+	else				// Else, use our size
 		this->scale = (Vec){size,size,size};
-	}
 
-	this->onExecute();
 	return true;
 }
 
-
-// YOU'RE DONE, no need to do anything below here.
-
-
+// No need to do anything below here.
 int dMakeYourOwn::onDelete() {
 	return true;
 }
@@ -326,10 +301,10 @@ int dMakeYourOwn::onExecute() {
 }
 
 int dMakeYourOwn::onDraw() {
-	if (customZ) {
-		matrix.translation(pos.x, pos.y, this->zOrder); }	// Set where to draw the model : -5500.0 is the official behind layer 2, while 5500.0 is in front of layer 0.
-	else {
-		matrix.translation(pos.x, pos.y, pos.z - 6500.0); }	// Set where to draw the model : -5500.0 is the official behind layer 2, while 5500.0 is in front of layer 0.
+	if (customZ)
+		matrix.translation(pos.x, pos.y, this->zOrder);	// Set where to draw the model : -5500.0 is the official behind layer 2, while 5500.0 is in front of layer 0.
+	else
+		matrix.translation(pos.x, pos.y, pos.z - 6500.0);	// Set where to draw the model : -5500.0 is the official behind layer 2, while 5500.0 is in front of layer 0.
 
 	matrix.applyRotationYXZ(&rot.x, &rot.y, &rot.z);	// Set how to rotate the drawn model
 

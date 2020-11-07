@@ -6,7 +6,7 @@ hooks:
   - name: LevelSpecialBuild
     type: add_func_pointer
     src_addr_pal: 0x8097CD28
-    target_func: 'dLevelSpecial::build(void)'
+    target_func: 'dLevelSpecial_c::build(void)'
 
   - name: AlwaysDrawHack
     type: branch_insn

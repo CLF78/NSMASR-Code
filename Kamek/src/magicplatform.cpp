@@ -307,11 +307,9 @@ void daEnMagicPlatform_c::handleMovement() {
 			*moveTarget = moveMax;
 			reachedEnd = true;
 		}
-	} else {
-		if (*moveTarget <= moveMin) {
-			*moveTarget = moveMin;
-			reachedEnd = true;
-		}
+	} else if (*moveTarget <= moveMin) {
+		*moveTarget = moveMin;
+		reachedEnd = true;
 	}
 
 	if (reachedEnd) {
@@ -350,16 +348,13 @@ void daEnMagicPlatform_c::findSourceArea() {
 	srcY = top >> 4;
 	width = (right - left) >> 4;
 	height = (bottom - top) >> 4;
-
-	//OSReport("Area: %f, %f ; %f x %f\n", rect.x, rect.y, rect.width, rect.height);
-	//OSReport("Source: %d, %d ; Size: %d x %d\n", srcX, srcY, width, height);
 }
 
 void daEnMagicPlatform_c::createTiles() {
 	rendererCount = width * height;
 	renderers = new TileRenderer[rendererCount];
 
-	// copy all the fuckers over
+	// Copy all the tiles over
 	int baseWorldX = srcX << 4, worldY = srcY << 4, rendererID = 0;
 
 	for (int y = 0; y < height; y++) {
@@ -439,11 +434,10 @@ void daEnMagicPlatform_c::setVisible(bool shown) {
 
 	for (int i = 0; i < rendererCount; i++) {
 		if (renderers[i].tileNumber > 0) {
-			if (shown) {
+			if (shown)
 				list->add(&renderers[i]);
-			} else {
+			else
 				list->remove(&renderers[i]);
-			}
 		}
 	}
 }

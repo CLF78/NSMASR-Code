@@ -1,12 +1,10 @@
-#include <common.h>
-#include <game.h>
-#include <sfx.h>
 #include "msgbox.h"
 
-// Replaces: EN_LIFT_ROTATION_HALF (Sprite 107; Profile ID 481 @ 80AF96F8)
-
+#define ANIM_BOX_APPEAR 0
+#define ANIM_BOX_DISAPPEAR 1
 
 dMsgBoxManager_c *dMsgBoxManager_c::instance = 0;
+
 dMsgBoxManager_c *dMsgBoxManager_c::build() {
 	void *buffer = AllocFromGameHeap1(sizeof(dMsgBoxManager_c));
 	dMsgBoxManager_c *c = new(buffer) dMsgBoxManager_c;
@@ -15,13 +13,12 @@ dMsgBoxManager_c *dMsgBoxManager_c::build() {
 	return c;
 }
 
-#define ANIM_BOX_APPEAR 0
-#define ANIM_BOX_DISAPPEAR 1
+CREATE_STATE_E(dMsgBoxManager_c, LoadRes);
+CREATE_STATE_E(dMsgBoxManager_c, Wait);
+CREATE_STATE(dMsgBoxManager_c, BoxAppearWait);
+CREATE_STATE(dMsgBoxManager_c, ShownWait);
+CREATE_STATE(dMsgBoxManager_c, BoxDisappearWait);
 
-extern int MessageBoxIsShowing;
-
-/*****************************************************************************/
-// Events
 int dMsgBoxManager_c::onCreate() {
 	if (!layoutLoaded) {
 		if (!layout.loadArc("msgbox.arc", false))
@@ -38,9 +35,8 @@ int dMsgBoxManager_c::onCreate() {
 
 		layout.build("MessageBox.brlyt");
 
-		if (IsWideScreen()) {
+		if (IsWideScreen())
 			layout.layout.rootPane->scale.x = 0.7711f;
-		}
 
 		layout.loadAnimations(brlanNames, 2);
 		layout.loadGroups(groupNames, (int[2]){0,1}, 2);
@@ -52,7 +48,6 @@ int dMsgBoxManager_c::onCreate() {
 	}
 
 	visible = false;
-
 	return true;
 }
 
@@ -66,56 +61,128 @@ int dMsgBoxManager_c::onExecute() {
 }
 
 int dMsgBoxManager_c::onDraw() {
-	if (visible) {
+	if (visible)
 		layout.scheduleForDrawing();
-	}
-	
+
 	return true;
 }
 
 int dMsgBoxManager_c::onDelete() {
 	instance = 0;
-
 	MessageBoxIsShowing = false;
-	if (canCancel && StageC4::instance)
-		StageC4::instance->_1D = 0; // disable no-pause
-	msgDataLoader.unload();
 
+	if (canCancel && StageC4::instance)
+		StageC4::instance->_1D = 0; // Disable no-pause
+
+	msgDataLoader.unload();
 	return layout.free();
 }
 
-/*****************************************************************************/
-// Load Resources
-CREATE_STATE_E(dMsgBoxManager_c, LoadRes);
+///////////////////
+// LoadRes State //
+///////////////////
 
 void dMsgBoxManager_c::executeState_LoadRes() {
-	if (msgDataLoader.load("/NewerRes/Messages.bin")) {
+	if (msgDataLoader.load("/NewerRes/Messages.bin"))
 		state.setState(&StateID_Wait);
-	} else {
+}
+
+////////////////
+// Wait State //
+////////////////
+
+void dMsgBoxManager_c::executeState_Wait() {
+}
+
+/////////////////////////
+// BoxAppearWait State //
+/////////////////////////
+
+void dMsgBoxManager_c::beginState_BoxAppearWait() {
+	visible = true;
+	MessageBoxIsShowing = true;
+	StageC4::instance->_1D = 1; // Enable no-pause
+	layout.enableNonLoopAnim(ANIM_BOX_APPEAR);
+
+	nw4r::snd::SoundHandle handle;
+	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_SYS_KO_DIALOGUE_IN, 1);
+}
+
+void dMsgBoxManager_c::executeState_BoxAppearWait() {
+	if (!layout.isAnimOn(ANIM_BOX_APPEAR))
+		state.setState(&StateID_ShownWait);
+}
+
+void dMsgBoxManager_c::endState_BoxAppearWait() {
+}
+
+/////////////////////
+// ShownWait State //
+/////////////////////
+
+void dMsgBoxManager_c::beginState_ShownWait() {
+}
+
+void dMsgBoxManager_c::executeState_ShownWait() {
+	if (canCancel) {
+		int nowPressed = Remocon_GetPressed(GetActiveRemocon());
+
+		if (nowPressed & WPAD_TWO)
+			state.setState(&StateID_BoxDisappearWait);
+	}
+
+	if (delay > 0) {
+		delay--;
+		if (delay == 0)
+			state.setState(&StateID_BoxDisappearWait);
 	}
 }
 
-/*****************************************************************************/
-// Waiting
-CREATE_STATE_E(dMsgBoxManager_c, Wait);
-
-void dMsgBoxManager_c::executeState_Wait() {
-	// null
+void dMsgBoxManager_c::endState_ShownWait() {
 }
 
-/*****************************************************************************/
-// Show Box
+////////////////////////////
+// BoxDisappearWait State //
+////////////////////////////
+
+void dMsgBoxManager_c::beginState_BoxDisappearWait() {
+	layout.enableNonLoopAnim(ANIM_BOX_DISAPPEAR);
+
+	nw4r::snd::SoundHandle handle;
+	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_SYS_DIALOGUE_OUT_AUTO, 1);
+}
+
+void dMsgBoxManager_c::executeState_BoxDisappearWait() {
+	if (!layout.isAnimOn(ANIM_BOX_DISAPPEAR)) {
+		state.setState(&StateID_Wait);
+
+		for (int i = 0; i < 2; i++)
+			layout.resetAnim(i);
+		layout.disableAllAnimations();
+	}
+}
+
+void dMsgBoxManager_c::endState_BoxDisappearWait() {
+	visible = false;
+	MessageBoxIsShowing = false;
+	if (canCancel && StageC4::instance)
+		StageC4::instance->_1D = 0; // Disable no-pause
+}
+
+///////////////////////////
+// Show Message Function //
+///////////////////////////
+
 void dMsgBoxManager_c::showMessage(int id, bool canCancel, int delay) {
 	if (!this) {
-		OSReport("ADD A MESSAGE BOX MANAGER YOU MORON\n");
+		OSReport("Message Box Manager not found!\n");
 		return;
 	}
 
-	// get the data file
+	// Get the data file
 	header_s *data = (header_s*)msgDataLoader.buffer;
 
 	const wchar_t *title = 0, *msg = 0;
-
 	for (int i = 0; i < data->count; i++) {
 		if (data->entry[i].id == id) {
 			title = (const wchar_t*)((u32)data + data->entry[i].titleOffset);
@@ -139,107 +206,16 @@ void dMsgBoxManager_c::showMessage(int id, bool canCancel, int delay) {
 	state.setState(&StateID_BoxAppearWait);
 }
 
+/*******************/
+/** Message Block **/
+/*******************/
 
-CREATE_STATE(dMsgBoxManager_c, BoxAppearWait);
-
-void dMsgBoxManager_c::beginState_BoxAppearWait() {
-	visible = true;
-	MessageBoxIsShowing = true;
-	StageC4::instance->_1D = 1; // enable no-pause
-	layout.enableNonLoopAnim(ANIM_BOX_APPEAR);
-
-	nw4r::snd::SoundHandle handle;
-	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_SYS_KO_DIALOGUE_IN, 1);
+daEnMsgBlock_c *daEnMsgBlock_c::build() {
+	void *buffer = AllocFromGameHeap1(sizeof(daEnMsgBlock_c));
+	return new(buffer) daEnMsgBlock_c;
 }
-
-void dMsgBoxManager_c::executeState_BoxAppearWait() {
-	if (!layout.isAnimOn(ANIM_BOX_APPEAR)) {
-		state.setState(&StateID_ShownWait);
-	}
-}
-
-void dMsgBoxManager_c::endState_BoxAppearWait() { }
-
-/*****************************************************************************/
-// Wait For Player To Finish
-CREATE_STATE(dMsgBoxManager_c, ShownWait);
-
-void dMsgBoxManager_c::beginState_ShownWait() { }
-void dMsgBoxManager_c::executeState_ShownWait() {
-	if (canCancel) {
-		int nowPressed = Remocon_GetPressed(GetActiveRemocon());
-
-		if (nowPressed & WPAD_TWO)
-			state.setState(&StateID_BoxDisappearWait);
-	}
-
-	if (delay > 0) {
-		delay--;
-		if (delay == 0)
-			state.setState(&StateID_BoxDisappearWait);
-	}
-}
-void dMsgBoxManager_c::endState_ShownWait() { }
-
-/*****************************************************************************/
-// Hide Box
-CREATE_STATE(dMsgBoxManager_c, BoxDisappearWait);
-
-void dMsgBoxManager_c::beginState_BoxDisappearWait() {
-	layout.enableNonLoopAnim(ANIM_BOX_DISAPPEAR);
-
-	nw4r::snd::SoundHandle handle;
-	PlaySoundWithFunctionB4(SoundRelatedClass, &handle, SE_SYS_DIALOGUE_OUT_AUTO, 1);
-}
-
-void dMsgBoxManager_c::executeState_BoxDisappearWait() {
-	if (!layout.isAnimOn(ANIM_BOX_DISAPPEAR)) {
-		state.setState(&StateID_Wait);
-
-		for (int i = 0; i < 2; i++)
-			layout.resetAnim(i);
-		layout.disableAllAnimations();
-	}
-}
-
-void dMsgBoxManager_c::endState_BoxDisappearWait() {
-	visible = false;
-	MessageBoxIsShowing = false;
-	if (canCancel && StageC4::instance)
-		StageC4::instance->_1D = 0; // disable no-pause
-}
-
-
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-// Replaces: EN_BLUR (Sprite 152; Profile ID 603 @ 80ADD890)
-
-
-class daEnMsgBlock_c : public daEnBlockMain_c {
-public:
-	TileRenderer tile;
-	Physics::Info physicsInfo;
-
-	int onCreate();
-	int onDelete();
-	int onExecute();
-
-	void calledWhenUpMoveExecutes();
-	void calledWhenDownMoveExecutes();
-
-	void blockWasHit(bool isDown);
-
-	USING_STATES(daEnMsgBlock_c);
-	DECLARE_STATE(Wait);
-
-	static daEnMsgBlock_c *build();
-};
-
 
 CREATE_STATE(daEnMsgBlock_c, Wait);
-
 
 int daEnMsgBlock_c::onCreate() {
 	blockInit(pos.y);
@@ -268,20 +244,16 @@ int daEnMsgBlock_c::onCreate() {
 	tile.tileNumber = 0x98;
 
 	doStateChange(&daEnMsgBlock_c::StateID_Wait);
-
 	return true;
 }
-
 
 int daEnMsgBlock_c::onDelete() {
 	TileRenderer::List *list = dBgGm_c::instance->getTileRendererList(0);
 	list->remove(&tile);
 
 	physics.removeFromList();
-
 	return true;
 }
-
 
 int daEnMsgBlock_c::onExecute() {
 	acState.execute();
@@ -292,52 +264,17 @@ int daEnMsgBlock_c::onExecute() {
 	tile.setVars(scale.x);
 
 	// now check zone bounds based on state
-	if (acState.getCurrentState()->isEqual(&StateID_Wait)) {
+	if (acState.getCurrentState()->isEqual(&StateID_Wait))
 		checkZoneBoundaries(0);
-	}
 
 	return true;
 }
 
-
-daEnMsgBlock_c *daEnMsgBlock_c::build() {
-	void *buffer = AllocFromGameHeap1(sizeof(daEnMsgBlock_c));
-	return new(buffer) daEnMsgBlock_c;
-}
-
-
-void daEnMsgBlock_c::blockWasHit(bool isDown) {
-	pos.y = initialY;
-
-	if (dMsgBoxManager_c::instance)
-		dMsgBoxManager_c::instance->showMessage(settings);
-	else
-		Delete(false);
-
-	physics.setup(this, &physicsInfo, 3, currentLayerID);
-	physics.addToList();
-	
-	doStateChange(&StateID_Wait);
-}
-
-
-
-void daEnMsgBlock_c::calledWhenUpMoveExecutes() {
-	if (initialY >= pos.y)
-		blockWasHit(false);
-}
-
-void daEnMsgBlock_c::calledWhenDownMoveExecutes() {
-	if (initialY <= pos.y)
-		blockWasHit(true);
-}
-
-
+////////////////
+// Wait State //
+////////////////
 
 void daEnMsgBlock_c::beginState_Wait() {
-}
-
-void daEnMsgBlock_c::endState_Wait() {
 }
 
 void daEnMsgBlock_c::executeState_Wait() {
@@ -357,4 +294,33 @@ void daEnMsgBlock_c::executeState_Wait() {
 	}
 }
 
+void daEnMsgBlock_c::endState_Wait() {
+}
 
+/////////////////////
+// Other Functions //
+/////////////////////
+
+void daEnMsgBlock_c::blockWasHit() {
+	pos.y = initialY;
+
+	if (dMsgBoxManager_c::instance)
+		dMsgBoxManager_c::instance->showMessage(settings);
+	else
+		Delete(false);
+
+	physics.setup(this, &physicsInfo, 3, currentLayerID);
+	physics.addToList();
+
+	doStateChange(&StateID_Wait);
+}
+
+void daEnMsgBlock_c::calledWhenUpMoveExecutes() {
+	if (initialY >= pos.y)
+		blockWasHit();
+}
+
+void daEnMsgBlock_c::calledWhenDownMoveExecutes() {
+	if (initialY <= pos.y)
+		blockWasHit();
+}

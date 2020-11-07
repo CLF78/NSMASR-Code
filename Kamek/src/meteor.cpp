@@ -97,7 +97,6 @@ int dMeteor::onCreate() {
 	this->spinSpeed = ((this->settings >> 16) & 0xFF) * 20;
 	this->isElectric = (this->settings >> 4) & 0x1;
 
-
 	// Setup Physics
 	if (isElectric) {
 		ActivePhysics::Info elec;

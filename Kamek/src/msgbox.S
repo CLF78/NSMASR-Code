@@ -6,7 +6,6 @@
 .global Query5758Replacement
 
 .text
-
 Query5758Replacement:
 	mr r5, r3				# Save param
 	lis r4, Global5758@ha	# Get 5758
@@ -22,4 +21,4 @@ Query5758Replacement:
 
 .data
 MessageBoxIsShowing:
-	.long 0
+	.byte 0

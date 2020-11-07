@@ -163,10 +163,8 @@ void daMrSun_c::dieFall_Execute() {
 				break;
 		}
 
-		if (!Player) {
+		if (!Player)
 			this->pos.x = 0;
-			doStateChange(&StateID_Follow);
-		}
 
 		this->pos.y = this->Baseline;
 
