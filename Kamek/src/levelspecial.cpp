@@ -11,7 +11,6 @@ class dLevelSpecial_c : public dStageActor_c {
 	int onDraw();
 
 	u8 event;
-	u32 keepTime;
 	u32 setTime;
 	u8 type;
 	u8 effect;
@@ -28,8 +27,6 @@ dLevelSpecial_c *dLevelSpecial_c::build() {
 int dLevelSpecial_c::onCreate() {
 	this->event = ((this->settings >> 24) & 0xFF) - 1;
 
-	this->keepTime = 0;
-
 	this->type = (this->settings) & 0xF;
 	this->effect = (this->settings >> 4) & 0xF;
 	this->setTime = (this->settings >> 8) & 0xFFFF;
@@ -39,9 +36,6 @@ int dLevelSpecial_c::onCreate() {
 }
 
 int dLevelSpecial_c::onExecute() {
-	if (this->keepTime)
-		TimeKeeper::instance->setTime(this->keepTime);
-
 	bool newEvState = (dFlagMgr_c::instance->active(this->event));
 
 	if (newEvState == this->lastEvState)
@@ -57,7 +51,7 @@ int dLevelSpecial_c::onExecute() {
 				break;
 
 			case 2:											// Stop Time
-				this->keepTime = (TimeKeeper::instance->timePlusFFFTimes40000 >> 0xC);
+				TimeKeeper::instance->isPaused = true;
 				break;
 
 			case 3:											// Mario Gravity
@@ -116,7 +110,7 @@ int dLevelSpecial_c::onExecute() {
 				break;
 
 			case 2:											// Stop Timer
-				this->keepTime = 0;
+				TimeKeeper::instance->isPaused = false;
 				break;
 
 			case 3:											// Mario Gravity

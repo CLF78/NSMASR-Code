@@ -18,6 +18,12 @@ hooks:
     src_addr_pal: 0x8006A6C4
     target_func: 'EndSCM'
 
+  - name: AutoBRSAR
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x802694F0
+    target_func: 'AutoBRSAR'
+
 # SFX
   - name: ClimbSounds
     type: branch_insn

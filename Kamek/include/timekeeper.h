@@ -5,9 +5,9 @@ class TimeKeeper {
 		void *vtable; // 0x8031B358
 		u32 timePlusFFFTimes40000;
 		u16 startingTime;
-		u8 _A;
+		u8 isAmbush;
 		u8 isTimeLessThan100;
-		u8 _C;
+		u8 isPaused;
 
 		static TimeKeeper* instance; // 0x8042A350
 

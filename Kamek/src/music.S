@@ -1,5 +1,6 @@
 #include <asm_setup.S>
 
+.global AutoBRSAR
 .global EndSCM
 .global newClimbSounds
 .global newClimbSoundsAttack
@@ -12,6 +13,12 @@
 .extern StagePtr
 
 .text
+AutoBRSAR:
+	lis r31, 0x7FFF
+	ori r31, r31, 0xFFFF
+	stw r31, 0x74(r29) # Original instruction
+	blr
+
 EndSCM:
 	lis r3, SCMs@h
 	ori r3, r3, SCMs@l
