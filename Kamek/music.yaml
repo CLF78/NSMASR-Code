@@ -1,22 +1,11 @@
 ---
 source_files: [../src/music.cpp, ../src/music.S]
 hooks:
-# Soundtrack
   - name: MusicHax
     type: branch_insn
     src_addr_pal: 0x8008E5E4
     branch_type: b
-    target_func: 'after_course_getMusicForZone'
-
-  - name: NukeBahps
-    type: nop_insn
-    area_pal: 0x8019E174
-
-  - name: DebugMusic
-    type: branch_insn
-    branch_type: b
-    src_addr_pal: 0x8006A6C4
-    target_func: 'EndSCM'
+    target_func: 'GetMusicForZone(unsigned char)'
 
   - name: AutoBRSAR
     type: branch_insn
@@ -24,39 +13,12 @@ hooks:
     src_addr_pal: 0x802694F0
     target_func: 'AutoBRSAR'
 
-# SFX
-  - name: ClimbSounds
+  - name: DebugMusic
     type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x80132EFC
-    target_func: 'newClimbSounds'
+    branch_type: b
+    src_addr_pal: 0x8006A6C4
+    target_func: 'EndSCM'
 
-  - name: ClimbSoundsJumpS
-    type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x80133120
-    target_func: 'newClimbSoundsJumpS'
-
-  - name: ClimbSoundsJumpSS
-    type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x80133134
-    target_func: 'newClimbSoundsJumpSS'
-
-  - name: ClimbSoundsJump
-    type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x80133148
-    target_func: 'newClimbSoundsJump'
-
-  - name: ClimbSoundsLand
-    type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x80132AE8
-    target_func: 'newClimbSoundsLand'
-
-  - name: ClimbSoundsAttack
-    type: branch_insn
-    branch_type: bl
-    src_addr_pal: 0x801334E4
-    target_func: 'newClimbSoundsAttack'
+  - name: NukeBahps
+    type: nop_insn
+    area_pal: 0x8019E174
