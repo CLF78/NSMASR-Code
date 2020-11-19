@@ -165,7 +165,7 @@ int dWMHud_c::onExecute() {
 	setupLives(); // FUCK IT
 	updatePressableButtonThingies();
 
-	int scCount = getUnspentStarCoinCount();
+	int scCount = getStarCoinCount();
 	WriteNumberToTextBox(&scCount, StarCoinCounter, false);
 
 	layout.execAnimations();
@@ -229,7 +229,7 @@ void dWMHud_c::loadHeaderInfo() {
 		return;
 	}
 
-	// LEVEL NAME
+	// Level Name
 	wchar_t convertedLevelName[100];
 	const char *sourceLevelName = levelInfo->getNameForLevel(infEntry);
 	int charCount = 0;
@@ -247,38 +247,13 @@ void dWMHud_c::loadHeaderInfo() {
 	// a hack because I don't feel like editing the rlyt
 	LevelName->size.x = LevelNameS->size.x = 400.0f;
 
-	// LEVEL NUMBER
-	wchar_t levelNumber[16];
-	getNewerLevelNumberString(infEntry->displayWorld, infEntry->displayLevel, levelNumber);
-
-	LevelNumber->SetString(levelNumber);
-
-	// make the picture shadowy
-	int sidx = 0;
-	while (levelNumber[sidx]) {
-		if (levelNumber[sidx] == 11) {
-			levelNumber[sidx+1] = 0x200 | (levelNumber[sidx+1]&0xFF);
-			sidx += 2;
-		}
-		sidx++;
-	}
-	LevelNumberS->SetString(levelNumber);
-
-	nw4r::ut::TextWriter tw2;
-	tw2.font = LevelNumber->font;
-	tw2.SetFontSize(LevelNumber->fontSizeX, LevelNumber->fontSizeY);
-	tw2.lineSpace = LevelNumber->lineSpace;
-	tw2.charSpace = LevelNumber->charSpace;
-	if (LevelNumber->tagProc != 0)
-		tw2.tagProcessor = LevelNumber->tagProc;
-
 	float currentPos = 30.0f;
 
-	// INFO
+	// Info
 	int w = nodeForHeader->levelNumber[0] - 1;
 	int l = nodeForHeader->levelNumber[1] - 1;
-
 	u32 conds = GetSaveFile()->GetBlock(-1)->GetLevelCondition(w, l);
+
 	// States: 0 = invisible, 1 = visible, 2 = faded
 	int normalState = 0, secretState = 0;
 
@@ -319,7 +294,7 @@ void dWMHud_c::loadHeaderInfo() {
 		}
 	}
 
-	// SIZE THING
+	// Level Name Size
 	nw4r::ut::TextWriter tw;
 	tw.font = LevelName->font;
 	tw.SetFontSize(LevelName->fontSizeX, LevelName->fontSizeY);

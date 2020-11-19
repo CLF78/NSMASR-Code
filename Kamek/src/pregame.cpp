@@ -1,12 +1,21 @@
 #include <game.h>
-#include "levelinfo.h"
 #include <newer.h>
+#include "fileload.h"
+#include "levelinfo.h"
+
+extern char CurrentLevel;
+extern char CurrentWorld;
 
 class PregameLytHandler {
 	public:
 		m2d::EmbedLayout_c layout;
 
 		nw4r::lyt::Pane *rootPane;
+
+		// Notes:
+		// Deleted; P_coinStage_00, T_recommend_00, T_worldNum_00,
+		// T_-_00, T_pictureFont_00, T_corseNum_00, T_world_00
+		// P_Wx_00, P_coin_00, P_free_00
 
 		nw4r::lyt::TextBox
 			*T_minus_00, *T_world_00, *T_worldNum_00,
@@ -45,14 +54,6 @@ class PregameLytHandler {
 		void hijack_loadLevelNumber(); // replaces 80B6BDD0
 };
 
-// Notes:
-// Deleted; P_coinStage_00, T_recommend_00, T_worldNum_00,
-// T_-_00, T_pictureFont_00, T_corseNum_00, T_world_00
-// P_Wx_00, P_coin_00, P_free_00
-
-extern char CurrentLevel;
-extern char CurrentWorld;
-
 void LoadPregameStyleNameAndNumber(m2d::EmbedLayout_c *layout) {
 	nw4r::lyt::TextBox
 		*LevelNumShadow, *LevelNum,
@@ -65,57 +66,38 @@ void LoadPregameStyleNameAndNumber(m2d::EmbedLayout_c *layout) {
 
 	// work out the thing now
 	dLevelInfo_c::entry_s *level = dLevelInfo_c::s_info.searchBySlot(CurrentWorld, CurrentLevel);
+
 	if (level) {
 		wchar_t convLevelName[160];
 		const char *srcLevelName = dLevelInfo_c::s_info.getNameForLevel(level);
 		int i = 0;
+
 		while (i < 159 && srcLevelName[i]) {
 			convLevelName[i] = srcLevelName[i];
 			i++;
 		}
+
 		convLevelName[i] = 0;
-		LevelNameShadow->SetString(convLevelName);
 		LevelName->SetString(convLevelName);
-
-		wchar_t levelNumber[32];
-		wcscpy(levelNumber, L"World ");
-		getNewerLevelNumberString(level->displayWorld, level->displayLevel, &levelNumber[6]);
-
-		LevelNum->SetString(levelNumber);
-
-		// make the picture shadowy
-		int sidx = 0;
-		while (levelNumber[sidx]) {
-			if (levelNumber[sidx] == 11) {
-				levelNumber[sidx+1] = 0x200 | (levelNumber[sidx+1]&0xFF);
-				sidx += 2;
-			}
-			sidx++;
-		}
-		LevelNumShadow->SetString(levelNumber);
+		LevelNameShadow->SetString(convLevelName);
 
 	} else {
-		LevelNameShadow->SetString(L"Not found in LevelInfo!");
 		LevelName->SetString(L"Not found in LevelInfo!");
+		LevelNameShadow->SetString(L"Not found in LevelInfo!");
 	}
 }
 
-#include "fileload.h"
 void PregameLytHandler::hijack_loadLevelNumber() {
 	LoadPregameStyleNameAndNumber(&layout);
 
 	nw4r::lyt::Picture *LevelSample;
 	LevelSample = layout.findPictureByName("LevelSample");
 
-	// this is not the greatest way to read a file but I suppose it works in a pinch
+	// Not the greatest way to read a file but I suppose it works in a pinch
 	char tplName[64];
 	sprintf(tplName, "/LevelSamples/%02d-%02d.tpl", CurrentWorld+1, CurrentLevel+1);
+
 	static File tpl;
-	if (tpl.open(tplName)) {
+	if (tpl.open(tplName))
 		LevelSample->material->texMaps[0].ReplaceImage((TPLPalette*)tpl.ptr(), 0);
-	}
 }
-
-
-
-

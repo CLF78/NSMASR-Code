@@ -26,9 +26,7 @@ u8 hijackMusicWithSongName(const char *songName, int themeID, bool hasFast, int 
 		return hj->stream[hj->currentStream].originalID;
 
 	// Which one do we use this time...?
-	int toUse = (hj->currentStream + 1) & 1;
-
-	hj->currentStream = toUse;
+	hj->currentStream = (hj->currentStream + 1) & 1;
 	hj->currentCustomTheme = themeID;
 
 	// Write the stream's info

@@ -14,8 +14,8 @@ class TimeKeeper {
 		TimeKeeper(u32 *buffer, u32 initialTime); // 0x800E38E0
 		~TimeKeeper(); // 0x800E3910
 
-		void setTime(u32 time); // 0x800E3A00 - updates both this->time and the u32. Maybe you need to manually set _B...
-		void updateUI(); // 0x800E3A20 - updates the display and speeds up the music if needed.
+		void setTime(u32 time); // 0x800E3A00 - updates the u32. Maybe you need to manually set _B...
+		void tick(); // 0x800E3A20 - updates the display and speeds up the music if needed.
 
-		void sub_800E3B50(); // 0x800E3B50 - related to time up
+		void handleTimeUp(); // 0x800E3B50
 };

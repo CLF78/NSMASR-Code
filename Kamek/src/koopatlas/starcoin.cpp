@@ -194,10 +194,9 @@ bool dWMStarCoin_c::canScrollRight() const {
 void dWMStarCoin_c::loadInfo() {
 	WriteBMGToTextBox(BtnBackText, GetBMG(), 3, 1, 0);
 
-	int unspentCoins = getUnspentStarCoinCount();
 	int coins = getStarCoinCount();
 
-	WriteNumberToTextBox(&unspentCoins, UnspentCoinCount, false);
+	WriteNumberToTextBox(&coins, UnspentCoinCount, false);
 	WriteNumberToTextBox(&coins, TotalCoinCount, false);
 
 	currentSection = -1;
