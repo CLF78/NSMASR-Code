@@ -2,7 +2,6 @@
 #define __KOOPATLAS_CAMERA_H
 
 #include "koopatlas/core.h"
-
 #define STD_ZOOM 2.8f
 
 class dWorldCamera_c : public dBase_c {
@@ -26,7 +25,6 @@ class dWorldCamera_c : public dBase_c {
 
 		void calculateScreenGeometry();
 
-
 		float zoomDivisor, screenLeft, screenTop, screenWidth, screenHeight;
 
 		bool followPlayer;
@@ -45,6 +43,4 @@ class dWorldCamera_c : public dBase_c {
 		static dWorldCamera_c *build();
 		static dWorldCamera_c *instance;
 };
-
 #endif
-
