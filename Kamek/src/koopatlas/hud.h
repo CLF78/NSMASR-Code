@@ -50,7 +50,6 @@ class dWMHud_c : public dBase_c {
 
 		dTexMapColouriser_c headerCol, footerCol;
 
-
 		nw4r::lyt::Pane
 			*N_IconPosXP_00[4];
 
@@ -70,6 +69,4 @@ class dWMHud_c : public dBase_c {
 			*StarCoinCounter,
 			*T_lifeNumber[4];
 };
-
 #endif
-

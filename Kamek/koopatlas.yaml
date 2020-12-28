@@ -62,7 +62,7 @@ hooks:
     type: nop_insn
     area_pal: 0x8077AA7C
 
-  - name: DisableWarpCannons
+  - name: ExitStageOverride
     type: patch
     addr_pal: 0x80102528
     data: '281D7777'

@@ -240,7 +240,11 @@ def fix_offs_kor_v1(offs):
         return offs + 0xB8
     elif 0x800B4760 <= offs <= 0x800C8DAC:
         return offs + 0xC0
-    elif 0x800C8E50 <= offs <= 0x800E4D6C:
+    elif 0x800C8E50 <= offs <= 0x800CF6F0:
+        return offs + 0x20
+    elif 0x800CF6F4 <= offs <= 0x800CF904:
+        return offs + 0x28
+    elif 0x800CF904 <= offs <= 0x800E4D90:
         return offs + 0x20
     elif 0x800E4D94 <= offs <= 0x800E4EBF:
         return offs - 0x4
@@ -473,7 +477,11 @@ def fix_offs_twn_v1(offs):
 
     if 0x80302278 <= offs <= 0x803097DF:
         return offs - 0x1C30
-    elif 0x803097E0 <= offs <= 0x8035E35E:
+    elif 0x803097E0 <= offs <= 0x803361EC:
+        return offs - 0x1C40
+    elif 0x803361F0 <= offs <= 0x8033682C:
+        return offs - 0x1C48
+    elif 0x80336830 <= offs <= 0x8035E37C:
         return offs - 0x1C40
     elif 0x8035E380 <= offs <= 0x807684C0:
         return offs - 0x1C00

@@ -5,13 +5,19 @@ extern char CurrentWorld;
 extern char CurrentLevel;
 extern bool hasWarped;
 
+enum WMHudAnimation {
+	SHOW_LIVES = 0,
+	SHOW_HEADER,
+	SHOW_FOOTER,
+	HIDE_ALL,
+	UNHIDE_ALL,
+};
+
 dWMHud_c *dWMHud_c::instance = 0;
 
 dWMHud_c *dWMHud_c::build() {
-
 	void *buffer = AllocFromGameHeap1(sizeof(dWMHud_c));
 	dWMHud_c *c = new(buffer) dWMHud_c;
-
 
 	instance = c;
 	return c;
@@ -23,15 +29,6 @@ dWMHud_c::dWMHud_c() {
 	isFooterVisible = false;
 }
 
-enum WMHudAnimation {
-	SHOW_LIVES = 0,
-	SHOW_HEADER,
-	SHOW_FOOTER,
-	HIDE_ALL,
-	UNHIDE_ALL,
-};
-
-
 int dWMHud_c::onCreate() {
 	if (!layoutLoaded) {
 		bool gotFile = layout.loadArc("MapHUD.arc", false);
@@ -41,9 +38,9 @@ int dWMHud_c::onCreate() {
 		bool output = layout.build("maphud.brlyt");
 
 		layout.layout.rootPane->trans.x = -112.0f;
-		if (IsWideScreen()) {
+		if (IsWideScreen())
 			layout.layout.rootPane->scale.x = 0.735f;
-		} else {
+		else {
 			layout.clippingEnabled = true;
 			layout.clipX = 0;
 			layout.clipY = 52;
@@ -58,6 +55,7 @@ int dWMHud_c::onCreate() {
 			"MapHUD_ShowMain.brlan", "MapHUD_ShowHeader.brlan",
 			"MapHUD_HideAll.brlan", "MapHUD_UnhideAll.brlan",
 		};
+
 		static const char *groupNames[] = {
 			"G_Lives", "G_Header", "G_Footer",
 			"G_Hideables", "G_Hideables",
@@ -79,6 +77,7 @@ int dWMHud_c::onCreate() {
 			"N_IconPos1P_00", "N_IconPos2P_00",
 			"N_IconPos3P_00", "N_IconPos4P_00"
 		};
+
 		layout.getPanes(paneNames, &N_IconPosXP_00[0], 4);
 
 		static const char *pictureNames[] = {
@@ -90,6 +89,7 @@ int dWMHud_c::onCreate() {
 			"P_BkinoFace_00", "P_YkinoFace_00",
 			"Star0", "Star1", "Star2"
 		};
+
 		layout.getPictures(pictureNames, &Header_Centre, 18);
 
 		static const char *textBoxNames[] = {
@@ -100,6 +100,7 @@ int dWMHud_c::onCreate() {
 			"T_lifeNumber_00", "T_lifeNumber_01",
 			"T_lifeNumber_02", "T_lifeNumber_03"
 		};
+
 		layout.getTextBoxes(textBoxNames, &LevelName, 11);
 
 		headerCol.setTexMap(Header_Right->material->texMaps);
@@ -119,7 +120,6 @@ int dWMHud_c::onCreate() {
 	return true;
 }
 
-
 void dWMHud_c::loadInitially() {
 	if (doneFirstShow)
 		return;
@@ -127,12 +127,11 @@ void dWMHud_c::loadInitially() {
 	doneFirstShow = true;
 
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
-	willShowFooter = (save->newerWorldName[0] != 0) && (save->hudHintH != 2000);
+	willShowFooter = (save->newerWorldName[0] != 0);
 
 	if (!dScKoopatlas_c::instance->pathManager.isMoving)
 		enteredNode();
 }
-
 
 int dWMHud_c::onDelete() {
 	dWMHud_c::instance = 0;
@@ -142,7 +141,6 @@ int dWMHud_c::onDelete() {
 
 	return layout.free();
 }
-
 
 int dWMHud_c::onExecute() {
 	if (!layoutLoaded)
@@ -174,48 +172,47 @@ int dWMHud_c::onExecute() {
 	return true;
 }
 
-
 int dWMHud_c::onDraw() {
 	if (!layoutLoaded)
 		return true;
 
 	layout.scheduleForDrawing();
-
 	return true;
 }
-
 
 void dWMHud_c::hideAll() {
 	if (!layout.isAnimOn(HIDE_ALL))
 		layout.enableNonLoopAnim(HIDE_ALL);
+
 	layout.grpHandlers[HIDE_ALL].frameCtrl.flags = 1; // NO_LOOP
 }
+
 void dWMHud_c::unhideAll() {
 	if (!layout.isAnimOn(HIDE_ALL))
 		layout.enableNonLoopAnim(HIDE_ALL, true);
+
 	layout.grpHandlers[HIDE_ALL].frameCtrl.flags = 3; // NO_LOOP | REVERSE
 }
 
-
-
-
 void dWMHud_c::playShowAnim(int id) {
-	if (!this || !this->layoutLoaded) return;
+	if (!this || !this->layoutLoaded)
+		return;
 
 	layout.enableNonLoopAnim(id);
 }
 
 void dWMHud_c::playHideAnim(int id) {
-	if (!this || !this->layoutLoaded) return;
+	if (!this || !this->layoutLoaded)
+		return;
 
-	if (!layout.isAnimOn(id)) {
+	if (!layout.isAnimOn(id))
 		layout.enableNonLoopAnim(id, true);
-	}
+
 	layout.grpHandlers[id].frameCtrl.flags = 3; // NO_LOOP | REVERSE
+
 	if (id == SHOW_FOOTER)
 		isFooterVisible = false;
 }
-
 
 void dWMHud_c::loadHeaderInfo() {
 	dLevelInfo_c *levelInfo = &dLevelInfo_c::s_info;
@@ -233,12 +230,13 @@ void dWMHud_c::loadHeaderInfo() {
 	wchar_t convertedLevelName[100];
 	const char *sourceLevelName = levelInfo->getNameForLevel(infEntry);
 	int charCount = 0;
-	
+
 	while (*sourceLevelName != 0 && charCount < 99) {
 		convertedLevelName[charCount] = *sourceLevelName;
 		sourceLevelName++;
 		charCount++;
 	}
+
 	convertedLevelName[charCount] = 0;
 
 	LevelName->SetString(convertedLevelName);
@@ -314,7 +312,6 @@ void dWMHud_c::loadHeaderInfo() {
 	headerCol.colourise(save->hudHintH%1000, save->hudHintS, save->hudHintL);
 }
 
-
 void dWMHud_c::loadFooterInfo() {
 	SaveBlock *save = GetSaveFile()->GetBlock(-1);
 
@@ -333,15 +330,15 @@ void dWMHud_c::loadFooterInfo() {
 	// Star 0: world is complete
 	// Star 1: all exits complete
 	// Star 2: all star coins obtained
-	
+
 	bool starVisibility[3];
 	starVisibility[0] = false;
 
 	dLevelInfo_c *linfo = &dLevelInfo_c::s_info;
 	dLevelInfo_c::entry_s *lastLevel = linfo->searchByDisplayNum(save->newerWorldID, lastLevelIDs[save->newerWorldID]);
-	if (lastLevel) {
+
+	if (lastLevel)
 		starVisibility[0] = (save->GetLevelCondition(lastLevel->worldSlot,lastLevel->levelSlot) & COND_NORMAL);
-	}
 
 	if (hasWarped) {
 		// Get world and level, find the worldname from it and write it to the textbox
@@ -390,16 +387,13 @@ void dWMHud_c::loadFooterInfo() {
 	for (int i = 0; i < 3; i++) {
 		Star[i]->SetVisible(starVisibility[i]);
 		Star[i]->trans.x = startX;
-		if (starVisibility[i]) {
+		if (starVisibility[i])
 			startX += Star[i]->size.x + 4.0f;
-		}
 	}
 
 	WorldName->trans.x = startX + 4.0f;
 	WorldNameS->trans.x = startX + 6.0f;
 }
-
-
 
 void dWMHud_c::enteredNode(dKPNode_s *node) {
 	if (node == 0)
@@ -415,14 +409,11 @@ void dWMHud_c::leftNode() {
 	if (layout.grpHandlers[SHOW_HEADER].frameCtrl.currentFrame > 0.1f) {
 		// not hidden
 
-		if ((layout.isAnimOn(SHOW_HEADER) && !(layout.grpHandlers[SHOW_HEADER].frameCtrl.flags & 2))
-				|| (!layout.isAnimOn(SHOW_HEADER))) {
+		if ((layout.isAnimOn(SHOW_HEADER) && !(layout.grpHandlers[SHOW_HEADER].frameCtrl.flags & 2)) || (!layout.isAnimOn(SHOW_HEADER)))
 			// currently being shown, OR fully shown already
 			playHideAnim(SHOW_HEADER);
-		}
 	}
 }
-
 
 void dWMHud_c::hideFooter() {
 	if (isFooterVisible)
@@ -432,11 +423,11 @@ void dWMHud_c::hideFooter() {
 void dWMHud_c::showFooter() {
 	if (!doneFirstShow)
 		return;
+
 	willShowFooter = true;
 	if (isFooterVisible)
 		playHideAnim(SHOW_FOOTER);
 }
-
 
 void dWMHud_c::setupLives() {
 	static const int LogicalPlayerIDs[] = {0,1,3,2};
@@ -477,14 +468,8 @@ void dWMHud_c::updatePressableButtonThingies() {
 
 	if (cntType != displayedControllerType) {
 		displayedControllerType = cntType;
+		GameMgrP->currentControllerType = (cntType);
 
-		int beef = (cntType == 0) ? 0 : 1;
-		GameMgrP->currentControllerType = beef;
-
-		WriteBMGToTextBox(
-				layout.findTextBoxByName("ItemsButtonInfo"),
-				GetBMG(), 4, 15, 0);
+		WriteBMGToTextBox(layout.findTextBoxByName("ItemsButtonInfo"), GetBMG(), 4, 15, 0);
 	}
 }
-
-

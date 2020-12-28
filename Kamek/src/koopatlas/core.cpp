@@ -81,34 +81,41 @@ dScKoopatlas_c::dScKoopatlas_c() : state(this) {
 }
 
 
-
+// SelectCursor
 #define SELC_SETUP_DONE(sc) (*((bool*)(((u32)(sc))+0xD38)))
 
+// EasyPairing
 #define EASYP_SETUP_DONE(ep) (*((bool*)(((u32)(ep))+0x278)))
 #define EASYP_ACTIVE(ep) (*((bool*)(((u32)(ep))+0x279)))
 
+// CorseSelectMenu
 #define CSMENU_SETUP_DONE(csm) (*((bool*)(((u32)(csm))+0x270)))
 #define CSMENU_ACTIVE(csm) (*((bool*)(((u32)(csm))+0x271)))
 #define CSMENU_CHOICE_OK(csm) (*((bool*)(((u32)(csm))+0x272)))
 #define CSMENU_UNK(csm) (*((bool*)(((u32)(csm))+0x273)))
 #define CSMENU_CURRENT(csm) (*((int*)(((u32)(csm))+0x268)))
 
+// NumPeopleChange (?)
 #define NPCHG_SETUP_DONE(npc) (*((bool*)(((u32)(npc))+0x67C)))
 #define NPCHG_ACTIVE(npc) (*((bool*)(((u32)(npc))+0x67E)))
 #define NPCHG_HIDE_FOR_EASYP(npc) (*((bool*)(((u32)(npc))+0x67F)))
 #define NPCHG_READY(npc) (*((bool*)(((u32)(npc))+0x680)))
 #define NPCHG_CCSB(npc,idx) (((void**)(((u32)(npc))+0x74))[(idx)])
 #define NPCHG_CCSC(npc,idx) (((void**)(((u32)(npc))+0x84))[(idx)])
-#define NPCHG_CCSA(npc,idx) (((void**)(((u32)(npc))+0x94))[(idx)])
-#define NPCHG_CCI(npc,idx) (((void**)(((u32)(npc))+0xA4))[(idx)])
+#define NPCHG_CCSA(npc,idx) (((void**)(((u32)(npc))+0x94))[(idx)]) // CharacterChangeSelectArrow
+#define NPCHG_CCI(npc,idx) (((void**)(((u32)(npc))+0xA4))[(idx)]) // CharacterChangeIndicator
 #define NPCHG_2DPLAYER(npc,idx) (((void**)(((u32)(npc))+0x64C))[(idx)])
 
+// CharacterChangeSelectBase
 #define CCSB_ACTIVE(ccsb) (*((bool*)(((u32)(ccsb))+0x29C)))
 
+// CharacterChangeSelectContents
 #define CCSC_ACTIVE(ccsc) (*((bool*)(((u32)(ccsc))+0x2A1)))
 
+// Player2D
 #define PLAYER2D_SHOW_EASY_PAIRING(p2d) (*((bool*)(((u32)(p2d))+0x264)))
 
+// Continue
 #define CONT_LIVES(cont,idx) (((int*)(((u32)(cont))+0x2B8))[(idx)])
 #define CONT_SETUP_DONE(cont) (*((bool*)(((u32)(cont))+0x2D4)))
 #define CONT_UNK1(cont) (*((bool*)(((u32)(cont))+0x2D5)))
